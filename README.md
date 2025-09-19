@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# Darby Mitchell Studio — React + TypeScript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A bespoke React + TypeScript site showcasing the artwork of Darby Mitchell. The experience focuses on quiet drama—graphite depths against blush pink washes—with dedicated views for artwork, exhibitions, biography, and inquiries.
 
-## Available Scripts
+## Scripts
 
-In the project directory, you can run:
+- `npm install` — install dependencies (TypeScript + CRA).
+- `npm start` — run the development server at `http://localhost:3000`.
+- `npm test` — run the Jest test suite (includes a smoke test for the navigation shell).
+- `npm run build` — create a production build in `build/`.
 
-### `npm start`
+> **Note:** If `npm` is unavailable on your machine, install Node.js first or use an alternative package manager such as `pnpm`/`yarn`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+src/
+  App.tsx                // Router + page layout
+  index.tsx              // React root bootstrap
+  components/            // Layout, navigation, footer, gallery grid, etc.
+  pages/                 // Home, Artwork, About, Exhibitions, Contact
+  data/                  // Artwork + exhibition data models
+  styles/                // Reserved for shared styles (currently unused)
+public/
+  images/                // Placeholder SVGs — replace with high-res artwork
+```
 
-### `npm test`
+### Artwork imagery
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Six placeholder SVGs (`public/images/*.svg`) mirror the palette from Darby’s drawings. Replace each file with the real artwork (keep the filenames to avoid code changes) or update the `image` paths in `src/data/artworks.ts`.
 
-### `npm run build`
+## Customising Content
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Update the copy on each page by editing the respective file in `src/pages/`.
+- Add or reorder artworks in `src/data/artworks.ts`.
+- Maintain exhibition history in `src/data/exhibitions.ts` — the home and exhibitions pages pull from this data.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Styling Notes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Core palette and typography live in `src/index.css` (CSS variables).
+- Each component/page uses a CSS module for scoped styling, keeping the fine-art aesthetic consistent.
+- Buttons and cards intentionally echo graphite shadows with blush accents; tweak gradients or radii inside the relevant `*.module.css` files.
 
-### `npm run eject`
+## Deployment
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+When you are ready to deploy, run `npm run build` and point your static hosting provider (Netlify, Vercel, Render, S3, etc.) at the generated `build/` directory.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For questions or handoff details, see the `Contact` page implementation in `src/pages/Contact/Contact.tsx`.

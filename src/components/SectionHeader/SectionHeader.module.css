@@ -1,0 +1,37 @@
+.header {
+  max-width: 720px;
+  margin: 0 auto clamp(1.5rem, 5vw, 3rem);
+}
+
+.left {
+  text-align: left;
+  margin-left: 0;
+}
+
+.center {
+  text-align: center;
+}
+
+.overline {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-graphite);
+  margin: 0 0 0.8rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  color: var(--color-charcoal);
+  letter-spacing: -0.02em;
+}
+
+.description {
+  margin: 1rem 0 0;
+  color: rgba(44, 39, 51, 0.75);
+  font-size: 1rem;
+  line-height: 1.7;
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="1100" viewBox="0 0 700 1100">
+  <defs>
+    <linearGradient id="rose" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f7c5d9" />
+      <stop offset="100%" stop-color="#f3a3c6" />
+    </linearGradient>
+    <radialGradient id="portraitShadow" cx="50%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#362f40" stop-opacity="0.82" />
+      <stop offset="100%" stop-color="#362f40" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="spoon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1a9fd7" />
+      <stop offset="100%" stop-color="#4b3ebf" />
+    </linearGradient>
+  </defs>
+  <rect width="700" height="1100" fill="url(#rose)" />
+  <path d="M210 680 C200 500 280 360 360 340 C440 320 540 420 540 600 C540 780 430 900 360 900 C290 900 220 860 210 680 Z" fill="#fdf3f7" fill-opacity="0.45" />
+  <ellipse cx="350" cy="460" rx="210" ry="240" fill="url(#portraitShadow)" />
+  <rect x="320" y="220" width="60" height="210" rx="30" fill="url(#spoon)" opacity="0.8" />
+  <circle cx="350" cy="790" r="110" fill="#f26590" opacity="0.35" />
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="640" viewBox="0 0 900 640">
+  <defs>
+    <linearGradient id="paper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbd7e5" />
+      <stop offset="100%" stop-color="#f4b4d0" />
+    </linearGradient>
+    <radialGradient id="mouth" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#2a2733" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#2a2733" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="900" height="640" fill="#f7f3f1" />
+  <g transform="translate(70 60)" fill="url(#paper)">
+    <rect width="220" height="180" rx="18" />
+    <rect x="250" width="220" height="180" rx="18" />
+    <rect x="500" width="220" height="180" rx="18" />
+    <rect y="210" width="220" height="180" rx="18" />
+    <rect x="250" y="210" width="220" height="180" rx="18" />
+    <rect x="500" y="210" width="220" height="180" rx="18" />
+  </g>
+  <g transform="translate(70 60)">
+    <ellipse cx="110" cy="90" rx="70" ry="50" fill="url(#mouth)" />
+    <ellipse cx="360" cy="90" rx="70" ry="50" fill="url(#mouth)" opacity="0.8" />
+    <ellipse cx="610" cy="90" rx="70" ry="50" fill="url(#mouth)" opacity="0.9" />
+    <ellipse cx="110" cy="300" rx="70" ry="50" fill="url(#mouth)" opacity="0.85" />
+    <ellipse cx="360" cy="300" rx="70" ry="50" fill="url(#mouth)" opacity="0.9" />
+    <ellipse cx="610" cy="300" rx="70" ry="50" fill="url(#mouth)" />
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+.shell {
+  position: relative;
+  min-height: 100vh;
+  flex: 1 1 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+.shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.65), transparent 60%),
+    radial-gradient(circle at 80% 10%, var(--scroll-accent, rgba(242, 167, 196, 0.25)), transparent 55%),
+    radial-gradient(circle at 80% 80%, var(--scroll-shadow, rgba(48, 44, 53, 0.18)), transparent 65%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.main {
+  flex: 1;
+}
