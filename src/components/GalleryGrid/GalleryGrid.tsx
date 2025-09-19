@@ -5,10 +5,11 @@ import styles from './GalleryGrid.module.css';
 type GalleryGridProps = {
   items: Artwork[];
   dense?: boolean;
+  size?: 'default' | 'large';
 };
 
-const GalleryGrid = ({ items, dense = false }: GalleryGridProps) => (
-  <div className={`${styles.grid} ${dense ? styles.dense : ''}`}>
+const GalleryGrid = ({ items, dense = false, size = 'default' }: GalleryGridProps) => (
+  <div className={`${styles.grid} ${dense ? styles.dense : ''} ${size === 'large' ? styles.large : ''}`}>
     {items.map((item) => (
       <Link key={item.id} to={`/artwork/${item.id}`} className={`${styles.item} ${styles[item.orientation]}`}>
         <div className={styles.frame}>
