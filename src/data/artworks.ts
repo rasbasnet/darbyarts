@@ -23,10 +23,21 @@ type RawArtwork = {
 export type Artwork = RawArtwork;
 
 const parseDate = (value: string) => new Date(value).getTime();
+const basePath = (process.env.PUBLIC_URL ?? '').replace(/\/$/, '');
+const toImageUrl = (imagePath: string) => {
+  const trimmed = imagePath.replace(/^\/+/, '');
+  const url = basePath ? `${basePath}/${trimmed}` : `/${trimmed}`;
+  return url.replace(/\\/g, '/');
+};
 
-export const artworks: Artwork[] = [...(rawArtworks as RawArtwork[])].sort(
+const normalisedArtworks = [...(rawArtworks as RawArtwork[])].sort(
   (a, b) => parseDate(b.created) - parseDate(a.created),
 );
+
+export const artworks: Artwork[] = normalisedArtworks.map((item) => ({
+  ...item,
+  image: toImageUrl(item.image),
+}));
 
 export const artworkMap: Record<string, Artwork> = artworks.reduce<Record<string, Artwork>>(
   (accumulator, item) => {

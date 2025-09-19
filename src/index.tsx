@@ -12,9 +12,13 @@ if (!container) {
 
 const root = createRoot(container);
 
+const basename = process.env.PUBLIC_URL
+  ? new URL(process.env.PUBLIC_URL, window.location.origin).pathname
+  : '/';
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </React.StrictMode>,
