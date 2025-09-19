@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/darbyarts/static/css/main.5a24199f.css",
+    "main.js": "/darbyarts/static/js/main.5788fe87.js",
+    "index.html": "/darbyarts/index.html",
+    "main.5a24199f.css.map": "/darbyarts/static/css/main.5a24199f.css.map",
+    "main.5788fe87.js.map": "/darbyarts/static/js/main.5788fe87.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a24199f.css",
+    "static/js/main.5788fe87.js"
+  ]
+}
