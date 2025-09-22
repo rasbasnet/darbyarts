@@ -4,6 +4,11 @@ import { getArtworkById } from '../../data/artworks';
 import { getExhibitionDetail } from '../../data/exhibitionDetails';
 import styles from './ExhibitionDetail.module.css';
 
+type GradientStyleVars = CSSProperties & {
+  '--accent-color'?: string;
+  '--shadow-color'?: string;
+};
+
 const ExhibitionDetail = () => {
   const { exhibitionId } = useParams<{ exhibitionId: string }>();
   if (!exhibitionId) {
@@ -16,7 +21,7 @@ const ExhibitionDetail = () => {
   }
 
   const heroArtwork = detail.heroArtworkId ? getArtworkById(detail.heroArtworkId) : undefined;
-  const gradientStyles: CSSProperties = heroArtwork
+  const gradientStyles: GradientStyleVars = heroArtwork
     ? {
         '--accent-color': heroArtwork.palette.primary,
         '--shadow-color': heroArtwork.palette.secondary
