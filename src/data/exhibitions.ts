@@ -4,61 +4,43 @@ export type Exhibition = {
   venue: string;
   location: string;
   year: string;
-  type: 'Solo' | 'Group' | 'Residency' | 'Fair';
+  type: 'Solo' | 'Group' | 'Residency' | 'Juried';
   notes?: string;
-  link?: string;
+  slug: string;
+  heroArtworkId?: string;
 };
 
 export const exhibitions: Exhibition[] = [
   {
-    id: '2025-flux',
-    title: 'FLUX: Bodies in Bloom',
-    venue: 'Cobalt Gallery',
-    location: 'Portland, OR',
+    id: '2025-contrast',
+    slug: 'contrast-thornback',
+    title: 'CONTRAST: A Juried Exhibition',
+    venue: 'Thornback Gallery',
+    location: 'Greenville, SC',
     year: '2025',
-    type: 'Solo',
-    notes: 'Upcoming—large-scale graphite and pastel works exploring voice and appetite.'
+    type: 'Juried',
+    heroArtworkId: 'eat-me',
+    notes: 'Featuring the drawing “Eat Me” investigating performative appetite and vulnerability.'
   },
   {
-    id: '2024-surface-study',
-    title: 'Surface Study',
-    venue: 'Glass Box Contemporary',
-    location: 'Seattle, WA',
-    year: '2024',
-    type: 'Group',
-    notes: 'Curated by Mei Chen alongside works by Giulia Bianchi and Malik Rios.'
-  },
-  {
-    id: '2023-crave',
-    title: 'Crave',
-    venue: 'Studio 4A',
-    location: 'Chicago, IL',
+    id: '2023-penland',
+    slug: 'penland-scholarship',
+    title: 'Penland School of Craft Scholarship Residency',
+    venue: 'Penland School of Craft',
+    location: 'Spruce Pine, NC',
     year: '2023',
-    type: 'Solo'
+    type: 'Residency',
+    notes: 'Scholarship-supported intensive that catalysed the pastel and graphite investigations present in current work.'
   },
   {
-    id: '2023-behind-the-teeth',
-    title: 'Behind the Teeth',
-    venue: 'The Drawing Room',
-    location: 'Brooklyn, NY',
-    year: '2023',
-    type: 'Group',
-    notes: 'An investigation of hunger politics with works by diaspora artists.'
-  },
-  {
-    id: '2022-sound-residency',
-    title: 'Residency: Sound House',
-    venue: 'Sound House Residency',
-    location: 'Taos, NM',
-    year: '2022',
-    type: 'Residency'
-  },
-  {
-    id: '2021-ink-fair',
-    title: 'INK Contemporary Drawing Fair',
-    venue: 'Pier 24',
-    location: 'San Francisco, CA',
+    id: '2021-embodied',
+    slug: 'embodied-bfa',
+    title: 'Embodied: An Anatomical Exploration of Inner Narrative',
+    venue: 'S. Tucker Cooke Gallery',
+    location: 'Asheville, NC',
     year: '2021',
-    type: 'Fair'
+    type: 'Solo',
+    heroArtworkId: 'drainage',
+    notes: 'BFA exhibition examining medical illustration as a site for emotional storytelling.'
   }
 ];

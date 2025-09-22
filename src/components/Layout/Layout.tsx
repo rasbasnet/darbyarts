@@ -15,9 +15,9 @@ const Layout = () => {
     const updateScrollTint = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      const hue = 330 + ratio * 40;
-      const accent = `hsla(${hue.toFixed(2)}, 80%, 86%, 0.56)`;
-      const shadow = `hsla(${(hue + 210).toFixed(2)}, 42%, 24%, 0.25)`;
+      const accentHue = 320 + ratio * 20;
+      const accent = `hsla(${accentHue.toFixed(1)}, 78%, 68%, 0.6)`;
+      const shadow = `hsla(${(accentHue + 200).toFixed(1)}, 50%, 18%, ${0.4 + ratio * 0.1})`;
       document.documentElement.style.setProperty('--scroll-accent', accent);
       document.documentElement.style.setProperty('--scroll-shadow', shadow);
     };
@@ -39,6 +39,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
+      <div className={styles.grain} aria-hidden />
     </div>
   );
 };

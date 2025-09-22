@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { profile } from '../../data/profile';
 import styles from './Navigation.module.css';
 
 const links = [
   { to: '/', label: 'Home' },
   { to: '/artwork', label: 'Artwork' },
   { to: '/about', label: 'About' },
-  { to: '/exhibitions', label: 'Exhibitions' },
+  { to: '/exhibitions', label: 'Exhibitions' }
 ];
 
 const Navigation = () => {
@@ -22,8 +23,8 @@ const Navigation = () => {
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <Link to="/" className={styles.brand} onClick={closeMenu}>
-          <span className={styles.brandWordmark}>Darby Mitchell</span>
-          <span className={styles.brandSubtitle}>figurative artist</span>
+          <span className={styles.brandWordmark}>{profile.name}</span>
+          <span className={styles.brandSubtitle}>{profile.tagline}</span>
         </Link>
 
         <button

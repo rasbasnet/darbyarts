@@ -1,48 +1,30 @@
 # Darby Mitchell Studio — React + TypeScript
 
-A bespoke React + TypeScript site showcasing the artwork of Darby Mitchell. The experience focuses on quiet drama—graphite depths against blush pink washes—with dedicated views for artwork, exhibitions, biography, and inquiries.
+Rebuilt portfolio site driven by structured data sourced from studio PDFs (Artist Deck, Work + Titles, Exhibition releases). Each page pulls copy and imagery from `src/data/` so updates only require editing JSON.
 
 ## Scripts
 
-- `npm install` — install dependencies (TypeScript + CRA).
+- `npm install` — install dependencies.
 - `npm start` — run the development server at `http://localhost:3000`.
-- `npm test` — run the Jest test suite (includes a smoke test for the navigation shell).
 - `npm run build` — create a production build in `build/`.
+- `npm run deploy` — push the compiled site to GitHub Pages (`gh-pages` branch).
 
-> **Note:** If `npm` is unavailable on your machine, install Node.js first or use an alternative package manager such as `pnpm`/`yarn`.
+## Data sources
 
-## Structure
+- `public/files/` — original PDFs used for copy, downloadable from the site.
+- `src/data/artworks.json` — artwork catalogue (title, medium, image path, palette, statements).
+- `src/data/profile.json` — statement, bio, contact, education, and awards.
+- `src/data/exhibitions.ts` — exhibitions and residencies.
+- `src/data/archiveWorks.ts` — legacy BFA works showcased on the About page.
 
-```
-src/
-  App.tsx                // Router + page layout
-  index.tsx              // React root bootstrap
-  components/            // Layout, navigation, footer, gallery grid, etc.
-  pages/                 // Home, Artwork, About, Exhibitions, Contact
-  data/                  // Artwork + exhibition data models
-  styles/                // Reserved for shared styles (currently unused)
-public/
-  images/                // Placeholder SVGs — replace with high-res artwork
-```
+All artwork imagery lives in `public/images/artworks/` and is referenced relatively, so deployments to GitHub Pages work under the `/darbyarts/` base path.
 
-### Artwork imagery
+## Styling notes
 
-Six placeholder SVGs (`public/images/*.svg`) mirror the palette from Darby’s drawings. Replace each file with the real artwork (keep the filenames to avoid code changes) or update the `image` paths in `src/data/artworks.ts`.
+- Fonts: Fraunces (display) and Sora (body) via Google Fonts.
+- Palette: punchy blush gradients with deep plum charcoal, animated slightly via scroll-reactive CSS variables (see `src/components/Layout/Layout.tsx`).
+- Components use CSS modules for scoping; add new styles alongside each component.
 
-## Customising Content
+## Deployment to GitHub Pages
 
-- Update the copy on each page by editing the respective file in `src/pages/`.
-- Add or reorder artworks in `src/data/artworks.ts`.
-- Maintain exhibition history in `src/data/exhibitions.ts` — the home and exhibitions pages pull from this data.
-
-## Styling Notes
-
-- Core palette and typography live in `src/index.css` (CSS variables).
-- Each component/page uses a CSS module for scoped styling, keeping the fine-art aesthetic consistent.
-- Buttons and cards intentionally echo graphite shadows with blush accents; tweak gradients or radii inside the relevant `*.module.css` files.
-
-## Deployment
-
-When you are ready to deploy, run `npm run build` and point your static hosting provider (Netlify, Vercel, Render, S3, etc.) at the generated `build/` directory.
-
-For questions or handoff details, see the `Contact` page implementation in `src/pages/Contact/Contact.tsx`.
+Ensure the repository name matches the `homepage` value in `package.json`. Run `npm run deploy`; the script builds the app and publishes `build/` to the `gh-pages` branch. All routes use `process.env.PUBLIC_URL` to maintain the `/darbyarts/` prefix.

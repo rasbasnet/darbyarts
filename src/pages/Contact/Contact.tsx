@@ -1,4 +1,5 @@
 import { FormEvent } from 'react';
+import { profile } from '../../data/profile';
 import styles from './Contact.module.css';
 
 const Contact = () => {
@@ -11,7 +12,7 @@ const Contact = () => {
     const message = (formData.get('message') ?? '').toString();
     const subject = encodeURIComponent('Darby Mitchell Studio Inquiry');
     const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-    window.location.href = `mailto:studio@darbymitchell.art?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${profile.contact.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -20,26 +21,25 @@ const Contact = () => {
         <div className="container">
           <div className={styles.intro}>
             <p className={styles.overline}>Contact</p>
-            <h1>Studio visits, acquisitions, collaborations.</h1>
+            <h1>Let’s co-create tender, sugar-coated worlds.</h1>
             <p>
-              Darby accepts a limited number of commissions yearly and welcomes invitations for exhibitions, artist talks,
-              and interdisciplinary collaborations. Please share as many details as possible so the studio can respond
-              thoughtfully.
+              For exhibitions, acquisitions, interviews, or studio visits, reach out directly using the form or contact
+              details below. Full project decks and high-resolution images are available on request.
             </p>
             <div className={styles.details}>
               <p>
                 <strong>Email</strong>
-                <a href="mailto:studio@darbymitchell.art">studio@darbymitchell.art</a>
+                <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+              </p>
+              <p>
+                <strong>Phone</strong>
+                <a href="tel:+17044377979">{profile.contact.phone}</a>
               </p>
               <p>
                 <strong>Instagram</strong>
-                <a href="https://www.instagram.com/darbymitchell.art" target="_blank" rel="noreferrer">
+                <a href={profile.contact.instagram} target="_blank" rel="noreferrer">
                   @darbymitchell.art
                 </a>
-              </p>
-              <p>
-                <strong>Studio</strong>
-                <span>Located in Portland, Oregon. Visits by appointment.</span>
               </p>
             </div>
           </div>
@@ -51,9 +51,9 @@ const Contact = () => {
             <input id="email" name="email" type="email" required placeholder="you@email.com" />
 
             <label htmlFor="message">Message</label>
-            <textarea id="message" name="message" rows={6} placeholder="Tell us about the project or inquiry." />
+            <textarea id="message" name="message" rows={8} placeholder="Tell me about the project or inquiry." />
 
-            <button type="submit">Compose email</button>
+            <button type="submit">Send message</button>
           </form>
         </div>
       </section>

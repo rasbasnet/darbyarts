@@ -5,6 +5,7 @@ import Artwork from './pages/Artwork/Artwork';
 import ArtworkDetail from './pages/ArtworkDetail/ArtworkDetail';
 import Contact from './pages/Contact/Contact';
 import Exhibitions from './pages/Exhibitions/Exhibitions';
+import ExhibitionDetail from './pages/ExhibitionDetail/ExhibitionDetail';
 import Home from './pages/Home/Home';
 
 const App = () => (
@@ -15,6 +16,7 @@ const App = () => (
       <Route path="artwork/:artworkId" element={<ArtworkDetail />} />
       <Route path="about" element={<About />} />
       <Route path="exhibitions" element={<Exhibitions />} />
+      <Route path="exhibitions/:exhibitionId" element={<ExhibitionDetail />} />
       <Route path="contact" element={<Contact />} />
     </Route>
     <Route path="*" element={<Navigate to="/" replace />} />

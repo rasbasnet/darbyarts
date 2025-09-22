@@ -1,0 +1,111 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  padding-block: clamp(4rem, 12vw, 7rem);
+  background: linear-gradient(140deg, rgba(255, 241, 247, 0.95), rgba(249, 212, 226, 0.85));
+  color: var(--color-charcoal);
+}
+
+.breadcrumb {
+  display: inline-flex;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(92, 31, 54, 0.55);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.breadcrumb a {
+  color: inherit;
+}
+
+.header {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  align-items: end;
+}
+
+.overline {
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(92, 31, 54, 0.55);
+}
+
+.header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  letter-spacing: -0.03em;
+  color: var(--color-charcoal);
+}
+
+.meta {
+  margin: 0.4rem 0 1.2rem;
+  color: rgba(92, 31, 54, 0.62);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.summary {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(92, 31, 54, 0.78);
+}
+
+.heroArtwork {
+  margin: 0;
+  position: relative;
+  border-radius: 36px;
+  overflow: hidden;
+  border: 1px solid rgba(244, 177, 198, 0.35);
+  box-shadow: 0 30px 70px rgba(244, 177, 198, 0.25);
+}
+
+.heroArtwork img {
+  width: 100%;
+  display: block;
+}
+
+.heroArtwork figcaption {
+  position: absolute;
+  inset: auto 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 239, 246, 0.92);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(92, 31, 54, 0.7);
+  box-shadow: 0 12px 30px rgba(244, 177, 198, 0.22);
+}
+
+.body {
+  display: grid;
+  gap: 1.6rem;
+  max-width: 780px;
+  color: rgba(92, 31, 54, 0.78);
+  line-height: 1.9;
+}
+
+.pullQuote {
+  margin: 1rem 0 0;
+  padding-left: 1.5rem;
+  border-left: 3px solid rgba(244, 177, 198, 0.6);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: rgba(92, 31, 54, 0.72);
+}
+
+@media (min-width: 992px) {
+  .header {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  }
+}

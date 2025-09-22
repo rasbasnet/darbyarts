@@ -13,13 +13,49 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.65), transparent 60%),
-    radial-gradient(circle at 80% 10%, var(--scroll-accent, rgba(242, 167, 196, 0.25)), transparent 55%),
-    radial-gradient(circle at 80% 80%, var(--scroll-shadow, rgba(48, 44, 53, 0.18)), transparent 65%);
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.75), transparent 58%),
+    linear-gradient(135deg, var(--scroll-accent, rgba(244, 177, 198, 0.35)), transparent 65%),
+    radial-gradient(circle at 82% 80%, rgba(255, 210, 226, 0.45), transparent 62%),
+    linear-gradient(160deg, #fff5f9, #f6d3e3 60%, #f3c6da);
   pointer-events: none;
   z-index: -1;
 }
 
+.grain {
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1.25 0 0 0 -0.15 0 1.22 0 0 -0.15 0 0 1.2 0 -0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23noise)' fill='rgba(68, 60, 68, 0.65)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  mix-blend-mode: multiply;
+  opacity: 0.32;
+  filter: contrast(125%);
+  animation: grainShift 22s linear infinite;
+}
+
+
+@keyframes grainShift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-3%, 3%, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+}
+
 .main {
   flex: 1;
+}
+
+
+@supports not (mix-blend-mode: multiply) {
+  .grain {
+    mix-blend-mode: normal;
+    opacity: 0.12;
+    filter: contrast(105%);
+  }
 }

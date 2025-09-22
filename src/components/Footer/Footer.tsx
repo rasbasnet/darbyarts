@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
+import { profile } from '../../data/profile';
 import styles from './Footer.module.css';
 
 const Footer = () => (
   <footer className={styles.footer}>
     <div className={`container ${styles.inner}`}>
       <div>
-        <p className={styles.signature}>Darby Mitchell Studio</p>
-        <p className={styles.smallPrint}>Drawing intimacies in graphite & blush.</p>
+        <p className={styles.signature}>{profile.name}</p>
+        <p className={styles.smallPrint}>{profile.tagline}</p>
       </div>
 
       <nav className={styles.footerNav} aria-label="Footer navigation">
@@ -17,14 +18,11 @@ const Footer = () => (
       </nav>
 
       <div className={styles.meta}>
-        <a
-          href="https://www.instagram.com/darbymitchell.art"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={profile.contact.instagram} target="_blank" rel="noreferrer">
           Instagram
         </a>
-        <span>© {new Date().getFullYear()} Darby Mitchell</span>
+        <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+        <span>© {new Date().getFullYear()} {profile.name}</span>
       </div>
     </div>
   </footer>

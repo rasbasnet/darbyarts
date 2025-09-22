@@ -1,5 +1,6 @@
 .page {
-  background: rgba(255, 255, 255, 0.78);
+  position: relative;
+  background: linear-gradient(150deg, rgba(255, 241, 247, 0.95), rgba(249, 212, 226, 0.85));
   min-height: 100%;
 }
 
@@ -23,6 +24,7 @@
   display: grid;
   gap: 1.5rem;
   max-width: 520px;
+  color: rgba(92, 31, 54, 0.78);
 }
 
 .overline {
@@ -30,7 +32,7 @@
   font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-graphite);
+  color: rgba(92, 31, 54, 0.55);
 }
 
 .intro h1 {
@@ -43,7 +45,7 @@
 
 .intro p {
   margin: 0;
-  color: rgba(44, 39, 51, 0.75);
+  color: rgba(92, 31, 54, 0.72);
   line-height: 1.8;
 }
 
@@ -57,7 +59,7 @@
   font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-graphite);
+  color: rgba(92, 31, 54, 0.55);
 }
 
 .details a,
@@ -76,16 +78,16 @@
   gap: 1rem;
   padding: clamp(2rem, 5vw, 3rem);
   border-radius: 30px;
-  border: 1px solid rgba(31, 29, 38, 0.1);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 30px 55px rgba(31, 29, 38, 0.15);
+  border: 1px solid rgba(244, 177, 198, 0.35);
+  background: rgba(255, 245, 249, 0.95);
+  box-shadow: 0 24px 55px rgba(244, 177, 198, 0.25);
 }
 
 .form label {
   font-size: 0.85rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-graphite);
+  color: rgba(92, 31, 54, 0.6);
 }
 
 .form input,
@@ -93,8 +95,8 @@
   width: 100%;
   padding: 0.9rem 1rem;
   border-radius: 18px;
-  border: 1px solid rgba(31, 29, 38, 0.12);
-  background: rgba(247, 243, 241, 0.6);
+  border: 1px solid rgba(92, 31, 54, 0.2);
+  background: rgba(255, 255, 255, 0.9);
   font-family: inherit;
   font-size: 0.95rem;
   color: var(--color-charcoal);
@@ -103,9 +105,8 @@
 .form input:focus,
 .form textarea:focus {
   outline: none;
-  border-color: rgba(242, 167, 196, 0.6);
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 0 0 4px rgba(242, 167, 196, 0.15);
+  border-color: rgba(244, 177, 198, 0.6);
+  box-shadow: 0 0 0 4px rgba(244, 177, 198, 0.15);
 }
 
 .form button {
@@ -113,7 +114,7 @@
   padding: 0.9rem 1.8rem;
   border-radius: 999px;
   border: none;
-  background: linear-gradient(120deg, rgba(242, 167, 196, 0.95), rgba(249, 217, 231, 0.85));
+  background: linear-gradient(120deg, rgba(244, 177, 198, 0.9), rgba(241, 155, 184, 0.95));
   color: var(--color-charcoal);
   font-weight: 600;
   text-transform: uppercase;
@@ -124,5 +125,5 @@
 
 .form button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 24px 48px rgba(242, 167, 196, 0.32);
+  box-shadow: 0 24px 48px rgba(244, 177, 198, 0.32);
 }

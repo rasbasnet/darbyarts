@@ -1,9 +1,31 @@
 .page {
-  background: rgba(255, 255, 255, 0.78);
+  position: relative;
+  background: linear-gradient(160deg, rgba(255, 245, 249, 0.72), rgba(244, 196, 214, 0.42));
+  overflow: hidden;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(240, 170, 200, 0.45), rgba(222, 132, 173, 0.4)),
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4), transparent 60%);
+  background-size: 200% 200%;
+  animation: drift 18s ease-in-out infinite;
+  z-index: -2;
+}
+
+.page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 249, 252, 0.68);
+  mix-blend-mode: lighten;
+  z-index: -1;
 }
 
 .intro {
-  padding-block: clamp(4rem, 10vw, 6rem);
+  padding-block: clamp(5rem, 11vw, 7rem);
 }
 
 .processNotes {
@@ -13,11 +35,57 @@
 }
 
 .processNotes > div {
-  background: rgba(247, 243, 241, 0.9);
-  border: 1px solid rgba(50, 47, 57, 0.08);
-  border-radius: 28px;
-  padding: 1.8rem;
-  box-shadow: 0 24px 45px rgba(31, 29, 38, 0.12);
+  position: relative;
+  background: linear-gradient(130deg, rgba(255, 255, 255, 0.24), rgba(239, 201, 217, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  padding: clamp(1.8rem, 4vw, 2.4rem);
+  box-shadow: 0 26px 62px rgba(32, 20, 28, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px) saturate(125%);
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), filter var(--transition);
+}
+
+
+.processNotes > div::before {
+  content: '';
+  position: absolute;
+  inset: -30% -40% 52%;
+  background:
+    radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.55), transparent 62%),
+    linear-gradient(118deg, rgba(255, 255, 255, 0.24), rgba(244, 177, 198, 0.18));
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 280ms ease, transform 360ms ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.processNotes > div::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.processNotes > div:hover,
+.processNotes > div:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 72px rgba(32, 20, 28, 0.28);
+  border-color: rgba(255, 255, 255, 0.45);
+  filter: brightness(1.04) saturate(1.05);
+}
+
+.processNotes > div:hover::before,
+.processNotes > div:focus-within::before {
+  opacity: 0.82;
+  transform: translate3d(-2%, -3%, 0) scale(1.06);
 }
 
 .processNotes h3 {
@@ -29,19 +97,48 @@
 
 .processNotes p {
   margin: 0;
-  color: rgba(44, 39, 51, 0.75);
-  font-size: 0.95rem;
-  line-height: 1.7;
+  color: rgba(36, 26, 39, 0.75);
+  font-size: 0.98rem;
+  line-height: 1.8;
 }
 
 .processNotes em {
   font-style: normal;
   font-family: var(--font-display);
-  color: var(--color-charcoal);
 }
+@supports not (backdrop-filter: blur(1px)) {
+  .processNotes > div {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(36, 26, 39, 0.12);
+    box-shadow: 0 24px 55px rgba(36, 26, 39, 0.14);
+    filter: none;
+  }
+
+  .processNotes > div:hover,
+  .processNotes > div:focus-within {
+    filter: none;
+  }
+}
+
 
 @media (min-width: 900px) {
   .processNotes {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@keyframes drift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 0%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page::before {
+    animation: none;
+  }
+
+  .processNotes > div,
+  .processNotes > div::before {
+    transition: none;
   }
 }

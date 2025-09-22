@@ -1,111 +1,158 @@
+import { Link } from 'react-router-dom';
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
+import { artworks } from '../../data/artworks';
+import { profile } from '../../data/profile';
 import styles from './About.module.css';
 
-const About = () => (
-  <div className={styles.page}>
-    <section className={styles.hero}> 
-      <div className="container">
-        <div className={styles.heroGrid}>
-          <div>
+const portrait = artworks.find((item) => item.id === 'summer-self-portrait-2') ?? artworks[0];
+const publicUrl = process.env.PUBLIC_URL ?? '';
+const deckUrl = publicUrl
+  ? `${publicUrl}${publicUrl.endsWith('/') ? '' : '/'}files/Artist Deck [Final].pdf`
+  : '/files/Artist Deck [Final].pdf';
+
+const practiceMotifs = [
+  {
+    title: 'Seductive armour',
+    description:
+      'Candy pink becomes a shield. Saturated grounds invite viewers to linger in scenes that might otherwise repel—sugar coating the bite of social anxiety.'
+  },
+  {
+    title: 'Bodies as instruments',
+    description:
+      'Graphite structures each muscle. Cosmetics, pastel, and gesso sink into paper like blush on skin, rehearsing appetite, language, and release.'
+  }
+];
+
+const About = () => {
+  const [statementLead, ...statementBody] = profile.statement;
+
+  return (
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className="container">
+          <div className={styles.heroGrid}>
+            <figure className={styles.heroImage}>
+              <img src={portrait.image} alt={portrait.alt} />
+              <figcaption>
+                <span>{portrait.title}</span>
+                <span>{portrait.year}</span>
+              </figcaption>
+            </figure>
+
+            <div className={styles.heroCopy}>
+              <span className={styles.overline}>Artist statement</span>
+              <h1>{profile.name}</h1>
+              <p className={styles.lead}>{statementLead}</p>
+              {statementBody.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <div className={styles.pillars}>
+                {practiceMotifs.map((motif) => (
+                  <article key={motif.title} className={styles.pillar}>
+                    <h3>{motif.title}</h3>
+                    <p>{motif.description}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <aside className={styles.quickFacts}>
+              <div className={styles.contactBlock}>
+                <span>Connect</span>
+                <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+                <a href="tel:+17044377979">{profile.contact.phone}</a>
+                <a href={profile.contact.instagram} target="_blank" rel="noreferrer">
+                  @darbymitchell.art
+                </a>
+              </div>
+              <div className={styles.contactBlock}>
+                <span>Location</span>
+                <p>{profile.contact.location}</p>
+              </div>
+              <a href={deckUrl} className={styles.deckLink} download>
+                Download artist deck
+              </a>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.bioSection}>
+        <div className="container">
+          <div className={styles.bioGrid}>
             <SectionHeader
-              overline="About"
-              title="Darby Mitchell"
-              description="Darby Mitchell (b. 1994) is a Portland-based figurative artist working in drawing, painting,
-                and installation. Her practice focuses on the mouth as a site of appetite, resistance, and language."
+              overline="Practice"
+              title="Drawing the seam between performance and tenderness"
+              description={profile.bio[0]}
+              tone="dark"
             />
-          </div>
-          <div className={styles.portraitCard}>
-            <div className={styles.portraitMask}>
-              <div className={styles.gradientRing} />
-              <div className={styles.portraitGlow} />
-            </div>
-            <p className={styles.caption}>
-              “I draw the body like a rehearsal. The mouth remembers the phrases our muscles hold even after the words
-              have slipped.”
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div className="container">
-        <div className={styles.bioGrid}>
-          <div>
-            <h3>Biography</h3>
-            <p>
-              Darby studied drawing and social practice at the Pacific Northwest College of Art (BFA, 2017) and pursued
-              graduate research at Cranbrook Academy of Art (MFA, 2020). She has been awarded residencies across the West
-              Coast, with recent fellowships at Sound House (2022) and the Watershed Collective (2021).
-            </p>
-            <p>
-              Her work appears in New American Paintings (Issue 164) and has been featured by Hyperallergic for the solo
-              exhibition <em>Crave</em>. Collections include the Portland Art Museum Viewing Drawers and numerous private
-              holdings in North America.
-            </p>
-            <p>
-              Mitchell’s studio practice extends into collaborative performance, partnering with choreographers and sound
-              designers to explore how the mouth modulates both speech and song. She currently teaches advanced drawing at
-              the Pacific Northwest College of Art.
-            </p>
-          </div>
-          <div className={styles.quickFacts}>
-            <div>
-              <h4>Education</h4>
-              <ul>
-                <li>MFA, Drawing—Cranbrook Academy of Art, 2020</li>
-                <li>BFA, Intermedia & Drawing—Pacific Northwest College of Art, 2017</li>
-              </ul>
-            </div>
-            <div>
-              <h4>Residencies & Awards</h4>
-              <ul>
-                <li>Sound House Residency, Taos, NM, 2022</li>
-                <li>Watershed Collective Fellowship, 2021</li>
-                <li>Oregon Arts Commission Career Opportunity Grant, 2020</li>
-              </ul>
-            </div>
-            <div>
-              <h4>Press</h4>
-              <ul>
-                <li>Hyperallergic — “Bodies in Blush” (Feature, 2023)</li>
-                <li>New American Paintings — Pacific Northwest Issue No. 164</li>
-                <li>KRONOS Radio — Interview on hunger and ritual, 2022</li>
-              </ul>
+            <div className={styles.bioBody}>
+              <p>{profile.bio[1]}</p>
+              <div className={styles.cvGrid}>
+                <div>
+                  <h3>Education</h3>
+                  <ul>
+                    {profile.education.map((entry) => (
+                      <li key={`${entry.year}-${entry.program}`}>
+                        <span>{entry.year}</span>
+                        <span>{entry.program}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3>Awards & Scholarships</h3>
+                  <ul>
+                    {profile.awards.map((award) => (
+                      <li key={`${award.year}-${award.title}`}>
+                        <span>{award.year}</span>
+                        <span>
+                          {award.title}
+                          {award.notes ? <em> — {award.notes}</em> : null}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <Link to="/contact" className={styles.ctaLink}>
+                Contact the studio
+              </Link>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className={styles.timelineSection}>
-      <div className="container">
-        <h3>Selected timeline</h3>
-        <ul className={styles.timeline}>
-          <li>
-            <span>2025</span>
-            <p>Upcoming solo exhibition <em>FLUX: Bodies in Bloom</em>, Cobalt Gallery, Portland, OR.</p>
-          </li>
-          <li>
-            <span>2024</span>
-            <p>Group exhibition <em>Surface Study</em>, Glass Box Contemporary, Seattle, WA.</p>
-          </li>
-          <li>
-            <span>2023</span>
-            <p>Solo exhibition <em>Crave</em>, Studio 4A, Chicago, IL; published in Hyperallergic.</p>
-          </li>
-          <li>
-            <span>2022</span>
-            <p>Sound House Residency, Taos, NM; new series <em>Anatomies of Tenderness</em> begins.</p>
-          </li>
-          <li>
-            <span>2020</span>
-            <p>Graduated from Cranbrook Academy of Art; awarded Oregon Arts Commission Career Opportunity Grant.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </div>
-);
+      <section className={styles.processSection}>
+        <div className="container">
+          <SectionHeader
+            overline="Process notes"
+            title="Bodies as portals, diagrams as confession"
+            description="Field notes pulled from the artist deck and exhibition essays."
+            tone="dark"
+          />
+          <div className={styles.processGrid}>
+            <blockquote>
+              <p>
+                Medical illustration has always been a way of conveying factual information about the body. This series gives
+                conceptual meaning to those otherwise sterile associations, recontextualising science to explore sentiment.
+                Put simply, it represents the literal embodiment of feeling.
+              </p>
+              <cite>— Embodied: An Anatomical Exploration of Inner Narrative, 2021</cite>
+            </blockquote>
+            <blockquote>
+              <p>
+                Eat Me began as a meditation on vulnerability through self-portraiture. Over time it dared the viewer to
+                engage with the body-as-vessel, trapping them in candy-pink space while a spoon hovers above an impossible
+                offering.
+              </p>
+              <cite>— CONTRAST: Thornback Gallery, 2025</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
 
 export default About;

@@ -1,135 +1,213 @@
 [
   {
-    "id": "soft-landing",
-    "title": "Soft Landing",
+    "id": "eat-me",
+    "title": "Eat Me",
+    "year": "2024",
+    "created": "2024-07-01",
+    "medium": "Colored pencil, gesso, and found cosmetics on paper",
+    "size": "20 \u00d7 42 in",
+    "image": "images/artworks/eat-me.jpg",
+    "alt": "Self-portrait with pastel pink ground and a silver spoon hovering above cereal held in the artist's mouth.",
+    "orientation": "portrait",
+    "series": "Performative Appetites",
+    "statement": "Commissioned for CONTRAST 2025, the drawing weaponises sweetness\u2014granting passive permission while daring the viewer to accept an impossible offer.",
+    "palette": {
+      "primary": "#ac8c96",
+      "secondary": "#2d1a24"
+    }
+  },
+  {
+    "id": "not-very-palatable",
+    "title": "Not Very Palatable",
+    "year": "2024",
+    "created": "2024-03-10",
+    "medium": "Chalk pastel on paper",
+    "size": "40 \u00d7 40 in",
+    "image": "images/artworks/not-very-palatable.jpg",
+    "alt": "Pink-toned portrait dissolving into abstraction against a blush field.",
+    "orientation": "portrait",
+    "series": "Performative Appetites",
+    "statement": "Anxieties around being consumed collapse into painterly paste, oscillating between seductive surface and stomach-turning grit.",
+    "palette": {
+      "primary": "#b37f91",
+      "secondary": "#2c1d27"
+    }
+  },
+  {
+    "id": "what-did-you-expect",
+    "title": "What Did You Expect?",
+    "year": "2025",
+    "created": "2025-02-20",
+    "medium": "Colored pencil and acrylic on paper",
+    "size": "30 \u00d7 18 in",
+    "image": "images/artworks/what-did-you-expect.jpg",
+    "alt": "Detail of a face bisected by saturated pink shadow.",
+    "orientation": "landscape",
+    "series": "Portals",
+    "statement": "Portraiture as provocation: a hot pink shadow scrutinises the assumptions woven into performance.",
+    "palette": {
+      "primary": "#cb97af",
+      "secondary": "#2b1424"
+    }
+  },
+  {
+    "id": "portals",
+    "title": "Portals 1\u20136",
+    "year": "2025",
+    "created": "2025-01-25",
+    "medium": "Colored pencil and acrylic on paper",
+    "size": "Each 9 \u00d7 11 in",
+    "image": "images/artworks/portals.jpg",
+    "alt": "Grid of cropped mouths rendered in mauves and blushes.",
+    "orientation": "portrait",
+    "statement": "Six studies rehearse micro-expressions, each mouth a doorway that negotiates secrecy, desire, and refusal.",
+    "palette": {
+      "primary": "#d8a2b8",
+      "secondary": "#402233"
+    }
+  },
+  {
+    "id": "key-of-bliss",
+    "title": "Key of Bliss",
+    "year": "2025",
+    "created": "2025-02-05",
+    "medium": "Graphite and acrylic on paper",
+    "size": "8 \u00d7 42 in",
+    "image": "images/artworks/key-of-bliss.jpg",
+    "alt": "Horizontal drawing of an elongated spoon-like form floating on blush ground.",
+    "orientation": "landscape",
+    "statement": "A devotional utensil floats like sheet music\u2014equal parts spoon, tuning fork, and key to the body\u2019s private chamber.",
+    "palette": {
+      "primary": "#e5c0d0",
+      "secondary": "#3b2230"
+    }
+  },
+  {
+    "id": "ouroboros",
+    "title": "Ouroboros",
+    "year": "2025",
+    "created": "2025-03-12",
+    "medium": "Graphite and acrylic on paper",
+    "size": "42 \u00d7 30 in",
+    "image": "images/artworks/ouroboros.jpg",
+    "alt": "Looped ribbon of flesh painted in pinks encircling itself.",
+    "orientation": "landscape",
+    "statement": "A ribbon of flesh curls back on itself, staging the endless loop of anxiety feeding on relief.",
+    "palette": {
+      "primary": "#d8adbf",
+      "secondary": "#371b2e"
+    }
+  },
+  {
+    "id": "drainage",
+    "title": "Drainage",
+    "year": "2025",
+    "created": "2025-04-14",
+    "medium": "Graphite and ink on Stonehenge paper",
+    "size": "24 \u00d7 36 in",
+    "image": "images/artworks/drainage.jpg",
+    "alt": "Bleeding bouquet of organs rendered in graphite against a pink wash.",
+    "orientation": "portrait",
+    "statement": "Organs bloom into a bouquet, mapping where excess feeling decants and how vulnerability leaks into the room.",
+    "palette": {
+      "primary": "#b7536c",
+      "secondary": "#2a1018"
+    }
+  },
+  {
+    "id": "extraction",
+    "title": "Extraction",
+    "year": "2025",
+    "created": "2025-04-14",
+    "medium": "Graphite and ink on Stonehenge paper",
+    "size": "24 \u00d7 36 in",
+    "image": "images/artworks/extraction.jpg",
+    "alt": "Large drawing of hands and teeth pulling tension across the page.",
+    "orientation": "landscape",
+    "statement": "Hands, teeth, and taut strings hold competing forces of grip and release\u2014the labour of translating trauma into language.",
+    "palette": {
+      "primary": "#b7b3a7",
+      "secondary": "#332c26"
+    }
+  },
+  {
+    "id": "dont-you-ever-get-lonely",
+    "title": "Don't You Ever Get Lonely Down There?",
+    "year": "2024",
+    "created": "2024-05-15",
+    "medium": "Gouache on paper",
+    "size": "42 \u00d7 108 in",
+    "image": "images/artworks/dont-you-ever-get-lonely.jpg",
+    "alt": "Wide painting of a figure submerged in pink voids.",
+    "orientation": "portrait",
+    "statement": "A panoramic gouache lodges the figure underground, asking who tends to our subterranean selves.",
+    "palette": {
+      "primary": "#dbcbd4",
+      "secondary": "#3f2b3c"
+    }
+  },
+  {
+    "id": "im-sorry-we-forgot",
+    "title": "I'm Sorry We Forgot",
+    "year": "2024",
+    "created": "2024-01-12",
+    "medium": "Mixed media sculpture",
+    "size": "15 \u00d7 15 \u00d7 4.5 in",
+    "image": "images/artworks/im-sorry-we-forgot.jpg",
+    "alt": "Relief sculpture of mouths and teeth glazed in pink confectionary tones.",
+    "orientation": "portrait",
+    "statement": "Candy-coated teeth and resin reliquaries archive apologies that were never spoken aloud.",
+    "palette": {
+      "primary": "#b0999a",
+      "secondary": "#3c2729"
+    }
+  },
+  {
+    "id": "they-must-love-you",
+    "title": "They Must Love You",
     "year": "2023",
-    "created": "2023-07-18",
-    "medium": "Graphite and pastel on cotton rag",
-    "size": "30 × 22 in",
-    "image": "images/artworks/soft-landing.jpg",
-    "alt": "Graphite figure dissolving into blush pigment with a hand covering the mouth.",
-    "orientation": "landscape",
-    "series": "Anatomies of Tenderness",
-    "statement": "A breath held between impulse and restraint, captured in graphite gradations and a single bruise of pink.",
-    "palette": {
-      "primary": "#f4c5d9",
-      "secondary": "#1f1d26"
-    }
-  },
-  {
-    "id": "tether",
-    "title": "Tether",
-    "year": "2024",
-    "created": "2024-04-09",
-    "medium": "Graphite, pastel, and conte on Lennox paper",
-    "size": "28 × 20 in",
-    "image": "images/artworks/tether.jpg",
-    "alt": "Graphite drawing of a mouth pulling a dark strand from a clenched hand with a crimson wash.",
-    "orientation": "landscape",
-    "series": "Anatomies of Tenderness",
-    "statement": "Investigating hunger and boundaries through a single tension line drawn between a mouth and fist.",
-    "palette": {
-      "primary": "#f28cab",
-      "secondary": "#1d1a24"
-    }
-  },
-  {
-    "id": "chrome-portrait",
-    "title": "Chromatic Reliquary",
-    "year": "2024",
-    "created": "2024-11-02",
-    "medium": "Acrylic and ink on paper",
-    "size": "18 × 14 in",
-    "image": "images/artworks/chrome-portrait.jpg",
-    "alt": "Iridescent blue face rendered over a blush ground with reflective highlights and lashes.",
+    "created": "2023-10-05",
+    "medium": "Charcoal and graphite on Stonehenge paper",
+    "size": "22.5 \u00d7 22.5 in",
+    "image": "images/artworks/they-must-love-you.jpg",
+    "alt": "Graphite portrait with ribbons of blush diffusing around the face.",
     "orientation": "portrait",
-    "statement": "A reflective shell capturing queer futurity—mirror-sheen contours soften into candy-colored drips.",
+    "statement": "Graphite ribbons spiral around a scrutinised face, balancing praise with the prickliness of surveillance.",
     "palette": {
-      "primary": "#6fd0ff",
-      "secondary": "#f053a3"
+      "primary": "#868686",
+      "secondary": "#201f1d"
     }
   },
   {
-    "id": "sugar-spell",
-    "title": "Sugar Spell",
-    "year": "2024",
-    "created": "2024-06-18",
-    "medium": "Oil on panel",
-    "size": "60 × 24 in",
-    "image": "images/artworks/sugar-spell.jpg",
-    "alt": "Portrait of a woman beneath a suspended spoon holding neon cereal in her mouth against a blush field.",
-    "orientation": "portrait",
-    "series": "Bite",
-    "statement": "Balancing indulgence and vulnerability via saturated candy hues hovering over a quiet figure.",
-    "palette": {
-      "primary": "#f7b7d2",
-      "secondary": "#2f1b3b"
-    }
-  },
-  {
-    "id": "mouth-variations",
-    "title": "Mouth Variations I–VI",
+    "id": "summer-self-portrait-1",
+    "title": "Summer Self-Portrait no. 1",
     "year": "2023",
-    "created": "2023-04-05",
-    "medium": "Graphite and pastel on paper",
-    "size": "Each 11 × 8.5 in",
-    "image": "images/artworks/mouth-variations.jpg",
-    "alt": "Studio wall with six pink studies of open mouths pinned in a grid.",
-    "orientation": "landscape",
-    "series": "Voice Notes",
-    "statement": "A chorus of quiet screams, each contour line shifting the emotional register of the series.",
+    "created": "2023-07-01",
+    "medium": "Charcoal on BFK Rives paper",
+    "size": "22.5 \u00d7 32 in",
+    "image": "images/artworks/summer-self-portrait-1.jpg",
+    "alt": "Charcoal self-portrait with windblown hair on a pale ground.",
+    "orientation": "portrait",
+    "statement": "Windbreaks of charcoal track how summer heat and exhaustion reshape the self mid-season.",
     "palette": {
-      "primary": "#f79ac4",
-      "secondary": "#482a3d"
+      "primary": "#d3d3d3",
+      "secondary": "#1f1f1f"
     }
   },
   {
-    "id": "better-worse",
-    "title": "Better? Worse? Same?",
+    "id": "summer-self-portrait-2",
+    "title": "Summer Self-Portrait no. 2",
     "year": "2023",
-    "created": "2023-02-14",
-    "medium": "Acrylic on canvas",
-    "size": "40 × 30 in",
-    "image": "images/artworks/better-worse.jpg",
-    "alt": "Painting of a blue sky eye chart reading ‘Better? Worse? The Same?’ above a yellow field.",
+    "created": "2023-07-08",
+    "medium": "Charcoal on BFK Rives paper",
+    "size": "22.5 \u00d7 32 in",
+    "image": "images/artworks/summer-self-portrait-2.jpg",
+    "alt": "Graphite portrait staring directly at the viewer.",
     "orientation": "portrait",
-    "statement": "Language tests perception: a pastoral horizon doubles as an optometrist’s chart probing certainty.",
+    "statement": "A second study holds eye contact\u2014equal parts challenge and confession, refusing to look away.",
     "palette": {
-      "primary": "#4ba4e0",
-      "secondary": "#f2d059"
-    }
-  },
-  {
-    "id": "hare-signal",
-    "title": "Signal Study",
-    "year": "2022",
-    "created": "2022-08-22",
-    "medium": "Graphite and pastel on paper",
-    "size": "12 × 48 in",
-    "image": "images/artworks/hare-signal.jpg",
-    "alt": "Pink panorama featuring a graphite hare facing a slender tuning instrument.",
-    "orientation": "landscape",
-    "series": "Echoes",
-    "statement": "A long-form drawing staging animal vigilance against a razor-thin instrument of measurement.",
-    "palette": {
-      "primary": "#f58ab0",
-      "secondary": "#2a0d24"
-    }
-  },
-  {
-    "id": "sorry-hearts",
-    "title": "I'm Sorry (Candy Hearts)",
-    "year": "2024",
-    "created": "2024-08-14",
-    "medium": "Oil pastel on paper",
-    "size": "20 × 20 in",
-    "image": "images/artworks/sorry-hearts.jpg",
-    "alt": "Drawing of conversation hearts on a pink background, each stamped with the words ‘I’M SORRY’.",
-    "orientation": "portrait",
-    "statement": "Sweetness with an apology on repeat—anxious affection coated in confectionery gloss.",
-    "palette": {
-      "primary": "#f68fc1",
-      "secondary": "#f1da6a"
+      "primary": "#ababab",
+      "secondary": "#1d1d1d"
     }
   }
 ]
