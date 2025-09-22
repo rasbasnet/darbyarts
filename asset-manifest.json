@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/darbyarts/static/css/main.5a24199f.css",
-    "main.js": "/darbyarts/static/js/main.5788fe87.js",
+    "main.css": "/darbyarts/static/css/main.eafc885f.css",
+    "main.js": "/darbyarts/static/js/main.527bafae.js",
     "index.html": "/darbyarts/index.html",
-    "main.5a24199f.css.map": "/darbyarts/static/css/main.5a24199f.css.map",
-    "main.5788fe87.js.map": "/darbyarts/static/js/main.5788fe87.js.map"
+    "main.eafc885f.css.map": "/darbyarts/static/css/main.eafc885f.css.map",
+    "main.527bafae.js.map": "/darbyarts/static/js/main.527bafae.js.map"
   },
   "entrypoints": [
-    "static/css/main.5a24199f.css",
-    "static/js/main.5788fe87.js"
+    "static/css/main.eafc885f.css",
+    "static/js/main.527bafae.js"
   ]
 }
