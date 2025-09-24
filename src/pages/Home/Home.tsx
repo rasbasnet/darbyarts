@@ -5,14 +5,12 @@ import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import { artworks } from '../../data/artworks';
 import { exhibitions } from '../../data/exhibitions';
 import { profile } from '../../data/profile';
+import { resolveAssetPath } from '../../utils/media';
 import styles from './Home.module.css';
 
 const heroArtwork = artworks.find((item) => item.id === 'eat-me') ?? artworks[0];
 const featuredArtworks = artworks.slice(0, 6);
-const publicUrl = process.env.PUBLIC_URL ?? '';
-const deckUrl = publicUrl
-  ? `${publicUrl}${publicUrl.endsWith('/') ? '' : '/'}files/Artist Deck [Final].pdf`
-  : '/files/Artist Deck [Final].pdf';
+const deckUrl = resolveAssetPath('files/Artist Deck [Final].pdf');
 
 const Home = () => {
   useEffect(() => {

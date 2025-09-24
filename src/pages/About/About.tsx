@@ -2,13 +2,11 @@ import { Link } from 'react-router-dom';
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import { artworks } from '../../data/artworks';
 import { profile } from '../../data/profile';
+import { resolveAssetPath } from '../../utils/media';
 import styles from './About.module.css';
 
 const portrait = artworks.find((item) => item.id === 'summer-self-portrait-2') ?? artworks[0];
-const publicUrl = process.env.PUBLIC_URL ?? '';
-const deckUrl = publicUrl
-  ? `${publicUrl}${publicUrl.endsWith('/') ? '' : '/'}files/Artist Deck [Final].pdf`
-  : '/files/Artist Deck [Final].pdf';
+const deckUrl = resolveAssetPath('files/Artist Deck [Final].pdf');
 
 const practiceMotifs = [
   {

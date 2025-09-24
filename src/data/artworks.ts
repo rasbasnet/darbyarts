@@ -1,4 +1,5 @@
 import rawArtworks from './artworks.json';
+import { resolveAssetPath } from '../utils/media';
 
 type Orientation = 'portrait' | 'landscape';
 
@@ -23,12 +24,7 @@ type RawArtwork = {
 export type Artwork = RawArtwork;
 
 const parseDate = (value: string) => new Date(value).getTime();
-const basePath = (process.env.PUBLIC_URL ?? '').replace(/\/$/, '');
-const toImageUrl = (imagePath: string) => {
-  const trimmed = imagePath.replace(/^\/+/, '');
-  const url = basePath ? `${basePath}/${trimmed}` : `/${trimmed}`;
-  return url.replace(/\\/g, '/');
-};
+const toImageUrl = (imagePath: string) => resolveAssetPath(imagePath);
 
 const normalisedArtworks = [...(rawArtworks as RawArtwork[])].sort(
   (a, b) => parseDate(b.created) - parseDate(a.created),
