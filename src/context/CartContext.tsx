@@ -53,6 +53,43 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       return;
     }
 
+    try {
+      const stored = window.sessionStorage.getItem(CART_BACKUP_KEY);
+      if (!stored) {
+        return;
+      }
+
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        return;
+      }
+
+      const entries = parsed
+        .map((item: any) => {
+          if (!item || typeof item.posterId !== 'string') {
+            return null;
+          }
+          const qty = Number(item.quantity);
+          if (!Number.isFinite(qty) || qty < 1) {
+            return null;
+          }
+          return { posterId: item.posterId, quantity: Math.max(1, Math.floor(qty)) };
+        })
+        .filter(Boolean) as CartLineItem[];
+
+      if (entries.length) {
+        setLines(entries);
+      }
+    } catch (error) {
+      console.error('Unable to restore cart from sessionStorage', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if (lines.length) {
       window.sessionStorage.setItem(CART_BACKUP_KEY, JSON.stringify(lines));
     } else {
