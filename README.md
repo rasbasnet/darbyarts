@@ -46,7 +46,6 @@ REACT_APP_API_BASE_URL=http://localhost:4242
 1. Create `server/.env` with your secrets:
 
 ```bash
-STRIPE_SECRET_KEY=
 # optional override
 APP_URL=http://localhost:3000  # set to https://darbymitchell.art in production
 ```
