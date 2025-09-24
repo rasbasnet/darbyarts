@@ -34,21 +34,11 @@ Ensure the repository name matches the `homepage` value in `package.json`. Run `
 
 ### Environment variables (frontend)
 
-Create a `.env.local` file and add:
-
-```bash
-REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_XXXXXXXXXXXXXXXXXXXXXXXX
-REACT_APP_API_BASE_URL=http://localhost:4242
-```
+Create a `.env.local` file with stripe publishiable key and api base url
 
 ### Payment service (Node)
 
-1. Create `server/.env` with your secrets:
-
-```bash
-# optional override
-APP_URL=http://localhost:3000  # set to https://darbymitchell.art in production
-```
+1. Create `server/.env` with your secrets
 
 2. Install dependencies and start both apps:
 
