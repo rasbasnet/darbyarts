@@ -7,6 +7,9 @@ import Contact from './pages/Contact/Contact';
 import Exhibitions from './pages/Exhibitions/Exhibitions';
 import ExhibitionDetail from './pages/ExhibitionDetail/ExhibitionDetail';
 import Home from './pages/Home/Home';
+import Posters from './pages/Posters/Posters';
+import PosterDetail from './pages/PosterDetail/PosterDetail';
+import CheckoutResult from './pages/Posters/CheckoutResult/CheckoutResult';
 
 const App = () => (
   <Routes>
@@ -17,6 +20,9 @@ const App = () => (
       <Route path="about" element={<About />} />
       <Route path="exhibitions" element={<Exhibitions />} />
       <Route path="exhibitions/:exhibitionId" element={<ExhibitionDetail />} />
+      <Route path="posters" element={<Posters />} />
+      <Route path="posters/:posterId" element={<PosterDetail />} />
+      <Route path="posters/checkout/result" element={<CheckoutResult />} />
       <Route path="contact" element={<Contact />} />
     </Route>
     <Route path="*" element={<Navigate to="/" replace />} />

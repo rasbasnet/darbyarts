@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Footer from '../Footer/Footer';
 import Navigation from '../Navigation/Navigation';
+import CartDrawer from '../CartDrawer/CartDrawer';
+import CartPeek from '../CartDrawer/CartPeek';
 import styles from './Layout.module.css';
 
 const Layout = () => {
@@ -39,6 +41,8 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
+      <CartDrawer />
+      <CartPeek />
       <div className={styles.grain} aria-hidden />
     </div>
   );

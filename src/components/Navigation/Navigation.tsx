@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { profile } from '../../data/profile';
+import { useCart } from '../../context/CartContext';
 import styles from './Navigation.module.css';
 
 const links = [
   { to: '/', label: 'Home' },
   { to: '/artwork', label: 'Artwork' },
   { to: '/about', label: 'About' },
-  { to: '/exhibitions', label: 'Exhibitions' }
+  { to: '/exhibitions', label: 'Exhibitions' },
+  { to: '/posters', label: 'Posters' }
 ];
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { items, openDrawer } = useCart();
+  const totalQuantity = items.reduce((total, poster) => total + poster.quantity, 0);
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
@@ -45,6 +49,9 @@ const Navigation = () => {
               {link.label}
             </NavLink>
           ))}
+          <button type="button" className={styles.cartButton} onClick={() => { openDrawer(); closeMenu(); }}>
+            Cart{totalQuantity ? ` (${totalQuantity})` : ''}
+          </button>
           <Link to="/contact" className={styles.cta} onClick={closeMenu}>
             Connect
           </Link>

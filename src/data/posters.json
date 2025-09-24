@@ -1,0 +1,22 @@
+[
+  {
+    "id": "poster-performative-appetites",
+    "title": "Performative Appetites Poster",
+    "description": "Full-bleed giclée print on archival matte stock capturing the graphite-to-cosmetic gradients from the Performative Appetites series.",
+    "priceCents": 4800,
+    "currency": "usd",
+    "image": "images/artworks/eat-me.jpg",
+    "dimensions": "18 × 24 in",
+    "inventoryStatus": "open-edition"
+  },
+  {
+    "id": "poster-portals",
+    "title": "Portals Field Study Poster",
+    "description": "Limited edition screen-print with high-contrast charcoal textures and blush overlays from the Portals sketch journals.",
+    "priceCents": 6200,
+    "currency": "usd",
+    "image": "images/artworks/portals.jpg",
+    "dimensions": "24 × 36 in",
+    "inventoryStatus": "limited"
+  }
+]

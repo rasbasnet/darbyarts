@@ -1,26 +1,31 @@
 {
-  "name": "darbyarts",
+  "name": "darbymitchell",
   "version": "0.1.0",
-  "homepage": "https://rasbasnet.github.io/darbyarts",
+  "homepage": ".",
   "private": true,
   "dependencies": {
+    "@stripe/stripe-js": "^3.2.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
+    "stripe": "^14.6.0",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.2",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.5",
     "gh-pages": "^6.3.0",
-    "typescript": "^5.6.3"
+    "typescript": "4.9.5"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -28,7 +33,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server/index.js"
   },
   "eslintConfig": {
     "extends": [

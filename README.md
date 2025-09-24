@@ -15,9 +15,10 @@ Rebuilt portfolio site driven by structured data sourced from studio PDFs (Artis
 - `src/data/artworks.json` — artwork catalogue (title, medium, image path, palette, statements).
 - `src/data/profile.json` — statement, bio, contact, education, and awards.
 - `src/data/exhibitions.ts` — exhibitions and residencies.
+- `src/data/posters.json` — poster editions available for Stripe checkout.
 - `src/data/archiveWorks.ts` — legacy BFA works showcased on the About page.
 
-All artwork imagery lives in `public/images/artworks/` and is referenced relatively, so deployments to GitHub Pages work under the `/darbyarts/` base path.
+All artwork imagery lives in `public/images/artworks/` and is referenced relatively, so deployments work cleanly from any origin.
 
 ## Styling notes
 
@@ -27,4 +28,43 @@ All artwork imagery lives in `public/images/artworks/` and is referenced relativ
 
 ## Deployment to GitHub Pages
 
-Ensure the repository name matches the `homepage` value in `package.json`. Run `npm run deploy`; the script builds the app and publishes `build/` to the `gh-pages` branch. All routes use `process.env.PUBLIC_URL` to maintain the `/darbyarts/` prefix.
+Ensure the repository name matches the `homepage` value in `package.json`. Run `npm run deploy`; the script builds the app and publishes `build/` to the `gh-pages` branch. All routes use `process.env.PUBLIC_URL` to keep assets working from any base URL.
+
+## Posters & commerce
+
+### Environment variables (frontend)
+
+Create a `.env.local` file and add:
+
+```bash
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_XXXXXXXXXXXXXXXXXXXXXXXX
+REACT_APP_API_BASE_URL=http://localhost:4242
+```
+
+### Payment service (Node)
+
+1. Create `server/.env` with your secrets:
+
+```bash
+STRIPE_SECRET_KEY=sk_test_XXXXXXXXXXXXXXXXXXXXXXXX
+# optional override
+APP_URL=http://localhost:3000  # set to https://darbymitchell.art in production
+```
+
+2. Install dependencies and start both apps:
+
+```bash
+npm install
+npm run server # in one terminal, starts http://localhost:4242
+```
+
+```bash
+npm start     # in another terminal, frontend reads REACT_APP_API_BASE_URL for API calls
+```
+
+The build uses Stripe Checkout (cards, wallets) on `/posters`, supports poster detail pages (`/posters/:posterId`), surfaces a cart drawer + mobile cart prompt, and routes Stripe redirects to `/posters/checkout/result` for success/cancel summaries.
+
+### Deployment notes
+
+- The GitHub Pages build remains static. Deploy the payment server separately (Render, Railway, Fly.io, etc.) and set `APP_URL` to the public site origin.
+- Update `REACT_APP_API_BASE_URL` (or override `apiBaseUrl` in `src/services/payments.ts`) if the payments API lives on a different host (e.g. `https://payments.example.com`).
