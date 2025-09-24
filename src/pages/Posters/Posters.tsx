@@ -40,24 +40,24 @@ const Posters = () => {
         <div className="container">
           <div className={styles.grid}>
             {posters.map((poster) => (
-                <article key={poster.id} className={styles.card}>
-                  <Link to={`/posters/${poster.id}`} className={styles.media}>
-                    <img src={resolveAssetPath(poster.image)} alt={poster.title} loading="lazy" />
-                  </Link>
-
-                  <div className={styles.content}>
-                    <Link to={`/posters/${poster.id}`} className={styles.titleLink}>
-                      <h2>{poster.title}</h2>
-                    </Link>
-                    <p className={styles.dimensions}>{poster.dimensions}</p>
-                    <p className={styles.description}>{poster.description}</p>
-                    <div className={styles.meta}>
-                      <span className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</span>
-                      <span className={styles.inventory}>
-                        {poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}
-                      </span>
+                <div key={poster.id} className={styles.card}>
+                  <Link to={`/posters/${poster.id}`} className={styles.cardLink}>
+                    <div className={styles.media}>
+                      <img src={resolveAssetPath(poster.image)} alt={poster.title} loading="lazy" />
                     </div>
-                  </div>
+
+                    <div className={styles.content}>
+                      <h2>{poster.title}</h2>
+                      <p className={styles.dimensions}>{poster.dimensions}</p>
+                      <p className={styles.description}>{poster.description}</p>
+                      <div className={styles.meta}>
+                        <span className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</span>
+                        <span className={styles.inventory}>
+                          {poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
 
                   <div className={styles.actions}>
                     <button
@@ -68,7 +68,7 @@ const Posters = () => {
                       Add to cart
                     </button>
                   </div>
-                </article>
+                </div>
             ))}
           </div>
         </div>

@@ -36,14 +36,21 @@ const PosterDetail = () => {
             </figcaption>
           </figure>
 
-          <div className={styles.panel}>
-            <p className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>
-            <p className={styles.note}>All posters ship rolled in archival tubes within 10 business days.</p>
+          <div className={styles.detailColumn}>
+            <div className={styles.panel}>
+              <p className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>
+              <p className={styles.note}>All posters ship rolled in archival tubes within 10 business days.</p>
 
-            <div className={styles.actions}>
-              <button type="button" className={styles.primaryButton} onClick={() => addToCart(poster.id)}>
-                Add to cart
-              </button>
+              <div className={styles.actions}>
+                <button type="button" className={styles.primaryButton} onClick={() => addToCart(poster.id)}>
+                  Add to cart
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.infoPanel}>
+              <h3>About this poster</h3>
+              <p>{poster.description}</p>
             </div>
           </div>
         </div>
