@@ -1,22 +1,64 @@
 [
   {
-    "id": "poster-performative-appetites",
-    "title": "Performative Appetites Poster",
-    "description": "Full-bleed giclée print on archival matte stock capturing the graphite-to-cosmetic gradients from the Performative Appetites series.",
-    "priceCents": 4800,
+    "id": "johnny-blue-skies-night-one",
+    "title": "Johnny Blue Skies & The Dark Clouds — Night 1",
+    "description": "Limited edition Johnny Blue Skies poster from the Sep. 16 performance at Red Rocks Amphitheatre.",
+    "priceCents": 7500,
     "currency": "usd",
-    "image": "images/artworks/eat-me.jpg",
+    "image": "images/artworks/poster1.png",
     "dimensions": "18 × 24 in",
-    "inventoryStatus": "open-edition"
+    "inventoryStatus": "limited",
+    "maxQuantityPerOrder": 1,
+    "editions": [
+      {
+        "id": "johnny-night-one-matte",
+        "label": "Matte Edition",
+        "priceCents": 7500,
+        "description": "Screen printed on archival matte stock."
+      },
+      {
+        "id": "johnny-night-one-foil",
+        "label": "Rainbow Foil Edition",
+        "priceCents": 12000,
+        "description": "Screen printed on iridescent rainbow foil stock."
+      },
+      {
+        "id": "johnny-night-one-uncut",
+        "label": "Uncut Foil Sheet",
+        "priceCents": 50000,
+        "description": "Full uncut foil press sheet."
+      }
+    ]
   },
   {
-    "id": "poster-portals",
-    "title": "Portals Field Study Poster",
-    "description": "Limited edition screen-print with high-contrast charcoal textures and blush overlays from the Portals sketch journals.",
-    "priceCents": 6200,
+    "id": "johnny-blue-skies-night-two",
+    "title": "Johnny Blue Skies & The Dark Clouds — Night 2",
+    "description": "Limited edition Johnny Blue Skies poster from the Sep. 17 performance at Red Rocks Amphitheatre.",
+    "priceCents": 7500,
     "currency": "usd",
-    "image": "images/artworks/portals.jpg",
-    "dimensions": "24 × 36 in",
-    "inventoryStatus": "limited"
+    "image": "images/artworks/poster2.png",
+    "dimensions": "18 × 24 in",
+    "inventoryStatus": "limited",
+    "maxQuantityPerOrder": 1,
+    "editions": [
+      {
+        "id": "johnny-night-two-matte",
+        "label": "Matte Edition",
+        "priceCents": 7500,
+        "description": "Screen printed on archival matte stock."
+      },
+      {
+        "id": "johnny-night-two-foil",
+        "label": "Rainbow Foil Edition",
+        "priceCents": 12000,
+        "description": "Screen printed on iridescent rainbow foil stock."
+      },
+      {
+        "id": "johnny-night-two-uncut",
+        "label": "Uncut Foil Sheet",
+        "priceCents": 50000,
+        "description": "Full uncut foil press sheet."
+      }
+    ]
   }
 ]

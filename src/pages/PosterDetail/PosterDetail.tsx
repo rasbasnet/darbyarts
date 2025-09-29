@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import { getPosterById } from '../../data/posters';
@@ -11,9 +12,22 @@ const PosterDetail = () => {
   const poster = posterId ? getPosterById(posterId) : null;
   const { addToCart } = useCart();
 
+  const [selectedEditionId, setSelectedEditionId] = useState<string | null>(poster?.editions?.[0]?.id ?? null);
+
+  useEffect(() => {
+    setSelectedEditionId(poster?.editions?.[0]?.id ?? null);
+  }, [poster]);
+
+  const selectedEdition = useMemo(
+    () => poster?.editions?.find((edition) => edition.id === selectedEditionId) ?? null,
+    [poster?.editions, selectedEditionId]
+  );
+
   if (!poster) {
     return <Navigate to="/posters" replace />;
   }
+
+  const requiresEdition = Boolean(poster.editions?.length);
 
   return (
     <div className={styles.page}>
@@ -33,16 +47,67 @@ const PosterDetail = () => {
             <img src={resolveAssetPath(poster.image)} alt={poster.title} />
             <figcaption>
               {poster.dimensions} · {poster.inventoryStatus === 'limited' ? 'Limited edition' : 'Open edition'}
+              {poster.isAvailable === false ? ' · Coming soon' : ''}
             </figcaption>
           </figure>
 
           <div className={styles.detailColumn}>
             <div className={styles.panel}>
-              <p className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>
+              {(() => {
+                const editions = poster.editions ?? [];
+                if (editions.length > 0) {
+                  const prices = editions.map((edition) => edition.priceCents);
+                  const minPrice = Math.min(...prices);
+                  const maxPrice = Math.max(...prices);
+                  const minLabel = formatCurrency(minPrice / 100, poster.currency);
+                  const priceLabel =
+                    minPrice === maxPrice ? minLabel : `${minLabel} – ${formatCurrency(maxPrice / 100, poster.currency)}`;
+                  return <p className={styles.price}>{priceLabel}</p>;
+                }
+                return <p className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>;
+              })()}
               <p className={styles.note}>All posters ship rolled in archival tubes within 10 business days.</p>
+              {poster.maxQuantityPerOrder ? (
+                <p className={styles.note}>Limited to {poster.maxQuantityPerOrder} per order.</p>
+              ) : null}
+
+              {poster.editions?.length ? (
+                <fieldset className={styles.editionGroup}>
+                  <legend>Choose an edition</legend>
+                  <div className={styles.editionOptions}>
+                    {poster.editions.map((edition) => {
+                      const isSelected = selectedEditionId === edition.id;
+                      return (
+                        <label
+                          key={edition.id}
+                          className={`${styles.editionOption} ${isSelected ? styles.editionOptionSelected : ''}`.trim()}
+                        >
+                          <input
+                            type="radio"
+                            name="edition"
+                            value={edition.id}
+                            checked={isSelected}
+                            onChange={() => setSelectedEditionId(edition.id)}
+                          />
+                          <span>
+                            <strong>{edition.label}</strong>
+                            <em>{formatCurrency(edition.priceCents / 100, poster.currency)}</em>
+                            {edition.description ? <small>{edition.description}</small> : null}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              ) : null}
 
               <div className={styles.actions}>
-                <button type="button" className={styles.primaryButton} onClick={() => addToCart(poster.id)}>
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  onClick={() => addToCart(poster.id, selectedEdition?.id ?? null)}
+                  disabled={requiresEdition && !selectedEdition}
+                >
                   Add to cart
                 </button>
               </div>
@@ -51,6 +116,9 @@ const PosterDetail = () => {
             <div className={styles.infoPanel}>
               <h3>About this poster</h3>
               <p>{poster.description}</p>
+              {selectedEdition?.description && !poster.editions?.length ? (
+                <p className={styles.note}>{selectedEdition.description}</p>
+              ) : null}
             </div>
           </div>
         </div>

@@ -106,20 +106,17 @@ const CheckoutResult = () => {
         if (Array.isArray(parsed)) {
           const entries = parsed
             .map((entry: any) => {
-              if (!Array.isArray(entry) || entry.length < 2) {
+              if (!entry || typeof entry.posterId !== 'string') {
                 return null;
               }
-              const [posterId, quantity] = entry;
-              if (typeof posterId !== 'string') {
-                return null;
-              }
-              const qtyNumber = Number(quantity);
+              const qtyNumber = Number(entry.quantity);
               if (!Number.isFinite(qtyNumber) || qtyNumber < 1) {
                 return null;
               }
-              return { posterId, quantity: qtyNumber };
+              const editionId = typeof entry.editionId === 'string' ? entry.editionId : null;
+              return { posterId: entry.posterId, editionId, quantity: qtyNumber };
             })
-            .filter(Boolean) as { posterId: string; quantity: number }[];
+            .filter(Boolean) as { posterId: string; editionId: string | null; quantity: number }[];
 
           if (entries.length) {
             replaceCart(entries);
@@ -146,12 +143,13 @@ const CheckoutResult = () => {
                 if (!Number.isFinite(qty) || qty < 1) {
                   return null;
                 }
-                return { posterId: entry.posterId, quantity: qty };
+                const editionId = typeof entry.editionId === 'string' ? entry.editionId : null;
+                return { posterId: entry.posterId, editionId, quantity: qty };
               })
-              .filter(Boolean) as { posterId: string; quantity: number }[];
+              .filter(Boolean) as { posterId: string; editionId: string | null; quantity: number }[];
 
-            if (entries.length) {
-              replaceCart(entries);
+          if (entries.length) {
+            replaceCart(entries);
             }
           }
         }

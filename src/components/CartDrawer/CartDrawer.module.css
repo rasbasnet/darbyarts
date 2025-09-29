@@ -112,6 +112,14 @@
   font-family: var(--font-display);
 }
 
+.itemEdition {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(61, 26, 45, 0.62);
+}
+
 .itemPrice {
   margin: 0.35rem 0 0.6rem;
   color: rgba(61, 26, 45, 0.78);

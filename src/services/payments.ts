@@ -5,6 +5,7 @@ const apiBaseUrl = (process.env.REACT_APP_API_BASE_URL ?? '').replace(/\/$/, '')
 
 export type StripeCheckoutItem = {
   posterId: string;
+  editionId?: string | null;
   quantity: number;
 };
 

@@ -7,7 +7,12 @@ export const resolveAssetPath = (path: string) => {
     return path;
   }
 
-  const base = (process.env.PUBLIC_URL ?? '').replace(/\/$/, '');
-  const normalized = path.replace(/^\//, '');
-  return `${base}/${normalized}`;
+  const baseCandidate = (process.env.PUBLIC_URL ?? '').replace(/\/+$/, '');
+  const normalized = path.replace(/^\/+/, '');
+
+  if (!baseCandidate || baseCandidate === '.') {
+    return `/${normalized}`;
+  }
+
+  return `${baseCandidate}/${normalized}`;
 };

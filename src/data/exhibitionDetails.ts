@@ -43,6 +43,7 @@ const details: ExhibitionDetail[] = [
       'An immersive scholarship residency that rekindled material play and set the stage for the Portals drawings.',
     body: [
       'Awarded the Iredell Statesville Arts Education Scholarship, Darby spent a concentrated session at Penland reinvestigating drawing as performance. The residency encouraged experimentation with cosmetics, powdered pigments, and unconventional surfaces.',
+      'Summer Self-Portrait no. 1 and no. 2 were completed during this residency, anchoring the experience in daily graphite study and the stamina of observation.',
       'Time at Penland provided the through-line between early anatomical works and the current candy-coated portraits—offering space to return to form while embracing new materials.'
     ]
   },

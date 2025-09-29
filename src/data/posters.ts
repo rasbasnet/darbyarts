@@ -1,5 +1,12 @@
 import postersData from './posters.json';
 
+export type PosterEdition = {
+  id: string;
+  label: string;
+  priceCents: number;
+  description?: string;
+};
+
 export type Poster = {
   id: string;
   title: string;
@@ -9,6 +16,10 @@ export type Poster = {
   image: string;
   dimensions: string;
   inventoryStatus: 'limited' | 'open-edition';
+  maxQuantityPerOrder?: number;
+  isAvailable?: boolean;
+  releaseInfo?: string;
+  editions?: PosterEdition[];
 };
 
 export const posters = postersData as Poster[];

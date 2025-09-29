@@ -19,6 +19,7 @@ type RawArtwork = {
     primary: string;
     secondary: string;
   };
+  collection: string;
 };
 
 export type Artwork = RawArtwork;

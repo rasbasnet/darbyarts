@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import { posters } from '../../data/posters';
 import { useCart } from '../../context/CartContext';
@@ -11,6 +11,16 @@ const Posters = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const [selectedEditions, setSelectedEditions] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    posters.forEach((poster) => {
+      if (poster.editions?.length) {
+        initial[poster.id] = poster.editions[0].id;
+      }
+    });
+    return initial;
+  });
 
   useEffect(() => {
     const checkoutStatus = searchParams.get('checkout');
@@ -39,7 +49,27 @@ const Posters = () => {
       <section>
         <div className="container">
           <div className={styles.grid}>
-            {posters.map((poster) => (
+            {posters.map((poster) => {
+              const hasEditions = Array.isArray(poster.editions) && poster.editions.length > 0;
+              const priceRange = hasEditions
+                ? (() => {
+                    const prices = poster.editions!.map((edition) => edition.priceCents);
+                    const minPrice = Math.min(...prices);
+                    const maxPrice = Math.max(...prices);
+                    const minLabel = formatCurrency(minPrice / 100, poster.currency);
+                    if (minPrice === maxPrice) {
+                      return minLabel;
+                    }
+                    const maxLabel = formatCurrency(maxPrice / 100, poster.currency);
+                    return `${minLabel} – ${maxLabel}`;
+                  })()
+                : formatCurrency(poster.priceCents / 100, poster.currency);
+
+              const selectedEditionId = selectedEditions[poster.id] ?? poster.editions?.[0]?.id ?? null;
+
+              const isAddDisabled = hasEditions && !selectedEditionId;
+
+              return (
                 <div key={poster.id} className={styles.card}>
                   <Link to={`/posters/${poster.id}`} className={styles.cardLink}>
                     <div className={styles.media}>
@@ -50,8 +80,9 @@ const Posters = () => {
                       <h2>{poster.title}</h2>
                       <p className={styles.dimensions}>{poster.dimensions}</p>
                       <p className={styles.description}>{poster.description}</p>
+                      {poster.releaseInfo ? <p className={styles.releaseInfo}>{poster.releaseInfo}</p> : null}
                       <div className={styles.meta}>
-                        <span className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</span>
+                        <span className={styles.price}>{priceRange}</span>
                         <span className={styles.inventory}>
                           {poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}
                         </span>
@@ -59,17 +90,41 @@ const Posters = () => {
                     </div>
                   </Link>
 
+                  {hasEditions ? (
+                    <label className={styles.editionSelector} htmlFor={`edition-${poster.id}`}>
+                      <span>Edition</span>
+                      <select
+                        id={`edition-${poster.id}`}
+                        value={selectedEditionId ?? ''}
+                        onChange={(event) =>
+                          setSelectedEditions((current) => ({
+                            ...current,
+                            [poster.id]: event.currentTarget.value
+                          }))
+                        }
+                      >
+                        {poster.editions?.map((edition) => (
+                          <option key={edition.id} value={edition.id}>
+                            {edition.label} · {formatCurrency(edition.priceCents / 100, poster.currency)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  ) : null}
+
                   <div className={styles.actions}>
                     <button
                       type="button"
                       className={styles.primaryButton}
-                      onClick={() => addToCart(poster.id)}
+                      onClick={() => addToCart(poster.id, selectedEditionId ?? null)}
+                      disabled={isAddDisabled}
                     >
                       Add to cart
                     </button>
                   </div>
                 </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

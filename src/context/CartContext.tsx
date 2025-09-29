@@ -1,21 +1,26 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Poster, getPosterById } from '../data/posters';
+import { Poster, PosterEdition, getPosterById } from '../data/posters';
 
 type CartLineItem = {
   posterId: string;
+  editionId?: string | null;
   quantity: number;
 };
 
-type CartPoster = Poster & { quantity: number };
+type CartPoster = Poster & {
+  quantity: number;
+  edition?: PosterEdition;
+  unitPriceCents: number;
+};
 
 export const CART_BACKUP_KEY = 'darbymitchell-cart-backup';
 
 type CartContextValue = {
   items: CartPoster[];
-  addToCart: (posterId: string, quantity?: number) => void;
-  removeFromCart: (posterId: string) => void;
-  updateQuantity: (posterId: string, quantity: number) => void;
+  addToCart: (posterId: string, editionId?: string | null, quantity?: number) => void;
+  removeFromCart: (posterId: string, editionId?: string | null) => void;
+  updateQuantity: (posterId: string, editionId: string | null, quantity: number) => void;
   clearCart: () => void;
   replaceCart: (entries: CartLineItem[]) => void;
   subtotalCents: number;
@@ -73,7 +78,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           if (!Number.isFinite(qty) || qty < 1) {
             return null;
           }
-          return { posterId: item.posterId, quantity: Math.max(1, Math.floor(qty)) };
+          const editionId = typeof item.editionId === 'string' ? item.editionId : null;
+          return {
+            posterId: item.posterId,
+            editionId,
+            quantity: Math.max(1, Math.floor(qty))
+          };
         })
         .filter(Boolean) as CartLineItem[];
 
@@ -101,17 +111,33 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     lines
       .map((line) => {
         const poster = getPosterById(line.posterId);
-        return poster ? { ...poster, quantity: line.quantity } : null;
+        if (!poster) {
+          return null;
+        }
+
+        const edition = poster.editions?.find((entry) => entry.id === line.editionId);
+        if (poster.editions?.length && !edition) {
+          return null;
+        }
+
+        const unitPriceCents = edition?.priceCents ?? poster.priceCents;
+
+        return {
+          ...poster,
+          quantity: line.quantity,
+          edition,
+          unitPriceCents
+        } as CartPoster;
       })
       .filter(Boolean) as CartPoster[],
   [lines]);
 
   const subtotalCents = useMemo(
-    () => enrichedItems.reduce((total, poster) => total + poster.priceCents * poster.quantity, 0),
+    () => enrichedItems.reduce((total, poster) => total + poster.unitPriceCents * poster.quantity, 0),
     [enrichedItems]
   );
 
-  const addToCart = (posterId: string, quantity = 1) => {
+  const addToCart = (posterId: string, editionId: string | null = null, quantity = 1) => {
     if (quantity < 1) {
       return;
     }
@@ -122,38 +148,87 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       return;
     }
 
+    const requiresEdition = Array.isArray(poster.editions) && poster.editions.length > 0;
+    if (requiresEdition && !editionId) {
+      setError('Select an edition before adding to cart.');
+      return;
+    }
+
+    const edition = poster.editions?.find((entry) => entry.id === editionId);
+    if (requiresEdition && !edition) {
+      setError('The selected edition is unavailable.');
+      return;
+    }
+
     setError(null);
     const normalizedQuantity = Math.max(1, Math.floor(quantity));
+    const limit = poster.maxQuantityPerOrder ?? Infinity;
 
     setLines((current) => {
-      const existing = current.find((item) => item.posterId === posterId);
+      const editionKey = edition?.id ?? null;
+      const totalForPoster = current.reduce(
+        (sum, item) => (item.posterId === posterId ? sum + item.quantity : sum),
+        0
+      );
+      const existing = current.find((item) => item.posterId === posterId && (item.editionId ?? null) === editionKey);
       if (existing) {
+        const otherQuantity = totalForPoster - existing.quantity;
+        if (existing.quantity >= limit || otherQuantity >= limit) {
+          setError(`Limit reached: only ${limit} per person for this poster.`);
+          return current;
+        }
+
+        const allowableIncrease = limit === Infinity ? normalizedQuantity : Math.max(0, Math.min(normalizedQuantity, limit - otherQuantity - existing.quantity));
+        if (allowableIncrease <= 0) {
+          setError(`Limit reached: only ${limit} per person for this poster.`);
+          return current;
+        }
+        const nextQuantity = existing.quantity + allowableIncrease;
         return current.map((item) =>
-          item.posterId === posterId
-            ? { ...item, quantity: item.quantity + normalizedQuantity }
+          item.posterId === posterId && (item.editionId ?? null) === editionKey
+            ? { ...item, quantity: nextQuantity }
             : item
         );
       }
-      return [...current, { posterId, quantity: normalizedQuantity }];
+      if (limit !== Infinity && totalForPoster >= limit) {
+        setError(`Limit reached: only ${limit} per person for this poster.`);
+        return current;
+      }
+
+      const allowableQuantity = limit === Infinity ? normalizedQuantity : Math.min(normalizedQuantity, Math.max(0, limit - totalForPoster));
+      if (allowableQuantity <= 0) {
+        setError(`Limit reached: only ${limit} per person for this poster.`);
+        return current;
+      }
+
+      return [...current, { posterId, editionId: editionKey, quantity: allowableQuantity }];
     });
 
     setDrawerOpen(true);
   };
 
-  const removeFromCart = (posterId: string) => {
-    setLines((current) => current.filter((item) => item.posterId !== posterId));
+  const removeFromCart = (posterId: string, editionId: string | null = null) => {
+    setLines((current) =>
+      current.filter((item) => !(item.posterId === posterId && (item.editionId ?? null) === (editionId ?? null)))
+    );
   };
 
-  const updateQuantity = (posterId: string, quantity: number) => {
+  const updateQuantity = (posterId: string, editionId: string | null, quantity: number) => {
     const normalizedQuantity = Math.floor(quantity);
+    const poster = getPosterById(posterId);
+    const limit = poster?.maxQuantityPerOrder ?? Infinity;
 
     if (normalizedQuantity <= 0) {
-      removeFromCart(posterId);
+      removeFromCart(posterId, editionId ?? null);
       return;
     }
 
     setLines((current) =>
-      current.map((item) => (item.posterId === posterId ? { ...item, quantity: normalizedQuantity } : item))
+      current.map((item) =>
+        item.posterId === posterId && (item.editionId ?? null) === (editionId ?? null)
+          ? { ...item, quantity: Math.min(normalizedQuantity, limit) }
+          : item
+      )
     );
   };
 
@@ -162,8 +237,26 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const replaceCart = useCallback((entries: CartLineItem[]) => {
     setLines(
       entries
-        .map(({ posterId, quantity }) => ({ posterId, quantity: Math.max(1, Math.floor(quantity)) }))
-        .filter((entry) => Boolean(getPosterById(entry.posterId)))
+        .map(({ posterId, editionId, quantity }) => {
+          const poster = getPosterById(posterId);
+          if (!poster) {
+            return null;
+          }
+
+          const limit = poster.maxQuantityPerOrder ?? Infinity;
+          const clampedQuantity = Math.min(Math.max(1, Math.floor(quantity)), limit);
+
+          if (poster.editions?.length) {
+            const edition = poster.editions.find((entry) => entry.id === editionId);
+            if (!edition) {
+              return null;
+            }
+            return { posterId, editionId: edition.id, quantity: clampedQuantity };
+          }
+
+          return { posterId, editionId: null, quantity: clampedQuantity };
+        })
+        .filter(Boolean) as CartLineItem[]
     );
     if (entries.length) {
       setDrawerOpen(true);
@@ -182,7 +275,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     try {
       const { beginStripeCheckout } = await import('../services/payments');
       await beginStripeCheckout({
-        items: enrichedItems.map((poster) => ({ posterId: poster.id, quantity: poster.quantity }))
+        items: enrichedItems.map((poster) => ({
+          posterId: poster.id,
+          editionId: poster.edition?.id ?? null,
+          quantity: poster.quantity
+        }))
       });
     } catch (checkoutError) {
       const message = checkoutError instanceof Error ? checkoutError.message : 'Checkout failed. Please try again.';

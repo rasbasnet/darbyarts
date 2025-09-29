@@ -24,17 +24,30 @@
   z-index: -1;
 }
 
-.intro {
-  padding-block: clamp(5rem, 11vw, 7rem);
+.collectionSection {
+  position: relative;
+  padding-block: clamp(4rem, 10vw, 6rem);
 }
 
-.processNotes {
+.collectionIntro {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.2rem);
+  color: rgba(36, 26, 39, 0.8);
+}
+
+.collectionParagraph {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+.notesGrid {
   margin-top: clamp(2.5rem, 6vw, 4rem);
   display: grid;
   gap: clamp(1.5rem, 4vw, 3rem);
 }
 
-.processNotes > div {
+.notesGrid article {
   position: relative;
   background: linear-gradient(130deg, rgba(255, 255, 255, 0.24), rgba(239, 201, 217, 0.08));
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -48,8 +61,7 @@
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), filter var(--transition);
 }
 
-
-.processNotes > div::before {
+.notesGrid article::before {
   content: '';
   position: absolute;
   inset: -30% -40% 52%;
@@ -64,7 +76,7 @@
   z-index: -1;
 }
 
-.processNotes > div::after {
+.notesGrid article::after {
   content: '';
   position: absolute;
   inset: -1px;
@@ -74,71 +86,134 @@
   pointer-events: none;
 }
 
-.processNotes > div:hover,
-.processNotes > div:focus-within {
+.notesGrid article:hover,
+.notesGrid article:focus-within {
   transform: translateY(-4px);
   box-shadow: 0 32px 72px rgba(32, 20, 28, 0.28);
   border-color: rgba(255, 255, 255, 0.45);
   filter: brightness(1.04) saturate(1.05);
 }
 
-.processNotes > div:hover::before,
-.processNotes > div:focus-within::before {
+.notesGrid article:hover::before,
+.notesGrid article:focus-within::before {
   opacity: 0.82;
   transform: translate3d(-2%, -3%, 0) scale(1.06);
 }
 
-.processNotes h3 {
+.notesGrid h3 {
   margin: 0 0 0.8rem;
   font-family: var(--font-display);
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
 
-.processNotes p {
+.notesGrid p {
   margin: 0;
   color: rgba(36, 26, 39, 0.75);
   font-size: 0.98rem;
   line-height: 1.8;
 }
 
-.processNotes em {
-  font-style: normal;
+.downloadLink {
+  display: inline-flex;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(61, 26, 45, 0.75);
+}
+
+.collectionBody {
+  margin-top: clamp(3rem, 8vw, 4.5rem);
+  padding-bottom: clamp(1rem, 4vw, 2rem);
+}
+
+.archiveBody {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.archiveList {
+  display: grid;
+  gap: 1.6rem;
+  padding: clamp(2rem, 4vw, 2.6rem);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(239, 201, 217, 0.1));
+  box-shadow: 0 28px 70px rgba(32, 20, 28, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(22px) saturate(130%);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+}
+
+.archiveList h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.archiveList ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.archiveList li {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.95rem;
+  color: rgba(36, 26, 39, 0.78);
+}
+
+.archiveTitle {
+  font-weight: 600;
   font-family: var(--font-display);
 }
+
 @supports not (backdrop-filter: blur(1px)) {
-  .processNotes > div {
+  .notesGrid article {
     background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(36, 26, 39, 0.12);
     box-shadow: 0 24px 55px rgba(36, 26, 39, 0.14);
     filter: none;
   }
 
-  .processNotes > div:hover,
-  .processNotes > div:focus-within {
+  .notesGrid article:hover,
+  .notesGrid article:focus-within {
     filter: none;
+  }
+
+  .archiveList {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(36, 26, 39, 0.18);
   }
 }
 
-
 @media (min-width: 900px) {
-  .processNotes {
+  .notesGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @keyframes drift {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 0%; }
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .page::before {
     animation: none;
   }
 
-  .processNotes > div,
-  .processNotes > div::before {
+  .notesGrid article,
+  .notesGrid article::before {
     transition: none;
   }
 }

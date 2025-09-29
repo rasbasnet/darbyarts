@@ -22,8 +22,6 @@ const practiceMotifs = [
 ];
 
 const About = () => {
-  const [statementLead, ...statementBody] = profile.statement;
-
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
@@ -38,12 +36,10 @@ const About = () => {
             </figure>
 
             <div className={styles.heroCopy}>
-              <span className={styles.overline}>Artist statement</span>
+              <span className={styles.overline}>About the artist</span>
               <h1>{profile.name}</h1>
-              <p className={styles.lead}>{statementLead}</p>
-              {statementBody.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
+              <p className={styles.lead}>{profile.tagline}</p>
+              <p>{profile.bio[0]}</p>
               <div className={styles.pillars}>
                 {practiceMotifs.map((motif) => (
                   <article key={motif.title} className={styles.pillar}>
@@ -81,11 +77,15 @@ const About = () => {
             <SectionHeader
               overline="Practice"
               title="Drawing the seam between performance and tenderness"
-              description={profile.bio[0]}
+              description={profile.bio[1]}
               tone="dark"
             />
             <div className={styles.bioBody}>
-              <p>{profile.bio[1]}</p>
+              <p>
+                Studio research embraces live performance, gig posters, and graphite rituals—treating drawing as both
+                rehearsal and reveal. Collaboration with musicians and galleries keeps the work porous, allowing new
+                audiences to enter the candy-coated unease.
+              </p>
               <div className={styles.cvGrid}>
                 <div>
                   <h3>Education</h3>

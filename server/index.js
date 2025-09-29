@@ -44,12 +44,12 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       return res.status(500).json({ error: 'Stripe secret key not configured on the server.' });
     }
 
-    const { items, posterId, quantity = 1 } = req.body;
+    const { items, posterId, editionId = null, quantity = 1 } = req.body;
 
     const requestedItems = Array.isArray(items) && items.length > 0
       ? items
       : posterId
-        ? [{ posterId, quantity }]
+        ? [{ posterId, editionId, quantity }]
         : [];
 
     if (requestedItems.length === 0) {
@@ -69,25 +69,42 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
         return res.status(400).json({ error: 'Each item quantity must be at least 1.' });
       }
 
-      const existing = aggregated.get(entry.posterId) ?? 0;
-      aggregated.set(entry.posterId, existing + Math.floor(parsedQuantity));
+      const editionKey = typeof entry.editionId === 'string' ? entry.editionId : null;
+      const key = `${entry.posterId}::${editionKey ?? 'default'}`;
+      const existing = aggregated.get(key);
+      if (existing) {
+        existing.quantity += Math.floor(parsedQuantity);
+      } else {
+        aggregated.set(key, {
+          posterId: entry.posterId,
+          editionId: editionKey,
+          quantity: Math.floor(parsedQuantity)
+        });
+      }
     }
 
     const lineItems = [];
 
-    for (const [id, qty] of aggregated) {
+    for (const { posterId: id, editionId: entryEditionId, quantity: qty } of aggregated.values()) {
       const poster = findPoster(id);
       if (!poster) {
         return res.status(404).json({ error: `Poster not found: ${id}` });
       }
 
+      const edition = poster.editions?.find((variant) => variant.id === entryEditionId);
+      if (poster.editions?.length && !edition) {
+        return res.status(404).json({ error: `Edition not found for poster: ${id}` });
+      }
+
+      const unitAmount = edition?.priceCents ?? poster.priceCents;
+
       lineItems.push({
         quantity: qty,
         price_data: {
           currency: poster.currency,
-          unit_amount: poster.priceCents,
+          unit_amount: unitAmount,
           product_data: {
-            name: poster.title,
+            name: edition ? `${poster.title} — ${edition.label}` : poster.title,
             description: poster.description,
             images: [`${origin.replace(/\/$/, '')}/${poster.image.replace(/^\//, '')}`]
           }
@@ -100,8 +117,11 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       success_url: `${origin}/posters/checkout/result?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/posters/checkout/result?status=cancelled&session_id={CHECKOUT_SESSION_ID}`,
       line_items: lineItems,
+      shipping_address_collection: {
+        allowed_countries: ['US', 'CA']
+      },
       metadata: {
-        items: JSON.stringify(Array.from(aggregated.entries()))
+        items: JSON.stringify(Array.from(aggregated.values()))
       }
     });
 

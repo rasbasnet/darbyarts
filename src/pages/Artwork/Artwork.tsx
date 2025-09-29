@@ -1,48 +1,76 @@
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import GalleryGrid from '../../components/GalleryGrid/GalleryGrid';
 import { artworks } from '../../data/artworks';
+import { collectionMetadata } from '../../data/collections';
+import { embodiedArchive } from '../../data/archivalWorks';
 import styles from './Artwork.module.css';
 
 const Artwork = () => (
   <div className={styles.page}>
-    <section className={styles.intro}>
-      <div className="container">
-        <SectionHeader
-          overline="Catalogue"
-          title="Sugar-coated apparitions"
-          description="This collection spans 2023–2025, pairing graphite discipline with cosmetic color. Each work is an isolated meditation on hunger, perception, and the labour of performance."
-        />
-        <div className={styles.processNotes}>
-          <div>
-            <h3>Materials & process</h3>
-            <p>
-              Drawings begin with tight graphite or charcoal foundations before layers of gesso, pastel, and expired
-              cosmetics are buffed in. The result is a surface that feels both clinical and confectionary.
-            </p>
-          </div>
-          <div>
-            <h3>Series threads</h3>
-            <p>
-              Works from <em>Performative Appetites</em> and <em>Portals</em> consider the mouth as both an invitation and a
-              dare. Earlier anatomical pieces reimagine medical illustration as a map for feeling.
-            </p>
-          </div>
-          <div>
-            <h3>Acquisitions</h3>
-            <p>
-              Originals and select editions are available directly through the studio. Contact for availability or to
-              request additional documentation.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    {collectionMetadata.map((collection, index) => {
+      const items = artworks.filter((artwork) => artwork.collection === collection.id);
+      const isArchive = collection.id === 'embodied';
 
-    <section>
-      <div className="container">
-        <GalleryGrid items={artworks} dense />
-      </div>
-    </section>
+      return (
+        <section key={collection.id} className={styles.collectionSection}>
+          <div className="container">
+            <div className={styles.collectionIntro}>
+              <SectionHeader
+                overline={index === 0 ? 'Catalogue' : 'Archive'}
+                title={`${collection.title} (${collection.years})`}
+                description={collection.statement[0]}
+                tone="dark"
+              />
+              {collection.statement.slice(1).map((paragraph) => (
+                <p key={paragraph} className={styles.collectionParagraph}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className={styles.notesGrid}>
+              <article>
+                <h3>Materials & process</h3>
+                <p>{collection.materialsProcess}</p>
+              </article>
+              <article>
+                <h3>Series threads</h3>
+                <p>{collection.seriesThreads}</p>
+              </article>
+              <article>
+                <h3>Acquisitions</h3>
+                <p>{collection.acquisitions}</p>
+                {collection.downloadUrl ? (
+                  <a href={collection.downloadUrl} className={styles.downloadLink} target="_blank" rel="noreferrer">
+                    {collection.downloadLabel ?? 'Download exhibition packet'}
+                  </a>
+                ) : null}
+              </article>
+            </div>
+          </div>
+
+          <div className={`${styles.collectionBody} ${isArchive ? styles.archiveBody : ''}`}>
+            <div className="container">
+              {items.length > 0 ? (
+                <GalleryGrid items={items} dense />
+              ) : (
+                <div className={styles.archiveList}>
+                  <h4>Works included</h4>
+                  <ul>
+                    {embodiedArchive.map((work) => (
+                      <li key={work.title}>
+                        <span className={styles.archiveTitle}>{work.title}</span>
+                        <span>{work.medium}</span>
+                        <span>{work.size}</span>
+                        <span>{work.year}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    })}
   </div>
 );
 

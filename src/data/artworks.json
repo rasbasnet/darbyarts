@@ -5,16 +5,17 @@
     "year": "2024",
     "created": "2024-07-01",
     "medium": "Colored pencil, gesso, and found cosmetics on paper",
-    "size": "20 \u00d7 42 in",
+    "size": "20 × 42 in",
     "image": "images/artworks/eat-me.jpg",
     "alt": "Self-portrait with pastel pink ground and a silver spoon hovering above cereal held in the artist's mouth.",
     "orientation": "portrait",
     "series": "Performative Appetites",
-    "statement": "Commissioned for CONTRAST 2025, the drawing weaponises sweetness\u2014granting passive permission while daring the viewer to accept an impossible offer.",
+    "statement": "Commissioned for CONTRAST 2025, the drawing weaponises sweetness—granting passive permission while daring the viewer to accept an impossible offer.",
     "palette": {
       "primary": "#ac8c96",
       "secondary": "#2d1a24"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "not-very-palatable",
@@ -22,7 +23,7 @@
     "year": "2024",
     "created": "2024-03-10",
     "medium": "Chalk pastel on paper",
-    "size": "40 \u00d7 40 in",
+    "size": "40 × 40 in",
     "image": "images/artworks/not-very-palatable.jpg",
     "alt": "Pink-toned portrait dissolving into abstraction against a blush field.",
     "orientation": "portrait",
@@ -31,15 +32,16 @@
     "palette": {
       "primary": "#b37f91",
       "secondary": "#2c1d27"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "what-did-you-expect",
-    "title": "What Did You Expect?",
+    "title": "Gossip",
     "year": "2025",
     "created": "2025-02-20",
     "medium": "Colored pencil and acrylic on paper",
-    "size": "30 \u00d7 18 in",
+    "size": "30 × 18 in",
     "image": "images/artworks/what-did-you-expect.jpg",
     "alt": "Detail of a face bisected by saturated pink shadow.",
     "orientation": "landscape",
@@ -48,15 +50,16 @@
     "palette": {
       "primary": "#cb97af",
       "secondary": "#2b1424"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "portals",
-    "title": "Portals 1\u20136",
+    "title": "What Did You Expect?",
     "year": "2025",
     "created": "2025-01-25",
     "medium": "Colored pencil and acrylic on paper",
-    "size": "Each 9 \u00d7 11 in",
+    "size": "Each 9 × 11 in",
     "image": "images/artworks/portals.jpg",
     "alt": "Grid of cropped mouths rendered in mauves and blushes.",
     "orientation": "portrait",
@@ -64,31 +67,33 @@
     "palette": {
       "primary": "#d8a2b8",
       "secondary": "#402233"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "key-of-bliss",
-    "title": "Key of Bliss",
+    "title": "Portals 1-6",
     "year": "2025",
     "created": "2025-02-05",
     "medium": "Graphite and acrylic on paper",
-    "size": "8 \u00d7 42 in",
+    "size": "8 × 42 in",
     "image": "images/artworks/key-of-bliss.jpg",
     "alt": "Horizontal drawing of an elongated spoon-like form floating on blush ground.",
     "orientation": "landscape",
-    "statement": "A devotional utensil floats like sheet music\u2014equal parts spoon, tuning fork, and key to the body\u2019s private chamber.",
+    "statement": "A devotional utensil floats like sheet music—equal parts spoon, tuning fork, and key to the body’s private chamber.",
     "palette": {
       "primary": "#e5c0d0",
       "secondary": "#3b2230"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "ouroboros",
-    "title": "Ouroboros",
+    "title": "Key of Bliss",
     "year": "2025",
     "created": "2025-03-12",
     "medium": "Graphite and acrylic on paper",
-    "size": "42 \u00d7 30 in",
+    "size": "42 × 30 in",
     "image": "images/artworks/ouroboros.jpg",
     "alt": "Looped ribbon of flesh painted in pinks encircling itself.",
     "orientation": "landscape",
@@ -96,15 +101,16 @@
     "palette": {
       "primary": "#d8adbf",
       "secondary": "#371b2e"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "drainage",
-    "title": "Drainage",
+    "title": "Ouroboros",
     "year": "2025",
     "created": "2025-04-14",
     "medium": "Graphite and ink on Stonehenge paper",
-    "size": "24 \u00d7 36 in",
+    "size": "24 × 36 in",
     "image": "images/artworks/drainage.jpg",
     "alt": "Bleeding bouquet of organs rendered in graphite against a pink wash.",
     "orientation": "portrait",
@@ -112,7 +118,8 @@
     "palette": {
       "primary": "#b7536c",
       "secondary": "#2a1018"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "extraction",
@@ -120,15 +127,16 @@
     "year": "2025",
     "created": "2025-04-14",
     "medium": "Graphite and ink on Stonehenge paper",
-    "size": "24 \u00d7 36 in",
+    "size": "24 × 36 in",
     "image": "images/artworks/extraction.jpg",
     "alt": "Large drawing of hands and teeth pulling tension across the page.",
     "orientation": "landscape",
-    "statement": "Hands, teeth, and taut strings hold competing forces of grip and release\u2014the labour of translating trauma into language.",
+    "statement": "Hands, teeth, and taut strings hold competing forces of grip and release—the labour of translating trauma into language.",
     "palette": {
       "primary": "#b7b3a7",
       "secondary": "#332c26"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "dont-you-ever-get-lonely",
@@ -136,7 +144,7 @@
     "year": "2024",
     "created": "2024-05-15",
     "medium": "Gouache on paper",
-    "size": "42 \u00d7 108 in",
+    "size": "42 × 108 in",
     "image": "images/artworks/dont-you-ever-get-lonely.jpg",
     "alt": "Wide painting of a figure submerged in pink voids.",
     "orientation": "portrait",
@@ -144,7 +152,8 @@
     "palette": {
       "primary": "#dbcbd4",
       "secondary": "#3f2b3c"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "im-sorry-we-forgot",
@@ -152,7 +161,7 @@
     "year": "2024",
     "created": "2024-01-12",
     "medium": "Mixed media sculpture",
-    "size": "15 \u00d7 15 \u00d7 4.5 in",
+    "size": "15 × 15 × 4.5 in",
     "image": "images/artworks/im-sorry-we-forgot.jpg",
     "alt": "Relief sculpture of mouths and teeth glazed in pink confectionary tones.",
     "orientation": "portrait",
@@ -160,7 +169,8 @@
     "palette": {
       "primary": "#b0999a",
       "secondary": "#3c2729"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "they-must-love-you",
@@ -168,7 +178,7 @@
     "year": "2023",
     "created": "2023-10-05",
     "medium": "Charcoal and graphite on Stonehenge paper",
-    "size": "22.5 \u00d7 22.5 in",
+    "size": "22.5 × 22.5 in",
     "image": "images/artworks/they-must-love-you.jpg",
     "alt": "Graphite portrait with ribbons of blush diffusing around the face.",
     "orientation": "portrait",
@@ -176,7 +186,8 @@
     "palette": {
       "primary": "#868686",
       "secondary": "#201f1d"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "summer-self-portrait-1",
@@ -184,7 +195,7 @@
     "year": "2023",
     "created": "2023-07-01",
     "medium": "Charcoal on BFK Rives paper",
-    "size": "22.5 \u00d7 32 in",
+    "size": "22.5 × 32 in",
     "image": "images/artworks/summer-self-portrait-1.jpg",
     "alt": "Charcoal self-portrait with windblown hair on a pale ground.",
     "orientation": "portrait",
@@ -192,7 +203,8 @@
     "palette": {
       "primary": "#d3d3d3",
       "secondary": "#1f1f1f"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   },
   {
     "id": "summer-self-portrait-2",
@@ -200,14 +212,15 @@
     "year": "2023",
     "created": "2023-07-08",
     "medium": "Charcoal on BFK Rives paper",
-    "size": "22.5 \u00d7 32 in",
+    "size": "22.5 × 32 in",
     "image": "images/artworks/summer-self-portrait-2.jpg",
     "alt": "Graphite portrait staring directly at the viewer.",
     "orientation": "portrait",
-    "statement": "A second study holds eye contact\u2014equal parts challenge and confession, refusing to look away.",
+    "statement": "A second study holds eye contact—equal parts challenge and confession, refusing to look away.",
     "palette": {
       "primary": "#ababab",
       "secondary": "#1d1d1d"
-    }
+    },
+    "collection": "sugar-coated-apparitions"
   }
 ]

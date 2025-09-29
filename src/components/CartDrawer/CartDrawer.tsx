@@ -68,23 +68,28 @@ const CartDrawer = () => {
 
               <div className={styles.itemContent}>
                 <h3>{poster.title}</h3>
-                <p className={styles.itemPrice}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>
+                {poster.edition ? <p className={styles.itemEdition}>{poster.edition.label}</p> : null}
+                <p className={styles.itemPrice}>{formatCurrency(poster.unitPriceCents / 100, poster.currency)}</p>
 
                 <div className={styles.quantityRow}>
                   <label htmlFor={`cart-qty-${poster.id}`}>Qty</label>
-                 <input
-                    id={`cart-qty-${poster.id}`}
+                  <input
+                    id={`cart-qty-${poster.id}-${poster.edition?.id ?? 'default'}`}
                     type="number"
                     min={1}
                     value={poster.quantity}
                     onChange={(event) => {
                       const next = Number(event.currentTarget.value);
                       if (Number.isFinite(next)) {
-                        updateQuantity(poster.id, next);
+                        updateQuantity(poster.id, poster.edition?.id ?? null, next);
                       }
                     }}
                   />
-                  <button type="button" className={styles.removeButton} onClick={() => removeFromCart(poster.id)}>
+                  <button
+                    type="button"
+                    className={styles.removeButton}
+                    onClick={() => removeFromCart(poster.id, poster.edition?.id ?? null)}
+                  >
                     Remove
                   </button>
                 </div>
