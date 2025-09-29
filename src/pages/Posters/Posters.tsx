@@ -30,16 +30,15 @@ const Posters = () => {
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
               <span className={styles.heroOverline}>Johnny Blue Skies</span>
-              <h1>Two posters, one electric skyline</h1>
+              <h1>Own the posters from those Red Rocks nights</h1>
               <p>
-                Both nights at Red Rocks lean on the same palette—neon copper, deep twilight blues, and foil that shifts
-                like stage lights. We tuned the entire poster shop to that shared mood.
+                Two back-to-back shows, one luminous skyline. These studio posters are the official keepsake—copper lights,
+                midnight gradients, and foil flashes that feel like standing in the crowd when the encore hits.
               </p>
 
               {!isSalesEnabled ? (
-                <p className={styles.heroNotice}>Edition sales open soon</p>
+                <p className={styles.heroNotice}>Edition sales open soon. Preview the lineup and join the mailing list to be first in line.</p>
               ) : null}
-
 
             </div>
 
