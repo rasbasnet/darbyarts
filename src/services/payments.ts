@@ -9,20 +9,8 @@ export type StripeCheckoutItem = {
   quantity: number;
 };
 
-export type CheckoutCustomer = {
-  name: string;
-  email: string;
-  addressLine1: string;
-  addressLine2?: string;
-  city: string;
-  region: string;
-  postalCode: string;
-  country: string;
-};
-
 export type StripeCheckoutRequest = {
   items: StripeCheckoutItem[];
-  customer: CheckoutCustomer;
 };
 
 type StripeCheckoutResponse = {
@@ -44,30 +32,9 @@ const getStripe = () => {
   return stripePromise;
 };
 
-export const beginStripeCheckout = async ({ items, customer }: StripeCheckoutRequest) => {
+export const beginStripeCheckout = async ({ items }: StripeCheckoutRequest) => {
   if (!Array.isArray(items) || items.length === 0) {
     throw new Error('No items provided for checkout.');
-  }
-
-  if (!customer || typeof customer !== 'object') {
-    throw new Error('Customer details are required for checkout.');
-  }
-
-  const requiredFields: Array<keyof CheckoutCustomer> = [
-    'name',
-    'email',
-    'addressLine1',
-    'city',
-    'region',
-    'postalCode',
-    'country'
-  ];
-
-  for (const field of requiredFields) {
-    const value = customer[field];
-    if (typeof value !== 'string' || !value.trim()) {
-      throw new Error('Incomplete shipping address.');
-    }
   }
 
   const stripe = await getStripe();
@@ -81,7 +48,7 @@ export const beginStripeCheckout = async ({ items, customer }: StripeCheckoutReq
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ items, customer })
+    body: JSON.stringify({ items })
   });
 
   const contentType = response.headers.get('content-type') ?? '';

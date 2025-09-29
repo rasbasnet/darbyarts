@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { POSTERS_SALES_ENABLED } from '../../config/features';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
 import styles from './CartDrawer.module.css';
@@ -11,6 +12,7 @@ const CartDrawer = () => {
     subtotalCents,
     removeFromCart,
     updateQuantity,
+    beginCheckout,
     isCheckoutLoading,
     error,
     dismissError,
@@ -31,6 +33,8 @@ const CartDrawer = () => {
     const currency = items[0]?.currency ?? 'usd';
     return formatCurrency(subtotalCents / 100, currency);
   }, [items, subtotalCents]);
+
+  const isSalesEnabled = POSTERS_SALES_ENABLED;
 
   const closeAndReset = () => {
     setLocalErrorDismissed(false);
@@ -108,14 +112,14 @@ const CartDrawer = () => {
         <Link to="/posters" className={styles.secondaryButton} onClick={closeDrawer}>
           Browse items for sale
         </Link>
-        <Link
-          to="/posters/checkout"
+        <button
+          type="button"
           className={styles.checkoutButton}
-          onClick={closeDrawer}
-          aria-disabled={!hasItems || isCheckoutLoading}
+          onClick={beginCheckout}
+          disabled={!hasItems || isCheckoutLoading || !isSalesEnabled}
         >
-          {isCheckoutLoading ? 'Processing…' : 'Proceed to checkout'}
-        </Link>
+          {isSalesEnabled ? (isCheckoutLoading ? 'Processing…' : 'Checkout with Stripe') : 'Coming soon'}
+        </button>
       </div>
     </aside>
   );

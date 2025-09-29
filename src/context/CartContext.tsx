@@ -1,17 +1,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Poster, PosterEdition, getPosterById } from '../data/posters';
-
-export type CheckoutContact = {
-  name: string;
-  email: string;
-  addressLine1: string;
-  addressLine2?: string;
-  city: string;
-  region: string;
-  postalCode: string;
-  country: string;
-};
+import { POSTERS_SALES_ENABLED } from '../config/features';
 
 type CartLineItem = {
   posterId: string;
@@ -35,7 +25,7 @@ type CartContextValue = {
   clearCart: () => void;
   replaceCart: (entries: CartLineItem[]) => void;
   subtotalCents: number;
-  beginCheckout: (contact: CheckoutContact) => Promise<void>;
+  beginCheckout: () => Promise<void>;
   isCheckoutLoading: boolean;
   error: string | null;
   dismissError: () => void;
@@ -50,17 +40,12 @@ type CartProviderProps = {
   children: ReactNode;
 };
 
-const US_POSTAL_PATTERN = /^\d{5}(?:-\d{4})?$/;
-const CA_POSTAL_PATTERN = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-
 export const CartProvider = ({ children }: CartProviderProps) => {
+  const location = useLocation();
   const [lines, setLines] = useState<CartLineItem[]>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [isCheckoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const location = useLocation();
-  const isCheckoutRoute = location.pathname.startsWith('/posters/checkout');
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('cart') === 'open') {
@@ -153,6 +138,12 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   );
 
   const addToCart = (posterId: string, editionId: string | null = null, quantity = 1) => {
+    if (!POSTERS_SALES_ENABLED) {
+      setError('Poster sales are coming soon. Join the studio list to be notified.');
+      setDrawerOpen(true);
+      return;
+    }
+
     if (quantity < 1) {
       return;
     }
@@ -278,83 +269,16 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   }, []);
 
-  const beginCheckout = async (contact: CheckoutContact) => {
+  const beginCheckout = async () => {
+    if (!POSTERS_SALES_ENABLED) {
+      setError('Poster sales are coming soon. Thanks for your patience!');
+      setDrawerOpen(true);
+      return;
+    }
+
     if (!enrichedItems.length) {
       setError('Add a poster to your cart before checking out.');
       return;
-    }
-
-    const sanitize = (value: string) => value.trim();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    const normalizedContact: CheckoutContact = {
-      name: sanitize(contact.name ?? ''),
-      email: sanitize(contact.email ?? '').toLowerCase(),
-      addressLine1: sanitize(contact.addressLine1 ?? ''),
-      addressLine2: sanitize(contact.addressLine2 ?? ''),
-      city: sanitize(contact.city ?? ''),
-      region: sanitize(contact.region ?? ''),
-      postalCode: sanitize(contact.postalCode ?? ''),
-      country: sanitize((contact.country ?? '').toUpperCase())
-    };
-
-    const requiredFields: Array<keyof CheckoutContact> = [
-      'name',
-      'email',
-      'addressLine1',
-      'city',
-      'region',
-      'postalCode',
-      'country'
-    ];
-
-    for (const field of requiredFields) {
-      if (!normalizedContact[field]) {
-        setError('Enter your shipping address before checking out.');
-        if (!isCheckoutRoute) {
-          setDrawerOpen(true);
-        }
-        return;
-      }
-    }
-
-    const allowedCountries = ['US', 'CA'];
-    if (!allowedCountries.includes(normalizedContact.country)) {
-      setError('Select a supported shipping country before checking out.');
-      if (!isCheckoutRoute) {
-        setDrawerOpen(true);
-      }
-      return;
-    }
-
-    if (!emailPattern.test(normalizedContact.email)) {
-      setError('Enter a valid email address before checking out.');
-      if (!isCheckoutRoute) {
-        setDrawerOpen(true);
-      }
-      return;
-    }
-
-    if (normalizedContact.country === 'US') {
-      normalizedContact.postalCode = normalizedContact.postalCode.replace(/\s+/g, '');
-      if (!US_POSTAL_PATTERN.test(normalizedContact.postalCode)) {
-        setError('Enter a valid US ZIP code before checking out.');
-        if (!isCheckoutRoute) {
-          setDrawerOpen(true);
-        }
-        return;
-      }
-    }
-
-    if (normalizedContact.country === 'CA') {
-      normalizedContact.postalCode = normalizedContact.postalCode.replace(/\s+/g, '').toUpperCase();
-      if (!CA_POSTAL_PATTERN.test(normalizedContact.postalCode)) {
-        setError('Enter a valid Canadian postal code before checking out.');
-        if (!isCheckoutRoute) {
-          setDrawerOpen(true);
-        }
-        return;
-      }
     }
 
     setCheckoutLoading(true);
@@ -367,8 +291,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           posterId: poster.id,
           editionId: poster.edition?.id ?? null,
           quantity: poster.quantity
-        })),
-        customer: normalizedContact
+        }))
       });
     } catch (checkoutError) {
       const message = checkoutError instanceof Error ? checkoutError.message : 'Checkout failed. Please try again.';

@@ -5,12 +5,14 @@ import { getPosterById } from '../../data/posters';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
+import { POSTERS_SALES_ENABLED } from '../../config/features';
 import styles from './PosterDetail.module.css';
 
 const PosterDetail = () => {
   const { posterId } = useParams<{ posterId: string }>();
   const poster = posterId ? getPosterById(posterId) : null;
   const { addToCart } = useCart();
+  const isSalesEnabled = POSTERS_SALES_ENABLED;
 
   const [selectedEditionId, setSelectedEditionId] = useState<string | null>(poster?.editions?.[0]?.id ?? null);
 
@@ -121,9 +123,9 @@ const PosterDetail = () => {
                   type="button"
                   className={styles.primaryButton}
                   onClick={() => addToCart(poster.id, selectedEdition?.id ?? null)}
-                  disabled={requiresEdition && !selectedEdition}
+                  disabled={!isSalesEnabled || (requiresEdition && !selectedEdition)}
                 >
-                  Add to cart
+                  {isSalesEnabled ? 'Add to cart' : 'Coming soon'}
                 </button>
               </div>
             </div>
@@ -131,6 +133,9 @@ const PosterDetail = () => {
             <div className={styles.infoPanel}>
               <h3>About this poster</h3>
               <p>{poster.description}</p>
+              {!isSalesEnabled ? (
+                <p className={styles.notice}>Edition sales open soon</p>
+              ) : null}
               {selectedEdition?.description && !poster.editions?.length ? (
                 <p className={styles.note}>{selectedEdition.description}</p>
               ) : null}

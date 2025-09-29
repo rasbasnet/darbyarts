@@ -18,74 +18,6 @@ const normaliseOrigin = (event) => {
   return 'http://localhost:3000';
 };
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ALLOWED_COUNTRIES = new Set(['US', 'CA']);
-const US_POSTAL_PATTERN = /^\d{5}(?:-\d{4})?$/;
-const CA_POSTAL_PATTERN = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-
-const normaliseString = (value) => (typeof value === 'string' ? value.trim() : '');
-const normaliseCountry = (value) => normaliseString(value).toUpperCase();
-
-const normaliseCustomer = (raw) => {
-  if (!raw || typeof raw !== 'object') {
-    return { error: 'Customer details are required for checkout.' };
-  }
-
-  const name = normaliseString(raw.name);
-  const email = normaliseString(raw.email).toLowerCase();
-  const addressLine1 = normaliseString(raw.addressLine1);
-  const addressLine2 = normaliseString(raw.addressLine2);
-  const city = normaliseString(raw.city);
-  const region = normaliseString(raw.region);
-  const postalCode = normaliseString(raw.postalCode);
-  const country = normaliseCountry(raw.country);
-
-  const required = [name, email, addressLine1, city, region, postalCode, country];
-  if (required.some((value) => !value)) {
-    return { error: 'Complete shipping details are required before checking out.' };
-  }
-
-  if (!EMAIL_PATTERN.test(email)) {
-    return { error: 'A valid email address is required before checking out.' };
-  }
-
-  if (!ALLOWED_COUNTRIES.has(country)) {
-    return { error: 'Selected shipping country is not supported.' };
-  }
-
-  let normalisedPostal = postalCode.replace(/\s+/g, '');
-
-  if (country === 'US' && !US_POSTAL_PATTERN.test(normalisedPostal)) {
-    return { error: 'A valid US ZIP code is required before checking out.' };
-  }
-
-  if (country === 'CA') {
-    normalisedPostal = normalisedPostal.toUpperCase();
-    if (!CA_POSTAL_PATTERN.test(normalisedPostal)) {
-      return { error: 'A valid Canadian postal code is required before checking out.' };
-    }
-  }
-
-  const formattedPostal = country === 'CA' && normalisedPostal.length === 6
-    ? `${normalisedPostal.slice(0, 3)} ${normalisedPostal.slice(3)}`
-    : normalisedPostal;
-
-  return {
-    value: {
-      name,
-      email,
-      address: {
-        line1: addressLine1,
-        line2: addressLine2 || undefined,
-        city,
-        state: region,
-        postal_code: formattedPostal,
-        country
-      }
-    }
-  };
-};
-
 const jsonResponse = (statusCode, payload) => ({
   statusCode,
   headers: { 'Content-Type': 'application/json' },
@@ -108,14 +40,7 @@ exports.handler = async (event) => {
     return jsonResponse(400, { error: 'Invalid JSON payload.' });
   }
 
-  const { items, posterId, editionId = null, quantity = 1, customer: rawCustomer } = body;
-
-  const normalisedCustomer = normaliseCustomer(rawCustomer);
-  if (normalisedCustomer.error) {
-    return jsonResponse(400, { error: normalisedCustomer.error });
-  }
-
-  const checkoutCustomer = normalisedCustomer.value;
+  const { items, posterId, editionId = null, quantity = 1 } = body;
 
   const requestedItems = Array.isArray(items) && items.length > 0
     ? items
@@ -175,63 +100,37 @@ exports.handler = async (event) => {
     }
 
     const imagePath = poster.image.replace(/^\/+/, '');
+    const productData = {
+      name,
+      description: poster.description
+    };
+
+    const imageUrl = `${origin}/${imagePath}`;
+    if (!/^https?:\/\/localhost(?::\d+)?/i.test(imageUrl)) {
+      productData.images = [imageUrl];
+    }
+
     lineItems.push({
       quantity: qty,
       price_data: {
         currency: poster.currency,
         unit_amount: unitAmount,
-        product_data: {
-          name,
-          description: poster.description,
-          images: [`${origin}/${imagePath}`]
-        }
+        product_data: productData
       }
     });
   }
 
   try {
-    const createdCustomer = await stripe.customers.create({
-      name: checkoutCustomer.name,
-      email: checkoutCustomer.email,
-      address: checkoutCustomer.address,
-      shipping: {
-        name: checkoutCustomer.name,
-        address: checkoutCustomer.address
-      },
-      metadata: {
-        checkout_source: 'poster_checkout'
-      }
-    });
-
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       success_url: `${origin}/posters/checkout/result?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/posters/checkout/result?status=cancelled&session_id={CHECKOUT_SESSION_ID}`,
       line_items: lineItems,
-      customer: createdCustomer.id,
-      customer_email: checkoutCustomer.email,
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
-      payment_intent_data: {
-        receipt_email: checkoutCustomer.email,
-        shipping: {
-          name: checkoutCustomer.name,
-          address: checkoutCustomer.address
-        }
-      },
       metadata: {
-        items: JSON.stringify(Array.from(aggregated.values())),
-        customer: JSON.stringify({
-          name: checkoutCustomer.name,
-          email: checkoutCustomer.email,
-          addressLine1: checkoutCustomer.address.line1,
-          addressLine2: checkoutCustomer.address.line2 ?? '',
-          city: checkoutCustomer.address.city,
-          region: checkoutCustomer.address.state,
-          postalCode: checkoutCustomer.address.postal_code,
-          country: checkoutCustomer.address.country
-        })
+        items: JSON.stringify(Array.from(aggregated.values()))
       }
     });
 

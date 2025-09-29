@@ -3,12 +3,14 @@ import { useEffect } from 'react';
 import { posters } from '../../data/posters';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
+import { POSTERS_SALES_ENABLED } from '../../config/features';
 import styles from './Posters.module.css';
 
 const Posters = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const featuredPoster = posters[0];
+  const heroPosters = posters.slice(0, 2);
+  const isSalesEnabled = POSTERS_SALES_ENABLED;
 
   useEffect(() => {
     const checkoutStatus = searchParams.get('checkout');
@@ -27,24 +29,37 @@ const Posters = () => {
         <div className="container">
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
-              <span className={styles.heroOverline}>Studio poster program</span>
-              <h1>Concert prints that shimmer like stage lights</h1>
+              <span className={styles.heroOverline}>Johnny Blue Skies Residency</span>
+              <h1>Two posters, one electric skyline</h1>
               <p>
-                Darby’s official Johnny Blue Skies gig posters fuse graphite realism with iridescent foil. Each drop is
-                screen printed in small batches, signed in-studio, and ships ready to frame.
+                Both nights at Red Rocks lean on the same palette—neon copper, deep twilight blues, and foil that shifts
+                like stage lights. We tuned the entire poster shop to that shared mood.
               </p>
 
-              <ul className={styles.heroHighlights}>
-                <li>Signed & numbered variants</li>
-                <li>Archival inks on heavyweight stock</li>
-                <li>Secure Stripe checkout & tracked shipping</li>
-              </ul>
+              {!isSalesEnabled ? (
+                <p className={styles.heroNotice}>Edition sales open soon</p>
+              ) : null}
+
+
             </div>
 
-            {featuredPoster ? (
-              <img src={resolveAssetPath(featuredPoster.image)} alt={featuredPoster.title} />
-                
-            ) : null}
+            <div className={styles.heroBillboard}>
+              <div className={styles.heroBillboardHeader}>
+                <span>Red Rocks Amphitheatre</span>
+                <span>September 16–17</span>
+              </div>
+              <div className={styles.heroBillboardBody}>
+                {heroPosters.map((poster, index) => (
+                  <figure key={poster.id} className={`${styles.heroPosterTile} ${styles[`heroPosterTile${index}`]}`}>
+                    <img src={resolveAssetPath(poster.image)} alt={poster.title} />
+                    <figcaption>
+                      <strong>{poster.title}</strong>
+                      <span>{poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}</span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -71,31 +86,46 @@ const Posters = () => {
               return (
                 <div key={poster.id} className={styles.card}>
                   <Link to={`/posters/${poster.id}`} className={styles.cardLink}>
+                    <header className={styles.cardHeader}>
+                      <span className={styles.cardOverline}>Johnny Blue Skies &amp; The Dark Clouds</span>
+                      <h2>{poster.title}</h2>
+                      <span className={styles.cardSubhead}>Red Rocks Amphitheatre · {poster.dimensions}</span>
+                    </header>
+
                     <div className={styles.media}>
                       <img src={resolveAssetPath(poster.image)} alt={poster.title} loading="lazy" />
                     </div>
 
                     <div className={styles.content}>
-                      <h2>{poster.title}</h2>
-                      <p className={styles.dimensions}>{poster.dimensions}</p>
                       <p className={styles.description}>{poster.description}</p>
                       {poster.releaseInfo ? <p className={styles.releaseInfo}>{poster.releaseInfo}</p> : null}
-                      <div className={styles.meta}>
-                        <span className={styles.price}>{priceRange}</span>
-                        <span className={styles.inventory}>
-                          {poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}
-                        </span>
-                      </div>
                     </div>
                   </Link>
 
-                  <div className={styles.actions}>
+                  <div className={styles.meta}>
+                    <div className={styles.metaPrice}>
+                      <span className={styles.price}>{priceRange}</span>
+                      <span className={styles.inventory}>
+                        {poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}
+                      </span>
+                    </div>
+                    {poster.editions?.length ? (
+                      <ul className={styles.variantList}>
+                        {poster.editions.map((edition) => (
+                          <li key={edition.id}>
+                            <span>{edition.label}</span>
+                            <span>{formatCurrency(edition.priceCents / 100, poster.currency)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {!isSalesEnabled ? <span className={styles.comingSoonBadge}>Coming soon</span> : null}
                     <Link
                       to={`/posters/${poster.id}`}
                       className={styles.primaryButton}
-                      aria-label={`Buy ${poster.title}`}
+                      aria-label={`View ${poster.title}`}
                     >
-                      {poster.isAvailable === false ? 'View details' : 'Buy'}
+                      View edition details
                     </Link>
                   </div>
                 </div>
