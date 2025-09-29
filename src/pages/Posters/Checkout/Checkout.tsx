@@ -141,8 +141,24 @@ const Checkout = () => {
       errors.email = 'Enter a valid email';
     }
 
-    if (details.country && !allowedCountries.some((country) => country.code === details.country.toUpperCase())) {
+    const countryCode = details.country?.toUpperCase() ?? '';
+
+    if (countryCode && !allowedCountries.some((country) => country.code === countryCode)) {
       errors.country = 'Currently shipping to US or CA';
+    }
+
+    if (countryCode === 'US') {
+      const zipPattern = /^\d{5}(?:-\d{4})?$/;
+      if (!zipPattern.test(details.postalCode)) {
+        errors.postalCode = 'Enter a valid US ZIP code';
+      }
+    }
+
+    if (countryCode === 'CA') {
+      const canadianPattern = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+      if (!canadianPattern.test(details.postalCode)) {
+        errors.postalCode = 'Enter a valid Canadian postal code';
+      }
     }
 
     return errors;
@@ -167,6 +183,14 @@ const Checkout = () => {
       postalCode: contact.postalCode.trim(),
       country: contact.country.trim().toUpperCase()
     };
+
+    if (trimmedContact.country === 'US') {
+      trimmedContact.postalCode = trimmedContact.postalCode.replace(/\s+/g, '');
+    }
+
+    if (trimmedContact.country === 'CA') {
+      trimmedContact.postalCode = trimmedContact.postalCode.replace(/\s+/g, '').toUpperCase();
+    }
 
     const validationErrors = validateContact(trimmedContact);
     setFieldErrors(validationErrors);

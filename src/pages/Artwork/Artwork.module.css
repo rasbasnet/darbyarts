@@ -2,7 +2,7 @@
   position: relative;
   --artwork-bg-start: rgba(255, 245, 249, 0.82);
   --artwork-bg-end: rgba(244, 196, 214, 0.48);
-  --artwork-halo: radial-gradient(circle at 18% 18%, rgba(255, 209, 227, 0.55), transparent 62%);
+  --artwork-halo-gradient: radial-gradient(circle at 18% 18%, rgba(255, 209, 227, 0.55), transparent 62%);
   background: linear-gradient(160deg, var(--artwork-bg-start), var(--artwork-bg-end));
   transition: background 600ms ease, box-shadow 600ms ease;
   overflow: hidden;
@@ -13,8 +13,8 @@
   position: absolute;
   inset: 0;
   background:
-    var(--artwork-halo),
-    linear-gradient(120deg, rgba(240, 170, 200, 0.45), rgba(222, 132, 173, 0.32));
+    var(--artwork-halo-gradient),
+    linear-gradient(120deg, rgba(240, 170, 200, 0.4), rgba(222, 132, 173, 0.26));
   background-size: 200% 200%;
   animation: drift 18s ease-in-out infinite;
   z-index: -2;

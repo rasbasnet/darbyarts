@@ -20,6 +20,8 @@ const normaliseOrigin = (event) => {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_COUNTRIES = new Set(['US', 'CA']);
+const US_POSTAL_PATTERN = /^\d{5}(?:-\d{4})?$/;
+const CA_POSTAL_PATTERN = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
 
 const normaliseString = (value) => (typeof value === 'string' ? value.trim() : '');
 const normaliseCountry = (value) => normaliseString(value).toUpperCase();
@@ -51,6 +53,23 @@ const normaliseCustomer = (raw) => {
     return { error: 'Selected shipping country is not supported.' };
   }
 
+  let normalisedPostal = postalCode.replace(/\s+/g, '');
+
+  if (country === 'US' && !US_POSTAL_PATTERN.test(normalisedPostal)) {
+    return { error: 'A valid US ZIP code is required before checking out.' };
+  }
+
+  if (country === 'CA') {
+    normalisedPostal = normalisedPostal.toUpperCase();
+    if (!CA_POSTAL_PATTERN.test(normalisedPostal)) {
+      return { error: 'A valid Canadian postal code is required before checking out.' };
+    }
+  }
+
+  const formattedPostal = country === 'CA' && normalisedPostal.length === 6
+    ? `${normalisedPostal.slice(0, 3)} ${normalisedPostal.slice(3)}`
+    : normalisedPostal;
+
   return {
     value: {
       name,
@@ -60,7 +79,7 @@ const normaliseCustomer = (raw) => {
         line2: addressLine2 || undefined,
         city,
         state: region,
-        postal_code: postalCode,
+        postal_code: formattedPostal,
         country
       }
     }

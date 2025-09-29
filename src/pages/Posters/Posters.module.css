@@ -120,6 +120,7 @@
   background: rgba(34, 29, 58, 0.85);
 }
 
+
 .heroPoster {
   position: relative;
   margin: 0;
@@ -133,12 +134,35 @@
     linear-gradient(310deg, rgba(160, 116, 255, 0.3), transparent);
   border: 1px solid rgba(160, 116, 255, 0.28);
   box-shadow: 0 40px 100px rgba(5, 3, 18, 0.55);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.heroPoster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 20%, rgba(160, 116, 255, 0.45), transparent 60%),
+    linear-gradient(130deg, rgba(255, 167, 203, 0.25), transparent 65%);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroPoster:hover::before,
+.heroPoster:focus-within::before {
+  opacity: 0.55;
 }
 
 .heroPoster img {
+  position: relative;
   width: min(340px, 80vw);
   border-radius: 20px;
   box-shadow: 0 30px 60px rgba(5, 3, 18, 0.55);
+  z-index: 1;
 }
 
 .heroPoster figcaption {
@@ -171,6 +195,7 @@
 }
 
 .card {
+  position: relative;
   display: grid;
   gap: clamp(1.4rem, 4vw, 2rem);
   padding: clamp(2rem, 4vw, 2.6rem);
@@ -187,14 +212,17 @@
   content: '';
   position: absolute;
   inset: -30% -40% 60% 40%;
-  background: linear-gradient(120deg, rgba(255, 215, 238, 0.35), transparent);
+  background: linear-gradient(120deg, rgba(255, 215, 238, 0.3), transparent);
   filter: blur(40px);
   opacity: 0;
-  transition: opacity 300ms ease;
+  transition: opacity 260ms ease;
+  mix-blend-mode: screen;
+  pointer-events: none;
 }
 
-.card:hover::after {
-  opacity: 0.8;
+.card:hover::after,
+.card:focus-within::after {
+  opacity: 0.55;
 }
 
 .media {
@@ -222,6 +250,24 @@
   gap: clamp(1.2rem, 3vw, 1.8rem);
   text-decoration: none;
   color: inherit;
+}
+
+.cardLink:hover,
+.cardLink:focus,
+.cardLink:active {
+  text-decoration: none;
+}
+
+.cardLink:hover h2,
+.cardLink:focus h2,
+.cardLink:active h2,
+.cardLink:hover p,
+.cardLink:focus p,
+.cardLink:active p,
+.cardLink:hover span,
+.cardLink:focus span,
+.cardLink:active span {
+  text-decoration: none;
 }
 
 .content {

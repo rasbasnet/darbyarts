@@ -50,6 +50,9 @@ type CartProviderProps = {
   children: ReactNode;
 };
 
+const US_POSTAL_PATTERN = /^\d{5}(?:-\d{4})?$/;
+const CA_POSTAL_PATTERN = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+
 export const CartProvider = ({ children }: CartProviderProps) => {
   const [lines, setLines] = useState<CartLineItem[]>([]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -330,6 +333,28 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         setDrawerOpen(true);
       }
       return;
+    }
+
+    if (normalizedContact.country === 'US') {
+      normalizedContact.postalCode = normalizedContact.postalCode.replace(/\s+/g, '');
+      if (!US_POSTAL_PATTERN.test(normalizedContact.postalCode)) {
+        setError('Enter a valid US ZIP code before checking out.');
+        if (!isCheckoutRoute) {
+          setDrawerOpen(true);
+        }
+        return;
+      }
+    }
+
+    if (normalizedContact.country === 'CA') {
+      normalizedContact.postalCode = normalizedContact.postalCode.replace(/\s+/g, '').toUpperCase();
+      if (!CA_POSTAL_PATTERN.test(normalizedContact.postalCode)) {
+        setError('Enter a valid Canadian postal code before checking out.');
+        if (!isCheckoutRoute) {
+          setDrawerOpen(true);
+        }
+        return;
+      }
     }
 
     setCheckoutLoading(true);

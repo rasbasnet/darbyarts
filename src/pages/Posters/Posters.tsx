@@ -42,14 +42,8 @@ const Posters = () => {
             </div>
 
             {featuredPoster ? (
-              <figure className={styles.heroPoster}>
-                <img src={resolveAssetPath(featuredPoster.image)} alt={featuredPoster.title} />
-                <figcaption>
-                  <strong>{featuredPoster.title}</strong>
-                  <span>{featuredPoster.dimensions}</span>
-                  <span>Foil & matte variants available</span>
-                </figcaption>
-              </figure>
+              <img src={resolveAssetPath(featuredPoster.image)} alt={featuredPoster.title} />
+                
             ) : null}
           </div>
         </div>
