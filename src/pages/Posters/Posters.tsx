@@ -29,7 +29,7 @@ const Posters = () => {
         <div className="container">
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
-              <span className={styles.heroOverline}>Johnny Blue Skies Residency</span>
+              <span className={styles.heroOverline}>Johnny Blue Skies</span>
               <h1>Two posters, one electric skyline</h1>
               <p>
                 Both nights at Red Rocks lean on the same palette—neon copper, deep twilight blues, and foil that shifts
