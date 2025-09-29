@@ -37,7 +37,7 @@ const Posters = () => {
               </p>
 
               {!isSalesEnabled ? (
-                <p className={styles.heroNotice}>Edition sales open soon. Preview the lineup and join the mailing list to be first in line.</p>
+                <p className={styles.heroNotice}>Edition sales open soon. Preview the lineup and stay tuned for when sales open!</p>
               ) : null}
 
             </div>
@@ -49,13 +49,7 @@ const Posters = () => {
               </div>
               <div className={styles.heroBillboardBody}>
                 {heroPosters.map((poster, index) => (
-                  <figure key={poster.id} className={`${styles.heroPosterTile} ${styles[`heroPosterTile${index}`]}`}>
                     <img src={resolveAssetPath(poster.image)} alt={poster.title} />
-                    <figcaption>
-                      <strong>{poster.title}</strong>
-                      <span>{poster.inventoryStatus === 'limited' ? 'Limited edition drop' : 'Open edition'}</span>
-                    </figcaption>
-                  </figure>
                 ))}
               </div>
             </div>

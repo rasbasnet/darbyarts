@@ -103,15 +103,16 @@
 .heroBillboard {
   position: relative;
   display: grid;
-  gap: 1.4rem;
+  gap: 1.8rem;
   padding: clamp(2rem, 4vw, 2.8rem);
-  border-radius: 32px;
+  border-radius: 36px;
   background:
     radial-gradient(circle at 30% -20%, rgba(255, 176, 137, 0.24), transparent 60%),
     linear-gradient(145deg, rgba(20, 25, 52, 0.92), rgba(12, 16, 33, 0.9));
   border: 1px solid rgba(93, 73, 171, 0.45);
   box-shadow: 0 42px 110px rgba(3, 5, 18, 0.55);
   overflow: hidden;
+  width: min(760px, 100%);
 }
 
 .heroBillboard::after {
@@ -144,29 +145,34 @@
 .heroBillboardBody {
   position: relative;
   display: grid;
-  gap: 1.2rem;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: clamp(1.4rem, 3vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
   z-index: 2;
 }
 
+
+
+
 .heroPosterTile {
-  position: relative;
   display: grid;
-  gap: 0.65rem;
+  gap: 1rem;
   justify-items: center;
-  padding: 1.2rem 1.4rem;
-  border-radius: 22px;
-  background: rgba(246, 244, 255, 0.92);
-  box-shadow: 0 24px 60px rgba(5, 6, 20, 0.4);
-  border: 1px solid rgba(255, 242, 232, 0.9);
+  padding: clamp(1.6rem, 3.2vw, 2.2rem);
+  border-radius: 26px;
+  background: rgba(246, 244, 255, 0.95);
+  box-shadow: 0 34px 86px rgba(5, 6, 20, 0.42);
+  border: 1px solid rgba(255, 242, 232, 0.92);
   transform-origin: center;
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  width: min(360px, 100%);
+  margin-inline: auto;
 }
 
 .heroPosterTile img {
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 16px 36px rgba(32, 22, 68, 0.28);
+  width: min(340px, 100%);
+  border-radius: 16px;
+  box-shadow: 0 22px 48px rgba(32, 22, 68, 0.3);
 }
 
 .heroPosterTile figcaption {
@@ -186,13 +192,7 @@
   color: rgba(26, 18, 52, 0.88);
 }
 
-.heroPosterTile0 {
-  transform: rotate(-4deg) translateY(10px);
-}
 
-.heroPosterTile1 {
-  transform: rotate(4deg) translateY(-6px);
-}
 
 .heroPosterTile:hover,
 .heroPosterTile:focus-within {
@@ -407,7 +407,11 @@
   }
 
   .heroBillboardBody {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroPosterTile {
+    padding: 1.4rem;
   }
 
   .heroPosterTile0,
