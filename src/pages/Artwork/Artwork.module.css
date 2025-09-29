@@ -1,6 +1,10 @@
 .page {
   position: relative;
-  background: linear-gradient(160deg, rgba(255, 245, 249, 0.72), rgba(244, 196, 214, 0.42));
+  --artwork-bg-start: rgba(255, 245, 249, 0.82);
+  --artwork-bg-end: rgba(244, 196, 214, 0.48);
+  --artwork-halo: radial-gradient(circle at 18% 18%, rgba(255, 209, 227, 0.55), transparent 62%);
+  background: linear-gradient(160deg, var(--artwork-bg-start), var(--artwork-bg-end));
+  transition: background 600ms ease, box-shadow 600ms ease;
   overflow: hidden;
 }
 
@@ -8,20 +12,13 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(240, 170, 200, 0.45), rgba(222, 132, 173, 0.4)),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4), transparent 60%);
+  background:
+    var(--artwork-halo),
+    linear-gradient(120deg, rgba(240, 170, 200, 0.45), rgba(222, 132, 173, 0.32));
   background-size: 200% 200%;
   animation: drift 18s ease-in-out infinite;
   z-index: -2;
-}
-
-.page::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 249, 252, 0.68);
-  mix-blend-mode: lighten;
-  z-index: -1;
+  mix-blend-mode: screen;
 }
 
 .collectionSection {
@@ -49,8 +46,8 @@
 
 .notesGrid article {
   position: relative;
-  background: linear-gradient(130deg, rgba(255, 255, 255, 0.24), rgba(239, 201, 217, 0.08));
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(130deg, var(--section-surface, rgba(255, 255, 255, 0.24)), rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--section-border, rgba(255, 255, 255, 0.3));
   border-radius: 30px;
   padding: clamp(1.8rem, 4vw, 2.4rem);
   box-shadow: 0 26px 62px rgba(32, 20, 28, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.4);

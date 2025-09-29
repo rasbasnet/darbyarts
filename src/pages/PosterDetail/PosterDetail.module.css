@@ -1,113 +1,132 @@
 .page {
-  position: relative;
-  background: linear-gradient(160deg, rgba(255, 245, 249, 0.78), rgba(244, 196, 214, 0.45));
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% -10%, rgba(93, 71, 210, 0.38), transparent 55%),
+    radial-gradient(circle at 88% 0%, rgba(255, 128, 176, 0.28), transparent 50%),
+    linear-gradient(180deg, #0a0716 0%, #151330 50%, #090712 100%);
+  color: #f6f4ff;
 }
 
 .hero {
-  padding-block: clamp(5rem, 12vw, 8rem) clamp(2rem, 6vw, 4rem);
+  padding-block: clamp(5rem, 14vw, 8.5rem) clamp(2.4rem, 7vw, 4rem);
+}
+
+.hero :global(.overline) {
+  color: rgba(197, 192, 247, 0.75);
+}
+
+.hero :global(.title) {
+  color: rgba(243, 240, 255, 0.95);
+}
+
+.hero :global(.description) {
+  color: rgba(210, 205, 245, 0.8);
 }
 
 .layout {
   display: grid;
-  column-gap: clamp(2rem, 6vw, 4rem);
-  row-gap: clamp(1rem, 4vw, 1.8rem);
-  align-items: start;
+  gap: clamp(2.4rem, 6vw, 4rem);
+  padding-block: 0 clamp(4rem, 7vw, 6rem);
 }
 
 @media (min-width: 960px) {
   .layout {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    grid-template-areas: 'poster details';
-  }
-
-  .figure {
-    grid-area: poster;
-  }
-
-  .detailColumn {
-    grid-area: details;
-    display: grid;
-    gap: 1rem;
-    align-content: start;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: start;
   }
 }
 
 .figure {
   margin: 0;
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 2.8rem);
+  border-radius: 36px;
+  background:
+    linear-gradient(160deg, rgba(26, 23, 46, 0.95), rgba(16, 14, 30, 0.9)),
+    linear-gradient(320deg, rgba(122, 98, 255, 0.18), rgba(255, 133, 174, 0.18));
+  border: 1px solid rgba(140, 118, 248, 0.3);
+  box-shadow: 0 42px 90px rgba(5, 3, 18, 0.55);
 }
 
 .figure img {
   width: 100%;
-  border-radius: 32px;
-  box-shadow: 0 42px 88px rgba(32, 20, 28, 0.22);
+  border-radius: 24px;
+  box-shadow: 0 38px 80px rgba(5, 3, 18, 0.55);
 }
 
 .figure figcaption {
-  font-size: 0.9rem;
-  letter-spacing: 0.14em;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(61, 26, 45, 0.68);
+  color: rgba(199, 195, 230, 0.72);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+}
+
+.detailColumn {
+  display: grid;
+  gap: clamp(1.6rem, 4vw, 2.4rem);
 }
 
 .panel {
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
   padding: clamp(2rem, 4vw, 2.6rem);
-  border-radius: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.28), rgba(239, 201, 217, 0.12));
-  box-shadow: 0 32px 76px rgba(32, 20, 28, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(30px) saturate(140%);
-  -webkit-backdrop-filter: blur(30px) saturate(140%);
+  border-radius: 30px;
+  background:
+    linear-gradient(160deg, rgba(19, 16, 34, 0.92), rgba(15, 12, 26, 0.9)),
+    linear-gradient(300deg, rgba(122, 98, 255, 0.18), rgba(255, 133, 174, 0.18));
+  border: 1px solid rgba(137, 115, 234, 0.32);
+  box-shadow: 0 36px 80px rgba(5, 3, 18, 0.5);
 }
 
 .price {
   margin: 0;
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 2.6rem);
-  color: var(--color-charcoal);
+  color: rgba(243, 240, 255, 0.95);
 }
 
 .note {
   margin: 0;
   font-size: 0.95rem;
-  color: rgba(61, 26, 45, 0.72);
+  color: rgba(209, 204, 245, 0.72);
   line-height: 1.8;
 }
 
 .editionGroup {
-  margin: 0;
+  margin: 1rem 0 0;
   padding: 0;
   border: none;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.75rem;
 }
 
 .editionGroup legend {
   padding: 0;
-  font-size: 0.85rem;
-  letter-spacing: 0.18em;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(61, 26, 45, 0.7);
+  color: rgba(199, 195, 230, 0.6);
 }
 
 .editionOptions {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.7rem;
 }
 
 .editionOption {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.8rem;
+  gap: 0.95rem;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.2rem;
   border-radius: 22px;
-  border: 1px solid rgba(61, 26, 45, 0.18);
-  background: rgba(255, 255, 255, 0.88);
-  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  border: 1px solid rgba(143, 123, 238, 0.28);
+  background: rgba(13, 11, 24, 0.75);
+  transition: border-color 220ms ease, box-shadow 220ms ease, background 220ms ease;
 }
 
 .editionOption input {
@@ -118,92 +137,102 @@
 
 .editionOption span {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.3rem;
 }
 
 .editionOption strong {
   font-family: var(--font-display);
   font-size: 1rem;
+  color: rgba(243, 240, 255, 0.92);
 }
 
 .editionOption em {
   font-style: normal;
   font-size: 0.95rem;
-  color: rgba(61, 26, 45, 0.78);
+  color: rgba(209, 204, 245, 0.78);
 }
 
 .editionOption small {
   font-size: 0.85rem;
-  color: rgba(61, 26, 45, 0.62);
+  color: rgba(193, 189, 236, 0.68);
 }
 
 .editionOptionSelected {
-  border-color: rgba(204, 103, 149, 0.65);
-  background: rgba(244, 177, 198, 0.18);
-  box-shadow: 0 18px 36px rgba(204, 103, 149, 0.18);
+  border-color: rgba(160, 116, 255, 0.6);
+  background: rgba(32, 26, 60, 0.85);
+  box-shadow: 0 24px 48px rgba(73, 38, 162, 0.36);
+}
+
+.editionSummary {
+  padding: 1.2rem 1.4rem;
+  border-radius: 22px;
+  border: 1px solid rgba(137, 115, 234, 0.3);
+  background: rgba(17, 14, 32, 0.8);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.editionSummary h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-family: var(--font-display);
+  color: rgba(243, 240, 255, 0.9);
+}
+
+.editionSummary p {
+  margin: 0;
+  color: rgba(209, 204, 245, 0.72);
+}
+
+.editionSummary ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.4rem;
+  color: rgba(199, 195, 230, 0.7);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.8rem;
 }
 
 .primaryButton {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 0.95rem 1.9rem;
+  padding: 0.95rem 2.1rem;
   border-radius: 999px;
-  border: 1px solid rgba(61, 26, 45, 0.28);
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  border: 1px solid rgba(140, 118, 248, 0.45);
+  background: linear-gradient(130deg, rgba(160, 116, 255, 0.92), rgba(255, 133, 174, 0.92));
+  color: #0b0616;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border var(--transition);
-}
-
-.primaryButton {
-  background: linear-gradient(110deg, rgba(244, 177, 198, 0.92), rgba(204, 103, 149, 0.88));
-  color: var(--color-charcoal);
-  box-shadow: 0 26px 46px rgba(204, 103, 149, 0.32);
+  box-shadow: 0 32px 68px rgba(73, 38, 162, 0.45);
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
 .primaryButton:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 32px 64px rgba(204, 103, 149, 0.36);
+  box-shadow: 0 42px 88px rgba(73, 38, 162, 0.6);
 }
 
 .primaryButton:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-@supports not (backdrop-filter: blur(1px)) {
-  .panel {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(61, 26, 45, 0.18);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .primaryButton,
-  .secondaryButton,
-  .panel {
-    transition: none;
-  }
-}
-
 .infoPanel {
-  margin-top: 0.25rem;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.3), rgba(239, 201, 217, 0.12));
-  border-radius: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 32px 76px rgba(32, 20, 28, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.45);
   padding: clamp(2rem, 4vw, 2.6rem);
-  backdrop-filter: blur(24px) saturate(135%);
-  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  border-radius: 30px;
+  background:
+    linear-gradient(160deg, rgba(19, 16, 34, 0.92), rgba(15, 12, 26, 0.88)),
+    linear-gradient(300deg, rgba(122, 98, 255, 0.18), rgba(255, 133, 174, 0.18));
+  border: 1px solid rgba(137, 115, 234, 0.32);
+  box-shadow: 0 30px 76px rgba(5, 3, 18, 0.45);
   display: grid;
   gap: 1rem;
 }
@@ -211,19 +240,29 @@
 .infoPanel h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  color: rgba(243, 240, 255, 0.95);
 }
 
 .infoPanel p {
   margin: 0;
-  color: rgba(61, 26, 45, 0.78);
+  color: rgba(209, 204, 245, 0.78);
   line-height: 1.8;
 }
 
-
 @supports not (backdrop-filter: blur(1px)) {
-  .infoPanel {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(61, 26, 45, 0.18);
+  .panel,
+  .infoPanel,
+  .figure {
+    background: rgba(19, 16, 34, 0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .editionOption,
+  .figure,
+  .panel {
+    transition: none;
   }
 }

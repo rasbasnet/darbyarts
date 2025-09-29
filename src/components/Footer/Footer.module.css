@@ -1,8 +1,10 @@
 .footer {
-  background: linear-gradient(180deg, #ffeef5 0%, #f7d4e3 100%);
-  color: var(--color-charcoal);
+  background: linear-gradient(180deg, rgba(16, 12, 30, 0.96) 0%, rgba(9, 7, 18, 0.98) 100%);
+  color: rgba(234, 231, 255, 0.92);
   padding-block: 2.5rem 2rem;
   margin-top: auto;
+  border-top: 1px solid rgba(128, 104, 234, 0.28);
+  box-shadow: 0 -24px 60px rgba(4, 3, 14, 0.35);
 }
 
 .inner {
@@ -17,12 +19,13 @@
   text-transform: uppercase;
   margin: 0;
   font-size: 0.95rem;
+  color: rgba(244, 241, 255, 0.9);
 }
 
 .smallPrint {
   margin: 0.5rem 0 0;
   font-size: 0.85rem;
-  color: rgba(92, 31, 54, 0.65);
+  color: rgba(199, 195, 230, 0.6);
 }
 
 .footerNav {
@@ -35,11 +38,11 @@
 }
 
 .footerNav a {
-  color: rgba(92, 31, 54, 0.75);
+  color: rgba(204, 200, 244, 0.75);
 }
 
 .footerNav a:hover {
-  color: var(--color-charcoal);
+  color: rgba(244, 241, 255, 0.92);
 }
 
 .meta {
@@ -47,11 +50,11 @@
   flex-wrap: wrap;
   gap: 1rem;
   font-size: 0.8rem;
-  color: rgba(92, 31, 54, 0.6);
+  color: rgba(199, 195, 230, 0.6);
 }
 
 .meta a {
-  color: rgba(92, 31, 54, 0.85);
+  color: rgba(225, 221, 252, 0.85);
 }
 
 @media (min-width: 768px) {

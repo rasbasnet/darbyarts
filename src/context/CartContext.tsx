@@ -2,6 +2,17 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { useLocation } from 'react-router-dom';
 import { Poster, PosterEdition, getPosterById } from '../data/posters';
 
+export type CheckoutContact = {
+  name: string;
+  email: string;
+  addressLine1: string;
+  addressLine2?: string;
+  city: string;
+  region: string;
+  postalCode: string;
+  country: string;
+};
+
 type CartLineItem = {
   posterId: string;
   editionId?: string | null;
@@ -24,7 +35,7 @@ type CartContextValue = {
   clearCart: () => void;
   replaceCart: (entries: CartLineItem[]) => void;
   subtotalCents: number;
-  beginCheckout: () => Promise<void>;
+  beginCheckout: (contact: CheckoutContact) => Promise<void>;
   isCheckoutLoading: boolean;
   error: string | null;
   dismissError: () => void;
@@ -45,6 +56,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const [isCheckoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const location = useLocation();
+  const isCheckoutRoute = location.pathname.startsWith('/posters/checkout');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -263,9 +275,60 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     }
   }, []);
 
-  const beginCheckout = async () => {
+  const beginCheckout = async (contact: CheckoutContact) => {
     if (!enrichedItems.length) {
       setError('Add a poster to your cart before checking out.');
+      return;
+    }
+
+    const sanitize = (value: string) => value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const normalizedContact: CheckoutContact = {
+      name: sanitize(contact.name ?? ''),
+      email: sanitize(contact.email ?? '').toLowerCase(),
+      addressLine1: sanitize(contact.addressLine1 ?? ''),
+      addressLine2: sanitize(contact.addressLine2 ?? ''),
+      city: sanitize(contact.city ?? ''),
+      region: sanitize(contact.region ?? ''),
+      postalCode: sanitize(contact.postalCode ?? ''),
+      country: sanitize((contact.country ?? '').toUpperCase())
+    };
+
+    const requiredFields: Array<keyof CheckoutContact> = [
+      'name',
+      'email',
+      'addressLine1',
+      'city',
+      'region',
+      'postalCode',
+      'country'
+    ];
+
+    for (const field of requiredFields) {
+      if (!normalizedContact[field]) {
+        setError('Enter your shipping address before checking out.');
+        if (!isCheckoutRoute) {
+          setDrawerOpen(true);
+        }
+        return;
+      }
+    }
+
+    const allowedCountries = ['US', 'CA'];
+    if (!allowedCountries.includes(normalizedContact.country)) {
+      setError('Select a supported shipping country before checking out.');
+      if (!isCheckoutRoute) {
+        setDrawerOpen(true);
+      }
+      return;
+    }
+
+    if (!emailPattern.test(normalizedContact.email)) {
+      setError('Enter a valid email address before checking out.');
+      if (!isCheckoutRoute) {
+        setDrawerOpen(true);
+      }
       return;
     }
 
@@ -279,7 +342,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
           posterId: poster.id,
           editionId: poster.edition?.id ?? null,
           quantity: poster.quantity
-        }))
+        })),
+        customer: normalizedContact
       });
     } catch (checkoutError) {
       const message = checkoutError instanceof Error ? checkoutError.message : 'Checkout failed. Please try again.';

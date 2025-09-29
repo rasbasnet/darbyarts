@@ -14,19 +14,31 @@
         "id": "johnny-night-one-matte",
         "label": "Matte Edition",
         "priceCents": 7500,
-        "description": "Screen printed on archival matte stock."
+        "description": "Screen printed on archival matte stock.",
+        "details": [
+          "High-fidelity screen print on 100 lb cover paper",
+          "Soft matte finish keeps the graphite textures crisp"
+        ]
       },
       {
         "id": "johnny-night-one-foil",
         "label": "Rainbow Foil Edition",
         "priceCents": 12000,
-        "description": "Screen printed on iridescent rainbow foil stock."
+        "description": "Screen printed on iridescent rainbow foil stock.",
+        "details": [
+          "Prismatic foil base shifts colour as light passes across the surface",
+          "Layered inks create depth while the foil gleams through highlight areas"
+        ]
       },
       {
         "id": "johnny-night-one-uncut",
         "label": "Uncut Foil Sheet",
         "priceCents": 50000,
-        "description": "Full uncut foil press sheet."
+        "description": "Full uncut foil press sheet.",
+        "details": [
+          "Shipped flat with interleaving to preserve the holographic surface",
+          "Features printer crop marks and colour bars for collectors"
+        ]
       }
     ]
   },
@@ -45,19 +57,31 @@
         "id": "johnny-night-two-matte",
         "label": "Matte Edition",
         "priceCents": 7500,
-        "description": "Screen printed on archival matte stock."
+        "description": "Screen printed on archival matte stock.",
+        "details": [
+          "High-fidelity screen print on 100 lb cover paper",
+          "Soft matte finish keeps the graphite textures crisp"
+        ]
       },
       {
         "id": "johnny-night-two-foil",
         "label": "Rainbow Foil Edition",
         "priceCents": 12000,
-        "description": "Screen printed on iridescent rainbow foil stock."
+        "description": "Screen printed on iridescent rainbow foil stock.",
+        "details": [
+          "Prismatic foil base shifts colour as light passes across the surface",
+          "Layered inks create depth while the foil gleams through highlight areas"
+        ]
       },
       {
         "id": "johnny-night-two-uncut",
         "label": "Uncut Foil Sheet",
         "priceCents": 50000,
-        "description": "Full uncut foil press sheet."
+        "description": "Full uncut foil press sheet.",
+        "details": [
+          "Shipped flat with interleaving to preserve the holographic surface",
+          "Features printer crop marks and colour bars for collectors"
+        ]
       }
     ]
   }

@@ -37,6 +37,7 @@ const PosterDetail = () => {
             overline="Poster Edition"
             title={poster.title}
             description={poster.description}
+            tone="light"
           />
         </div>
       </section>
@@ -99,6 +100,20 @@ const PosterDetail = () => {
                     })}
                   </div>
                 </fieldset>
+              ) : null}
+
+              {selectedEdition ? (
+                <div className={styles.editionSummary}>
+                  <h4>{selectedEdition.label}</h4>
+                  {selectedEdition.description ? <p>{selectedEdition.description}</p> : null}
+                  {selectedEdition.details?.length ? (
+                    <ul>
+                      {selectedEdition.details.map((detail) => (
+                        <li key={detail}>{detail}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               ) : null}
 
               <div className={styles.actions}>

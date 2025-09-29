@@ -10,6 +10,7 @@ import Home from './pages/Home/Home';
 import Posters from './pages/Posters/Posters';
 import PosterDetail from './pages/PosterDetail/PosterDetail';
 import CheckoutResult from './pages/Posters/CheckoutResult/CheckoutResult';
+import Checkout from './pages/Posters/Checkout/Checkout';
 
 const App = () => (
   <Routes>
@@ -22,6 +23,7 @@ const App = () => (
       <Route path="exhibitions/:exhibitionId" element={<ExhibitionDetail />} />
       <Route path="posters" element={<Posters />} />
       <Route path="posters/:posterId" element={<PosterDetail />} />
+      <Route path="posters/checkout" element={<Checkout />} />
       <Route path="posters/checkout/result" element={<CheckoutResult />} />
       <Route path="contact" element={<Contact />} />
     </Route>

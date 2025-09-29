@@ -222,5 +222,229 @@
       "secondary": "#1d1d1d"
     },
     "collection": "sugar-coated-apparitions"
+  },
+  {
+    "id": "embodied-it-never-did-heal-right",
+    "title": "It Never Did Heal Right",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Graphite on paper",
+    "size": "42 × 33 in",
+    "image": "images/artworks/embodied/embodied-page1-1.png",
+    "alt": "It Never Did Heal Right drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#b9b1ae",
+      "secondary": "#3d3532"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-you-cant-trust-the-tap-water",
+    "title": "You Can't Trust The Tap Water",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Graphite and colored pencil on paper",
+    "size": "42 × 33 in",
+    "image": "images/artworks/embodied/embodied-page2-1.png",
+    "alt": "You Can't Trust The Tap Water drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c0b7b5",
+      "secondary": "#3a3432"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-touch-starved",
+    "title": "Touch-Starved",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Graphite on paper",
+    "size": "42 × 33 in",
+    "image": "images/artworks/embodied/embodied-page3-1.png",
+    "alt": "Touch-Starved drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#bcb3af",
+      "secondary": "#3f3935"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-blue-blood-no-1",
+    "title": "Blue Blood no. 1",
+    "year": "2020",
+    "created": "2020-01-01",
+    "medium": "Colored pencil on Bristol board",
+    "size": "15 × 18 in",
+    "image": "images/artworks/embodied/embodied-page4-1.png",
+    "alt": "Blue Blood no. 1 drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c0b8bb",
+      "secondary": "#3b3336"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-blue-blood-no-2",
+    "title": "Blue Blood no. 2",
+    "year": "2020",
+    "created": "2020-01-01",
+    "medium": "Colored pencil on Bristol board",
+    "size": "15 × 18 in",
+    "image": "images/artworks/embodied/embodied-page5-1.png",
+    "alt": "Blue Blood no. 2 drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c4bcbf",
+      "secondary": "#3d3337"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-blue-blood-no-3",
+    "title": "Blue Blood no. 3",
+    "year": "2020",
+    "created": "2020-01-01",
+    "medium": "Colored pencil on Bristol board",
+    "size": "15 × 18 in",
+    "image": "images/artworks/embodied/embodied-page6-1.png",
+    "alt": "Blue Blood no. 3 drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#bfb7bb",
+      "secondary": "#3a3236"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-just-pick-one",
+    "title": "Just Pick One",
+    "year": "2020",
+    "created": "2020-01-01",
+    "medium": "Graphite and colored pencil on Bristol board",
+    "size": "18 × 14 in",
+    "image": "images/artworks/embodied/embodied-page7-1.png",
+    "alt": "Just Pick One drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c2bab8",
+      "secondary": "#3c3533"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-long-term-commitment",
+    "title": "Long Term Commitment",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page8-1.png",
+    "alt": "Long Term Commitment drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#bbb3af",
+      "secondary": "#3d3733"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-it-always-hurts",
+    "title": "It Always Hurts",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page9-1.png",
+    "alt": "It Always Hurts drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#beb6b4",
+      "secondary": "#3e3735"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-hard-to-breathe",
+    "title": "Hard to Breathe",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page10-1.png",
+    "alt": "Hard to Breathe drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#beb6b2",
+      "secondary": "#3e3733"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-im-scared-it-will-make-me-unrecognisable",
+    "title": "I'm Scared It Will Make Me Unrecognisable",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page11-1.png",
+    "alt": "I'm Scared It Will Make Me Unrecognisable drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c3bbb7",
+      "secondary": "#3e3632"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-sometimes-theyre-so-bad-i-cant-sleep",
+    "title": "Sometimes They're So Bad I Can't Sleep",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page12-1.png",
+    "alt": "Sometimes They're So Bad I Can't Sleep drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c0b8b4",
+      "secondary": "#3d3531"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-the-most-important-thing",
+    "title": "The Most Important Thing",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Charcoal and colored pencil on Stonehenge paper",
+    "size": "23 × 30 in",
+    "image": "images/artworks/embodied/embodied-page13-1.png",
+    "alt": "The Most Important Thing drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c7bebb",
+      "secondary": "#403735"
+    },
+    "collection": "embodied"
+  },
+  {
+    "id": "embodied-lullaby-for-a-lost-mother",
+    "title": "Lullaby for a Lost Mother",
+    "year": "2021",
+    "created": "2021-01-01",
+    "medium": "Graphite and charcoal on paper",
+    "size": "42 × 53 in",
+    "image": "images/artworks/embodied/embodied-page14-1.png",
+    "alt": "Lullaby for a Lost Mother drawing.",
+    "orientation": "landscape",
+    "palette": {
+      "primary": "#c5bcba",
+      "secondary": "#3f3634"
+    },
+    "collection": "embodied"
   }
 ]

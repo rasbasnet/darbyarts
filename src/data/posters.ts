@@ -5,6 +5,7 @@ export type PosterEdition = {
   label: string;
   priceCents: number;
   description?: string;
+  details?: string[];
 };
 
 export type Poster = {

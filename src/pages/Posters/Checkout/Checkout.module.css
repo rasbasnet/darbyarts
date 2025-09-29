@@ -1,0 +1,317 @@
+.page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, rgba(14, 12, 24, 0.88), rgba(7, 5, 12, 0.95));
+  color: #f8f7ff;
+}
+
+.headerBand {
+  padding-block: clamp(4rem, 10vw, 6.5rem) clamp(2rem, 6vw, 3rem);
+}
+
+.checkoutSection {
+  padding-block: clamp(2rem, 6vw, 4rem) clamp(4rem, 8vw, 6rem);
+}
+
+.layout {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: start;
+  }
+}
+
+.formPanel {
+  position: relative;
+  padding: clamp(2rem, 4vw, 2.6rem);
+  border-radius: 32px;
+  background: linear-gradient(160deg, rgba(24, 22, 39, 0.92), rgba(18, 16, 32, 0.94));
+  box-shadow: 0 45px 90px rgba(4, 3, 12, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(110, 92, 204, 0.32);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.formPanel fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.formPanel legend {
+  padding: 0;
+  font-size: 0.88rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(196, 190, 255, 0.66);
+}
+
+.formGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 720px) {
+  .formGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formGrid label:nth-child(-n + 3) {
+    grid-column: 1 / -1;
+  }
+}
+
+.formField {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(199, 195, 230, 0.72);
+}
+
+.formField span {
+  font-weight: 600;
+}
+
+.formField input,
+.formField select {
+  border-radius: 16px;
+  border: 1px solid rgba(116, 104, 204, 0.5);
+  background: rgba(15, 13, 26, 0.85);
+  color: #f6f3ff;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-transform: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+.formField input:focus,
+.formField select:focus {
+  outline: none;
+  border-color: rgba(180, 144, 255, 0.8);
+  background: rgba(21, 18, 38, 0.95);
+  box-shadow: 0 0 0 3px rgba(122, 98, 255, 0.24);
+}
+
+.fieldError {
+  font-size: 0.75rem;
+  color: rgba(255, 132, 132, 0.9);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.formFooter {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.formError {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 143, 143, 0.92);
+}
+
+.contextError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 143, 143, 0.5);
+  background: rgba(64, 16, 32, 0.65);
+  color: rgba(255, 203, 210, 0.95);
+}
+
+.contextError button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.primaryButton {
+  justify-self: start;
+  padding: 0.95rem 2.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 144, 255, 0.5);
+  background: linear-gradient(120deg, rgba(132, 94, 247, 0.95), rgba(96, 60, 229, 0.88));
+  color: #0b0616;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  box-shadow: 0 30px 60px rgba(60, 34, 150, 0.45);
+}
+
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 40px 80px rgba(60, 34, 150, 0.55);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.privacyNote {
+  margin-top: 1.6rem;
+  font-size: 0.85rem;
+  color: rgba(199, 195, 230, 0.74);
+  line-height: 1.7;
+}
+
+.summaryPanel {
+  position: sticky;
+  top: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(2rem, 4vw, 2.4rem);
+  border-radius: 28px;
+  border: 1px solid rgba(132, 118, 214, 0.35);
+  background: linear-gradient(180deg, rgba(20, 17, 34, 0.92), rgba(13, 11, 24, 0.9));
+  box-shadow: 0 38px 80px rgba(4, 3, 12, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.summaryPanel header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  color: rgba(235, 230, 255, 0.9);
+}
+
+.summaryPanel header p {
+  margin: 0.35rem 0 0;
+  color: rgba(199, 195, 230, 0.78);
+}
+
+.itemList {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemRow {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(132, 118, 214, 0.28);
+  background: rgba(19, 16, 34, 0.78);
+  padding: 0.75rem 1rem;
+}
+
+.itemMedia {
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.itemMedia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.itemContent {
+  display: grid;
+  gap: 0.6rem;
+  color: rgba(235, 230, 255, 0.92);
+}
+
+.itemContent strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.itemContent span {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(199, 195, 230, 0.7);
+}
+
+.itemContent p {
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(199, 195, 230, 0.7);
+}
+
+.controls input {
+  width: 72px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(132, 118, 214, 0.4);
+  background: rgba(15, 13, 24, 0.9);
+  color: #f6f3ff;
+  text-align: center;
+}
+
+.controls button {
+  border: none;
+  background: transparent;
+  color: rgba(217, 188, 255, 0.9);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.summaryTotals {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.summaryTotals div {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(235, 230, 255, 0.86);
+}
+
+.summaryTotals strong {
+  font-family: var(--font-display);
+}
+
+.secondaryLink {
+  justify-self: start;
+  color: rgba(199, 195, 230, 0.82);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.82rem;
+}
+
+.secondaryLink:hover {
+  color: rgba(217, 211, 250, 0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .formField input,
+  .formField select,
+  .itemRow,
+  .summaryPanel,
+  .formPanel {
+    transition: none;
+  }
+}

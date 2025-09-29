@@ -34,6 +34,55 @@ const resolveOrigin = (req) => {
   return `${protocol}://${host}`;
 };
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ALLOWED_COUNTRIES = new Set(['US', 'CA']);
+
+const normaliseString = (value) => (typeof value === 'string' ? value.trim() : '');
+const normaliseCountry = (value) => normaliseString(value).toUpperCase();
+
+const normaliseCustomer = (raw) => {
+  if (!raw || typeof raw !== 'object') {
+    return { error: 'Customer details are required for checkout.' };
+  }
+
+  const name = normaliseString(raw.name);
+  const email = normaliseString(raw.email).toLowerCase();
+  const addressLine1 = normaliseString(raw.addressLine1);
+  const addressLine2 = normaliseString(raw.addressLine2);
+  const city = normaliseString(raw.city);
+  const region = normaliseString(raw.region);
+  const postalCode = normaliseString(raw.postalCode);
+  const country = normaliseCountry(raw.country);
+
+  const required = [name, email, addressLine1, city, region, postalCode, country];
+  if (required.some((value) => !value)) {
+    return { error: 'Complete shipping details are required before checking out.' };
+  }
+
+  if (!EMAIL_PATTERN.test(email)) {
+    return { error: 'A valid email address is required before checking out.' };
+  }
+
+  if (!ALLOWED_COUNTRIES.has(country)) {
+    return { error: 'Selected shipping country is not supported.' };
+  }
+
+  return {
+    value: {
+      name,
+      email,
+      address: {
+        line1: addressLine1,
+        line2: addressLine2 || undefined,
+        city,
+        state: region,
+        postal_code: postalCode,
+        country
+      }
+    }
+  };
+};
+
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });
 });
@@ -44,7 +93,14 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       return res.status(500).json({ error: 'Stripe secret key not configured on the server.' });
     }
 
-    const { items, posterId, editionId = null, quantity = 1 } = req.body;
+    const { items, posterId, editionId = null, quantity = 1, customer: rawCustomer } = req.body;
+
+    const normalisedCustomer = normaliseCustomer(rawCustomer);
+    if (normalisedCustomer.error) {
+      return res.status(400).json({ error: normalisedCustomer.error });
+    }
+
+    const checkoutCustomer = normalisedCustomer.value;
 
     const requestedItems = Array.isArray(items) && items.length > 0
       ? items
@@ -112,16 +168,56 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       });
     }
 
+    let stripeCustomerId = null;
+
+    try {
+      const createdCustomer = await stripe.customers.create({
+        name: checkoutCustomer.name,
+        email: checkoutCustomer.email,
+        address: checkoutCustomer.address,
+        shipping: {
+          name: checkoutCustomer.name,
+          address: checkoutCustomer.address
+        },
+        metadata: {
+          checkout_source: 'poster_checkout'
+        }
+      });
+      stripeCustomerId = createdCustomer.id;
+    } catch (customerError) {
+      console.error('Stripe customer creation error', customerError);
+      return res.status(500).json({ error: 'Unable to create Stripe customer profile.' });
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       success_url: `${origin}/posters/checkout/result?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/posters/checkout/result?status=cancelled&session_id={CHECKOUT_SESSION_ID}`,
       line_items: lineItems,
+      customer: stripeCustomerId,
+      customer_email: checkoutCustomer.email,
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
+      payment_intent_data: {
+        receipt_email: checkoutCustomer.email,
+        shipping: {
+          name: checkoutCustomer.name,
+          address: checkoutCustomer.address
+        }
+      },
       metadata: {
-        items: JSON.stringify(Array.from(aggregated.values()))
+        items: JSON.stringify(Array.from(aggregated.values())),
+        customer: JSON.stringify({
+          name: checkoutCustomer.name,
+          email: checkoutCustomer.email,
+          addressLine1: checkoutCustomer.address.line1,
+          addressLine2: checkoutCustomer.address.line2 ?? '',
+          city: checkoutCustomer.address.city,
+          region: checkoutCustomer.address.state,
+          postalCode: checkoutCustomer.address.postal_code,
+          country: checkoutCustomer.address.country
+        })
       }
     });
 

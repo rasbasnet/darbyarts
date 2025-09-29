@@ -40,6 +40,18 @@ const Home = () => {
 
   return (
     <>
+      <div className={styles.announcement}>
+        <div className={`container ${styles.announcementInner}`}>
+          <span className={styles.announcementBadge}>Limited drop</span>
+          <p>
+            Foil and matte Johnny Blue Skies posters are available now — signed, numbered, and ready to ship.
+          </p>
+          <Link to="/posters" className={styles.announcementLink}>
+            Explore posters
+          </Link>
+        </div>
+      </div>
+
       <section className={styles.hero}>
         <div className="container">
           <div className={styles.heroInner}>

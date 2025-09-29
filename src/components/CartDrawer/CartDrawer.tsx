@@ -11,7 +11,6 @@ const CartDrawer = () => {
     subtotalCents,
     removeFromCart,
     updateQuantity,
-    beginCheckout,
     isCheckoutLoading,
     error,
     dismissError,
@@ -109,14 +108,14 @@ const CartDrawer = () => {
         <Link to="/posters" className={styles.secondaryButton} onClick={closeDrawer}>
           Browse items for sale
         </Link>
-        <button
-          type="button"
+        <Link
+          to="/posters/checkout"
           className={styles.checkoutButton}
-          disabled={!hasItems || isCheckoutLoading}
-          onClick={beginCheckout}
+          onClick={closeDrawer}
+          aria-disabled={!hasItems || isCheckoutLoading}
         >
-          {isCheckoutLoading ? 'Processing…' : 'Checkout with Stripe'}
-        </button>
+          {isCheckoutLoading ? 'Processing…' : 'Proceed to checkout'}
+        </Link>
       </div>
     </aside>
   );

@@ -1,26 +1,14 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import SectionHeader from '../../components/SectionHeader/SectionHeader';
+import { useEffect } from 'react';
 import { posters } from '../../data/posters';
-import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
 import styles from './Posters.module.css';
 
 const Posters = () => {
-  const { addToCart } = useCart();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
-  const [selectedEditions, setSelectedEditions] = useState<Record<string, string>>(() => {
-    const initial: Record<string, string> = {};
-    posters.forEach((poster) => {
-      if (poster.editions?.length) {
-        initial[poster.id] = poster.editions[0].id;
-      }
-    });
-    return initial;
-  });
+  const featuredPoster = posters[0];
 
   useEffect(() => {
     const checkoutStatus = searchParams.get('checkout');
@@ -37,12 +25,33 @@ const Posters = () => {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className="container">
-          <SectionHeader
-            overline="Posters"
-            title="Studio editions for your walls"
-            description="Limited drops and open edition posters pulled from in-progress graphite studies and performance documentation."
-            align="center"
-          />
+          <div className={styles.heroInner}>
+            <div className={styles.heroCopy}>
+              <span className={styles.heroOverline}>Studio poster program</span>
+              <h1>Concert prints that shimmer like stage lights</h1>
+              <p>
+                Darby’s official Johnny Blue Skies gig posters fuse graphite realism with iridescent foil. Each drop is
+                screen printed in small batches, signed in-studio, and ships ready to frame.
+              </p>
+
+              <ul className={styles.heroHighlights}>
+                <li>Signed & numbered variants</li>
+                <li>Archival inks on heavyweight stock</li>
+                <li>Secure Stripe checkout & tracked shipping</li>
+              </ul>
+            </div>
+
+            {featuredPoster ? (
+              <figure className={styles.heroPoster}>
+                <img src={resolveAssetPath(featuredPoster.image)} alt={featuredPoster.title} />
+                <figcaption>
+                  <strong>{featuredPoster.title}</strong>
+                  <span>{featuredPoster.dimensions}</span>
+                  <span>Foil & matte variants available</span>
+                </figcaption>
+              </figure>
+            ) : null}
+          </div>
         </div>
       </section>
 
@@ -65,10 +74,6 @@ const Posters = () => {
                   })()
                 : formatCurrency(poster.priceCents / 100, poster.currency);
 
-              const selectedEditionId = selectedEditions[poster.id] ?? poster.editions?.[0]?.id ?? null;
-
-              const isAddDisabled = hasEditions && !selectedEditionId;
-
               return (
                 <div key={poster.id} className={styles.card}>
                   <Link to={`/posters/${poster.id}`} className={styles.cardLink}>
@@ -90,37 +95,14 @@ const Posters = () => {
                     </div>
                   </Link>
 
-                  {hasEditions ? (
-                    <label className={styles.editionSelector} htmlFor={`edition-${poster.id}`}>
-                      <span>Edition</span>
-                      <select
-                        id={`edition-${poster.id}`}
-                        value={selectedEditionId ?? ''}
-                        onChange={(event) =>
-                          setSelectedEditions((current) => ({
-                            ...current,
-                            [poster.id]: event.currentTarget.value
-                          }))
-                        }
-                      >
-                        {poster.editions?.map((edition) => (
-                          <option key={edition.id} value={edition.id}>
-                            {edition.label} · {formatCurrency(edition.priceCents / 100, poster.currency)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  ) : null}
-
                   <div className={styles.actions}>
-                    <button
-                      type="button"
+                    <Link
+                      to={`/posters/${poster.id}`}
                       className={styles.primaryButton}
-                      onClick={() => addToCart(poster.id, selectedEditionId ?? null)}
-                      disabled={isAddDisabled}
+                      aria-label={`Buy ${poster.title}`}
                     >
-                      Add to cart
-                    </button>
+                      {poster.isAvailable === false ? 'View details' : 'Buy'}
+                    </Link>
                   </div>
                 </div>
               );
