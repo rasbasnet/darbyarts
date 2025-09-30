@@ -24,6 +24,9 @@ const Footer = () => (
         </a>
         <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
         <span>© {new Date().getFullYear()} {profile.name}</span>
+        <a href="https://raskkal.com/" target="_blank" rel="noreferrer">
+          Website by Raskkal
+        </a>
       </div>
     </div>
   </footer>
