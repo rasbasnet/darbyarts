@@ -39,7 +39,6 @@ const PosterDetail = () => {
             overline="Poster Edition"
             title={poster.title}
             description={poster.description}
-            tone="light"
           />
         </div>
       </section>

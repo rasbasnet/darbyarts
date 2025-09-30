@@ -44,20 +44,15 @@ const Posters = () => {
 
             <div className={styles.heroBillboard}>
               <div className={styles.heroBillboardHeader}>
+                <span>Johnny Blue Skies</span>
                 <span>Red Rocks Amphitheatre</span>
-                <span>September 16–17</span>
-              </div>
-              <div className={styles.heroBillboardBody}>
-                {heroPosters.map((poster, index) => (
-                    <img src={resolveAssetPath(poster.image)} alt={poster.title} />
-                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section>
+      <section className={styles.catalog}>
         <div className="container">
           <div className={styles.grid}>
             {posters.map((poster) => {
