@@ -9,7 +9,6 @@ import styles from './Posters.module.css';
 const Posters = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const heroPosters = posters.slice(0, 2);
   const isSalesEnabled = POSTERS_SALES_ENABLED;
 
   useEffect(() => {
@@ -44,8 +43,8 @@ const Posters = () => {
 
             <div className={styles.heroBillboard}>
               <div className={styles.heroBillboardHeader}>
+                <span>Red Rocks Amphitheatre September 16–17</span>
                 <span>Johnny Blue Skies</span>
-                <span>Red Rocks Amphitheatre</span>
               </div>
             </div>
           </div>

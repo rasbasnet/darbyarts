@@ -120,6 +120,15 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      customer_creation: 'always',
+      customer_update: {
+        address: 'auto',
+        name: 'auto',
+        shipping: 'auto'
+      },
+      invoice_creation: {
+        enabled: true
+      },
       success_url: `${origin}/posters/checkout/result?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/posters/checkout/result?status=cancelled&session_id={CHECKOUT_SESSION_ID}`,
       line_items: lineItems,
@@ -151,7 +160,7 @@ app.get('/api/stripe/checkout-session/:sessionId', async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items', 'line_items.data.price.product']
+      expand: ['line_items', 'line_items.data.price.product', 'payment_intent']
     });
 
     return res.json({
@@ -175,7 +184,13 @@ app.get('/api/stripe/checkout-session/:sessionId', async (req, res) => {
           images: item.price.product.images
         } : null
       })) ?? [],
-      metadata: session.metadata ?? null
+      metadata: session.metadata ?? null,
+      paymentIntentId:
+        session.payment_intent && typeof session.payment_intent === 'object'
+          ? session.payment_intent.id
+          : typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : null
     });
   } catch (error) {
     console.error('Stripe session lookup error', error);

@@ -118,7 +118,7 @@ const CartDrawer = () => {
           onClick={beginCheckout}
           disabled={!hasItems || isCheckoutLoading || !isSalesEnabled}
         >
-          {isSalesEnabled ? (isCheckoutLoading ? 'Processing…' : 'Checkout with Stripe') : 'Coming soon'}
+          {isSalesEnabled ? (isCheckoutLoading ? 'Processing…' : 'Checkout') : 'Coming soon'}
         </button>
       </div>
     </aside>

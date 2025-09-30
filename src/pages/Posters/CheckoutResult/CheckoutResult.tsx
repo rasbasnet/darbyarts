@@ -30,6 +30,7 @@ type SessionSummary = {
   customerName: string | null;
   lineItems: SessionLineItem[];
   metadata?: Record<string, string> | null;
+  paymentIntentId?: string | null;
 };
 
 const CheckoutResult = () => {
@@ -169,6 +170,75 @@ const CheckoutResult = () => {
 
   const lineItems = sessionDetails?.lineItems ?? [];
   const customerEmail = sessionDetails?.customerEmail ?? profile.contact.email;
+  const supportLink = `mailto:${profile.contact.email}`;
+  const paymentIntentId = sessionDetails?.paymentIntentId ?? null;
+
+  const badgeClass = sessionError
+    ? `${styles.statusBadge} ${styles.statusBadgeWarning}`
+    : isLoading
+      ? `${styles.statusBadge} ${styles.statusBadgeInfo}`
+      : isSuccess
+        ? `${styles.statusBadge} ${styles.statusBadgeSuccess}`
+        : `${styles.statusBadge} ${styles.statusBadgeWarning}`;
+
+  const badgeLabel = sessionError
+    ? 'Unable to load receipt'
+    : isLoading
+      ? 'Processing checkout'
+      : isSuccess
+        ? 'Payment received'
+        : 'Payment incomplete';
+
+  const orderTitle = isSuccess ? 'Order summary' : 'Checkout summary';
+  const totalLabel = isSuccess ? 'Total paid' : 'Cart total';
+
+  const secondaryAction = isSuccess || sessionError ? (
+    <a href={supportLink} className={styles.secondaryButton}>
+      Email the studio
+    </a>
+  ) : (
+    <Link to="/posters?cart=open" className={styles.secondaryButton}>
+      Review cart
+    </Link>
+  );
+
+  const renderStatusCopy = () => {
+    if (isLoading) {
+      return <p className={styles.loading}>Loading your order summary…</p>;
+    }
+
+    if (sessionError) {
+      return (
+        <>
+          <p className={styles.error}>{sessionError}</p>
+          <p>
+            Need a hand? Email <a href={supportLink}>{profile.contact.email}</a> and include your checkout reference.
+          </p>
+        </>
+      );
+    }
+
+    if (isSuccess) {
+      return (
+        <>
+          <p>
+            A confirmation email is on its way to <strong>{customerEmail}</strong> with your receipt and shipping
+            details. Posters ship rolled in archival tubes within 10 business days.
+          </p>
+          <p>We’ll send tracking information as soon as your order leaves the studio.</p>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <p>
+          Your payment was cancelled before completion. Your cart has been restored so you can review the items and try
+          again when you’re ready.
+        </p>
+      </>
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -186,76 +256,80 @@ const CheckoutResult = () => {
           />
         </div>
       </section>
+      <section className={styles.summarySection}>
+        <div className={`container ${styles.summaryLayout}`}>
+          <div className={`${styles.card} ${styles.orderCard}`}>
+            <div className={styles.statusHeader}>
+              <span className={badgeClass}>{badgeLabel}</span>
+              {paymentIntentId ? <span className={styles.reference}>Ref: {paymentIntentId}</span> : null}
+            </div>
 
-      <section>
-        <div className="container">
-          <div className={styles.summary}>
-            {isLoading ? (
-              <p>Loading your order summary…</p>
-            ) : sessionError ? (
-              <p>{sessionError}</p>
-            ) : (
+            <div className={styles.statusBody}>{renderStatusCopy()}</div>
+
+            {!isLoading && !sessionError ? (
               <>
-                {isSuccess ? (
-                  <>
-                    <p>
-                      A confirmation email is being sent to <strong>{customerEmail}</strong> with your receipt and
-                      shipping details. Posters ship rolled in archival tubes within 10 business days.
-                    </p>
-                    {totalFormatted ? <p>Total paid: <strong>{totalFormatted}</strong></p> : null}
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      Your payment was cancelled before completion. You can reopen your cart to review the items and try
-                      again, or contact us if you need assistance.
-                    </p>
-                    {customerEmail ? (
-                      <p>We reserved your cart for <strong>{customerEmail}</strong> for a short time.</p>
-                    ) : null}
-                  </>
-                )}
+                <div className={styles.orderHeading}>
+                  <h3>{orderTitle}</h3>
+                </div>
 
                 {lineItems.length ? (
-                  <ul className={styles.lineItems}>
+                  <ul className={styles.orderList}>
                     {lineItems.map((item) => {
                       const name = item.product?.name ?? item.description ?? 'Poster';
-                      const qty = item.quantity ?? 1;
-                      const lineTotal = formatCurrency(((item.amountTotal ?? item.amountSubtotal ?? 0) / 100), item.currency ?? currency);
+                      const quantity = Math.max(1, item.quantity ?? 1);
+                      const subtotalCents = item.amountSubtotal ?? item.amountTotal ?? 0;
+                      const totalCents = item.amountTotal ?? item.amountSubtotal ?? 0;
+                      const currencyCode = item.currency ?? currency;
+                      const unitCents = quantity > 0 ? subtotalCents / quantity : subtotalCents;
+                      const unitLabel = formatCurrency(unitCents / 100, currencyCode);
+                      const lineTotalLabel = formatCurrency(totalCents / 100, currencyCode);
 
                       return (
-                        <li key={item.id}>
-                          <span>{name}</span>
-                          <span>{qty} × {formatCurrency((item.amountSubtotal ?? 0) / 100, item.currency ?? currency)}</span>
-                          <strong>{lineTotal}</strong>
+                        <li key={item.id} className={styles.orderLine}>
+                          <div>
+                            <span className={styles.orderLineTitle}>{name}</span>
+                            <div className={styles.orderLineMeta}>
+                              {quantity} × {unitLabel}
+                            </div>
+                          </div>
+                          <span className={styles.orderLineTotal}>{lineTotalLabel}</span>
                         </li>
                       );
                     })}
                   </ul>
+                ) : (
+                  <p className={styles.orderEmpty}>No items were captured for this checkout.</p>
+                )}
+
+                {totalFormatted ? (
+                  <div className={styles.orderFooter}>
+                    <span>{totalLabel}</span>
+                    <strong>{totalFormatted}</strong>
+                  </div>
                 ) : null}
 
-                <p>
-                  Have a question about your order? Email{' '}
-                  <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a> and include your order
-                  reference.
-                </p>
+                <div className={styles.orderMeta}>
+                  {customerEmail ? (
+                    <span>
+                      {
+                        isSuccess && `Receipt sent to `
+                      }
+                      {
+                        isSuccess && <strong>{customerEmail}</strong>
+                      }
+                    </span>
+                  ) : null}
+                  <a href={supportLink}>Need help? Email the studio</a>
+                </div>
               </>
-            )}
-          </div>
+            ) : null}
 
-          <div className={styles.actions}>
-            <Link to="/posters" className={styles.primaryButton}>
-              {isSuccess ? 'Browse more posters' : 'Return to posters'}
-            </Link>
-            {isSuccess ? (
-              <a href={`mailto:${profile.contact.email}`} className={styles.secondaryButton}>
-                Email the studio
-              </a>
-            ) : (
-              <Link to="/posters?cart=open" className={styles.secondaryButton}>
-                Review cart
+            <div className={styles.actions}>
+              <Link to="/posters" className={styles.primaryButton}>
+                {isSuccess ? 'Browse more posters' : 'Return to posters'}
               </Link>
-            )}
+              {secondaryAction}
+            </div>
           </div>
         </div>
       </section>
