@@ -80,6 +80,7 @@ const CartDrawer = () => {
                     id={`cart-qty-${poster.id}-${poster.edition?.id ?? 'default'}`}
                     type="number"
                     min={1}
+                    max={poster.maxQuantityPerEdition ?? poster.maxQuantityPerOrder ?? undefined}
                     value={poster.quantity}
                     onChange={(event) => {
                       const next = Number(event.currentTarget.value);
@@ -109,6 +110,7 @@ const CartDrawer = () => {
           <span>Subtotal</span>
           <strong>{subtotalDisplay}</strong>
         </div>
+        <p className={styles.shippingNote}>Flat $15 shipping added at checkout.</p>
         <Link to="/posters" className={styles.secondaryButton} onClick={closeDrawer}>
           Browse items for sale
         </Link>

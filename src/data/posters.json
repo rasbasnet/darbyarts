@@ -2,18 +2,19 @@
   {
     "id": "johnny-blue-skies-night-one",
     "title": "Johnny Blue Skies & The Dark Clouds — Night 1",
-    "description": "Limited edition Johnny Blue Skies poster from the Sep. 16 performance at Red Rocks Amphitheatre.",
-    "priceCents": 7500,
+    "description": "Two back-to-back shows across the iconic Red Rocks skyline. These studio posters are the official keepsake for any Johnny Blue Skies fan!",
+    "priceCents": 15000,
     "currency": "usd",
     "image": "images/artworks/poster1.png",
     "dimensions": "18 × 24 in",
     "inventoryStatus": "limited",
-    "maxQuantityPerOrder": 1,
+    "maxQuantityPerOrder": 3,
+    "maxQuantityPerEdition": 1,
     "editions": [
       {
         "id": "johnny-night-one-matte",
         "label": "Matte Edition",
-        "priceCents": 7500,
+        "priceCents": 15000,
         "description": "Screen printed on archival matte stock.",
         "details": [
           "High-fidelity screen print on 100 lb cover paper",
@@ -23,7 +24,7 @@
       {
         "id": "johnny-night-one-foil",
         "label": "Rainbow Foil Edition",
-        "priceCents": 12000,
+        "priceCents": 25000,
         "description": "Screen printed on iridescent rainbow foil stock.",
         "details": [
           "Prismatic foil base shifts colour as light passes across the surface",
@@ -33,7 +34,7 @@
       {
         "id": "johnny-night-one-uncut",
         "label": "Uncut Foil Sheet",
-        "priceCents": 50000,
+        "priceCents": 95000,
         "description": "Full uncut foil press sheet.",
         "details": [
           "Shipped flat with interleaving to preserve the holographic surface",
@@ -45,18 +46,19 @@
   {
     "id": "johnny-blue-skies-night-two",
     "title": "Johnny Blue Skies & The Dark Clouds — Night 2",
-    "description": "Limited edition Johnny Blue Skies poster from the Sep. 17 performance at Red Rocks Amphitheatre.",
-    "priceCents": 7500,
+    "description": "Two back-to-back shows across the iconic Red Rocks skyline. These studio posters are the official keepsake for any Johnny Blue Skies fan!",
+    "priceCents": 15000,
     "currency": "usd",
     "image": "images/artworks/poster2.png",
     "dimensions": "18 × 24 in",
     "inventoryStatus": "limited",
-    "maxQuantityPerOrder": 1,
+    "maxQuantityPerOrder": 3,
+    "maxQuantityPerEdition": 1,
     "editions": [
       {
         "id": "johnny-night-two-matte",
         "label": "Matte Edition",
-        "priceCents": 7500,
+        "priceCents": 15000,
         "description": "Screen printed on archival matte stock.",
         "details": [
           "High-fidelity screen print on 100 lb cover paper",
@@ -66,7 +68,7 @@
       {
         "id": "johnny-night-two-foil",
         "label": "Rainbow Foil Edition",
-        "priceCents": 12000,
+        "priceCents": 25000,
         "description": "Screen printed on iridescent rainbow foil stock.",
         "details": [
           "Prismatic foil base shifts colour as light passes across the surface",
@@ -76,7 +78,7 @@
       {
         "id": "johnny-night-two-uncut",
         "label": "Uncut Foil Sheet",
-        "priceCents": 50000,
+        "priceCents": 95000,
         "description": "Full uncut foil press sheet.",
         "details": [
           "Shipped flat with interleaving to preserve the holographic surface",

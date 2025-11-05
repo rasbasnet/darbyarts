@@ -121,11 +121,6 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       customer_creation: 'always',
-      customer_update: {
-        address: 'auto',
-        name: 'auto',
-        shipping: 'auto'
-      },
       invoice_creation: {
         enabled: true
       },
@@ -135,6 +130,22 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 1500,
+              currency: 'usd'
+            },
+            display_name: 'Flat rate shipping',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 5 },
+              maximum: { unit: 'business_day', value: 10 }
+            }
+          }
+        }
+      ],
       metadata: {
         items: JSON.stringify(Array.from(aggregated.values()))
       }

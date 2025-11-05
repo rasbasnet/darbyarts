@@ -123,12 +123,32 @@ exports.handler = async (event) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
+      customer_creation: 'always',
+      invoice_creation: {
+        enabled: true
+      },
       success_url: `${origin}/posters/checkout/result?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/posters/checkout/result?status=cancelled&session_id={CHECKOUT_SESSION_ID}`,
       line_items: lineItems,
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 1500,
+              currency: 'usd'
+            },
+            display_name: 'Flat rate shipping',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 5 },
+              maximum: { unit: 'business_day', value: 10 }
+            }
+          }
+        }
+      ],
       metadata: {
         items: JSON.stringify(Array.from(aggregated.values()))
       }

@@ -68,9 +68,21 @@ const PosterDetail = () => {
                 }
                 return <p className={styles.price}>{formatCurrency(poster.priceCents / 100, poster.currency)}</p>;
               })()}
-              <p className={styles.note}>All posters ship rolled in archival tubes within 10 business days.</p>
-              {poster.maxQuantityPerOrder ? (
-                <p className={styles.note}>Limited to {poster.maxQuantityPerOrder} per order.</p>
+              <p className={styles.note}>
+                All posters ship rolled in archival tubes within 10 business days. Flat $15 shipping is applied at checkout for U.S. and Canada orders.
+              </p>
+              {poster.maxQuantityPerEdition ? (
+                <p className={styles.note}>
+                  {poster.maxQuantityPerEdition === 1
+                    ? 'Limited to one per edition per order.'
+                    : `Limited to ${poster.maxQuantityPerEdition} per edition per order.`}
+                </p>
+              ) : poster.maxQuantityPerOrder ? (
+                <p className={styles.note}>
+                  {poster.maxQuantityPerOrder === 1
+                    ? 'Limited to one per order.'
+                    : `Limited to ${poster.maxQuantityPerOrder} per order.`}
+                </p>
               ) : null}
 
               {poster.editions?.length ? (

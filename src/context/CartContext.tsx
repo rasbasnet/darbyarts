@@ -168,7 +168,17 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
     setError(null);
     const normalizedQuantity = Math.max(1, Math.floor(quantity));
-    const limit = poster.maxQuantityPerOrder ?? Infinity;
+    const posterLimit = poster.maxQuantityPerOrder ?? Infinity;
+    const editionLimit = poster.maxQuantityPerEdition ?? posterLimit;
+
+    const editionLimitMessage =
+      editionLimit === Infinity
+        ? null
+        : `Limit reached: only ${editionLimit === 1 ? '1' : editionLimit} per person for this edition.`;
+    const posterLimitMessage =
+      posterLimit === Infinity
+        ? null
+        : `Limit reached: only ${posterLimit === 1 ? '1' : posterLimit} per person for this poster.`;
 
     setLines((current) => {
       const editionKey = edition?.id ?? null;
@@ -179,14 +189,36 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       const existing = current.find((item) => item.posterId === posterId && (item.editionId ?? null) === editionKey);
       if (existing) {
         const otherQuantity = totalForPoster - existing.quantity;
-        if (existing.quantity >= limit || otherQuantity >= limit) {
-          setError(`Limit reached: only ${limit} per person for this poster.`);
+        if (editionLimit !== Infinity && existing.quantity >= editionLimit) {
+          setError(editionLimitMessage ?? 'Limit reached for this edition.');
           return current;
         }
 
-        const allowableIncrease = limit === Infinity ? normalizedQuantity : Math.max(0, Math.min(normalizedQuantity, limit - otherQuantity - existing.quantity));
+        if (posterLimit !== Infinity && otherQuantity >= posterLimit) {
+          setError(posterLimitMessage ?? 'Limit reached for this poster.');
+          return current;
+        }
+
+        const allowedByEdition =
+          editionLimit === Infinity
+            ? normalizedQuantity
+            : Math.max(0, Math.min(normalizedQuantity, editionLimit - existing.quantity));
+        if (allowedByEdition <= 0) {
+          setError(editionLimitMessage ?? 'Limit reached for this edition.');
+          return current;
+        }
+
+        const allowedByPoster =
+          posterLimit === Infinity
+            ? normalizedQuantity
+            : Math.max(0, Math.min(normalizedQuantity, posterLimit - otherQuantity - existing.quantity));
+        const allowableIncrease = Math.min(allowedByEdition, allowedByPoster);
         if (allowableIncrease <= 0) {
-          setError(`Limit reached: only ${limit} per person for this poster.`);
+          setError(
+            posterLimit !== Infinity && allowedByPoster <= 0
+              ? posterLimitMessage ?? 'Limit reached for this poster.'
+              : editionLimitMessage ?? 'Limit reached for this edition.'
+          );
           return current;
         }
         const nextQuantity = existing.quantity + allowableIncrease;
@@ -196,14 +228,24 @@ export const CartProvider = ({ children }: CartProviderProps) => {
             : item
         );
       }
-      if (limit !== Infinity && totalForPoster >= limit) {
-        setError(`Limit reached: only ${limit} per person for this poster.`);
+      if (posterLimit !== Infinity && totalForPoster >= posterLimit) {
+        setError(posterLimitMessage ?? 'Limit reached for this poster.');
         return current;
       }
 
-      const allowableQuantity = limit === Infinity ? normalizedQuantity : Math.min(normalizedQuantity, Math.max(0, limit - totalForPoster));
+      const allowedByEdition =
+        editionLimit === Infinity ? normalizedQuantity : Math.min(normalizedQuantity, editionLimit);
+      const allowedByPoster =
+        posterLimit === Infinity
+          ? normalizedQuantity
+          : Math.max(0, Math.min(normalizedQuantity, posterLimit - totalForPoster));
+      const allowableQuantity = Math.min(allowedByEdition, allowedByPoster);
       if (allowableQuantity <= 0) {
-        setError(`Limit reached: only ${limit} per person for this poster.`);
+        setError(
+          posterLimit !== Infinity && allowedByPoster <= 0
+            ? posterLimitMessage ?? 'Limit reached for this poster.'
+            : editionLimitMessage ?? 'Limit reached for this edition.'
+        );
         return current;
       }
 
@@ -222,48 +264,118 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const updateQuantity = (posterId: string, editionId: string | null, quantity: number) => {
     const normalizedQuantity = Math.floor(quantity);
     const poster = getPosterById(posterId);
-    const limit = poster?.maxQuantityPerOrder ?? Infinity;
+    const posterLimit = poster?.maxQuantityPerOrder ?? Infinity;
+    const editionLimit = poster?.maxQuantityPerEdition ?? posterLimit;
 
     if (normalizedQuantity <= 0) {
       removeFromCart(posterId, editionId ?? null);
       return;
     }
 
-    setLines((current) =>
-      current.map((item) =>
-        item.posterId === posterId && (item.editionId ?? null) === (editionId ?? null)
-          ? { ...item, quantity: Math.min(normalizedQuantity, limit) }
-          : item
-      )
-    );
+    setLines((current) => {
+      const editionKey = editionId ?? null;
+      const otherQuantity = current.reduce(
+        (sum, item) =>
+          item.posterId === posterId && (item.editionId ?? null) !== editionKey ? sum + item.quantity : sum,
+        0
+      );
+
+      return current.reduce<CartLineItem[]>((acc, item) => {
+        if (item.posterId === posterId && (item.editionId ?? null) === editionKey) {
+          const desired = Math.max(1, normalizedQuantity);
+          const allowedByEdition = editionLimit === Infinity ? desired : Math.min(desired, editionLimit);
+          const capacityByPoster =
+            posterLimit === Infinity
+              ? allowedByEdition
+              : Math.min(allowedByEdition, Math.max(0, posterLimit - otherQuantity));
+
+          if (capacityByPoster <= 0) {
+            return acc;
+          }
+
+          acc.push({ ...item, quantity: capacityByPoster });
+          return acc;
+        }
+
+        acc.push(item);
+        return acc;
+      }, []);
+    });
   };
 
   const clearCart = useCallback(() => setLines([]), []);
 
   const replaceCart = useCallback((entries: CartLineItem[]) => {
-    setLines(
-      entries
-        .map(({ posterId, editionId, quantity }) => {
-          const poster = getPosterById(posterId);
-          if (!poster) {
-            return null;
+    setLines(() => {
+      const next: CartLineItem[] = [];
+
+      entries.forEach(({ posterId, editionId, quantity }) => {
+        const poster = getPosterById(posterId);
+        if (!poster) {
+          return;
+        }
+
+        const posterLimit = poster.maxQuantityPerOrder ?? Infinity;
+        const editionLimit = poster.maxQuantityPerEdition ?? posterLimit;
+        const normalizedQuantity = Math.max(1, Math.floor(quantity));
+
+        if (normalizedQuantity <= 0) {
+          return;
+        }
+
+        const edition = poster.editions?.length
+          ? poster.editions.find((entry) => entry.id === editionId)
+          : null;
+
+        if (poster.editions?.length && !edition) {
+          return;
+        }
+
+        const editionKey = edition?.id ?? null;
+        const totalForPoster = next.reduce(
+          (sum, item) => (item.posterId === poster.id ? sum + item.quantity : sum),
+          0
+        );
+        const existing = next.find(
+          (item) => item.posterId === poster.id && (item.editionId ?? null) === editionKey
+        );
+
+        if (existing) {
+          const otherQuantity = totalForPoster - existing.quantity;
+          const allowedByEdition =
+            editionLimit === Infinity
+              ? normalizedQuantity
+              : Math.max(0, Math.min(normalizedQuantity, editionLimit - existing.quantity));
+          const allowedByPoster =
+            posterLimit === Infinity
+              ? normalizedQuantity
+              : Math.max(0, Math.min(normalizedQuantity, posterLimit - otherQuantity - existing.quantity));
+          const allowableIncrease = Math.min(allowedByEdition, allowedByPoster);
+          if (allowableIncrease > 0) {
+            existing.quantity += allowableIncrease;
           }
+          return;
+        }
 
-          const limit = poster.maxQuantityPerOrder ?? Infinity;
-          const clampedQuantity = Math.min(Math.max(1, Math.floor(quantity)), limit);
+        if (posterLimit !== Infinity && totalForPoster >= posterLimit) {
+          return;
+        }
 
-          if (poster.editions?.length) {
-            const edition = poster.editions.find((entry) => entry.id === editionId);
-            if (!edition) {
-              return null;
-            }
-            return { posterId, editionId: edition.id, quantity: clampedQuantity };
-          }
+        const allowedByEdition =
+          editionLimit === Infinity ? normalizedQuantity : Math.min(normalizedQuantity, editionLimit);
+        const allowedByPoster =
+          posterLimit === Infinity
+            ? normalizedQuantity
+            : Math.max(0, Math.min(normalizedQuantity, posterLimit - totalForPoster));
+        const allowableQuantity = Math.min(allowedByEdition, allowedByPoster);
 
-          return { posterId, editionId: null, quantity: clampedQuantity };
-        })
-        .filter(Boolean) as CartLineItem[]
-    );
+        if (allowableQuantity > 0) {
+          next.push({ posterId: poster.id, editionId: editionKey, quantity: allowableQuantity });
+        }
+      });
+
+      return next;
+    });
     if (entries.length) {
       setDrawerOpen(true);
     }

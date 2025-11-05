@@ -31,8 +31,7 @@ const Posters = () => {
               <span className={styles.heroOverline}>Johnny Blue Skies</span>
               <h1>Own the posters from those Red Rocks nights</h1>
               <p>
-                Two back-to-back shows, one luminous skyline. These studio posters are the official keepsake—copper lights,
-                midnight gradients, and foil flashes that feel like standing in the crowd when the encore hits.
+                Two back-to-back shows across the iconic Red Rocks skyline. These studio posters are the official keepsake for any Johnny Blue Skies fan!
               </p>
 
               {!isSalesEnabled ? (

@@ -18,6 +18,7 @@ export type Poster = {
   dimensions: string;
   inventoryStatus: 'limited' | 'open-edition';
   maxQuantityPerOrder?: number;
+  maxQuantityPerEdition?: number;
   isAvailable?: boolean;
   releaseInfo?: string;
   editions?: PosterEdition[];

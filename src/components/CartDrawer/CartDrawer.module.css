@@ -210,6 +210,13 @@
   color: rgba(209, 205, 245, 0.9);
 }
 
+.shippingNote {
+  margin: -0.4rem 0 0;
+  font-size: 0.8rem;
+  color: rgba(193, 189, 236, 0.7);
+  letter-spacing: 0.02em;
+}
+
 .checkoutButton {
   display: inline-flex;
   justify-content: center;
