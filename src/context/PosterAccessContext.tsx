@@ -85,7 +85,7 @@ export const PosterAccessProvider = ({ children }: { children: ReactNode }) => {
       verifyPassword,
       resetError
     }),
-    [error, hasAccess, isVerifying, verifyPassword]
+    [error, hasAccess, isVerifying, verifyPassword, resetError]
   );
 
   return <PosterAccessContext.Provider value={value}>{children}</PosterAccessContext.Provider>;
