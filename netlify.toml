@@ -22,6 +22,12 @@
   force = true
 
 [[redirects]]
+  from = "/api/posters/access"
+  to = "/.netlify/functions/verify-access"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

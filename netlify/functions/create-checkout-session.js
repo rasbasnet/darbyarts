@@ -5,6 +5,51 @@ const stripe = stripeSecretKey ? require('stripe')(stripeSecretKey) : null;
 
 const findPoster = (posterId) => posters.find((poster) => poster.id === posterId);
 
+const parseTestPriceCents = () => {
+  const raw = process.env.POSTER_TEST_PRICE_CENTS || process.env.REACT_APP_POSTER_TEST_PRICE_CENTS;
+  if (!raw) {
+    return null;
+  }
+
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+
+  return Math.round(value);
+};
+
+const testPriceCents = parseTestPriceCents();
+
+const resolveUnitAmount = (poster, edition) => {
+  if (testPriceCents) {
+    return testPriceCents;
+  }
+
+  return edition?.priceCents ?? poster.priceCents;
+};
+
+const resolveShippingOption = () => {
+  const amount = testPriceCents ? 0 : 1500;
+
+  return [
+    {
+      shipping_rate_data: {
+        type: 'fixed_amount',
+        fixed_amount: {
+          amount,
+          currency: 'usd'
+        },
+        display_name: testPriceCents ? 'Test shipping (free)' : 'Flat rate shipping',
+        delivery_estimate: {
+          minimum: { unit: 'business_day', value: 5 },
+          maximum: { unit: 'business_day', value: 10 }
+        }
+      }
+    }
+  ];
+};
+
 const normaliseOrigin = (event) => {
   if (process.env.APP_URL) {
     return process.env.APP_URL.replace(/\/$/, '');
@@ -89,15 +134,17 @@ exports.handler = async (event) => {
 
     let unitAmount = poster.priceCents;
     let name = poster.title;
+    let edition = null;
 
     if (poster.editions?.length) {
-      const edition = poster.editions.find((variant) => variant.id === entryEditionId);
+      edition = poster.editions.find((variant) => variant.id === entryEditionId);
       if (!edition) {
         return jsonResponse(404, { error: `Edition not found for poster: ${id}` });
       }
-      unitAmount = edition.priceCents;
       name = `${poster.title} — ${edition.label}`;
     }
+
+    unitAmount = resolveUnitAmount(poster, edition);
 
     const imagePath = poster.image.replace(/^\/+/, '');
     const productData = {
@@ -133,22 +180,7 @@ exports.handler = async (event) => {
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 1500,
-              currency: 'usd'
-            },
-            display_name: 'Flat rate shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 5 },
-              maximum: { unit: 'business_day', value: 10 }
-            }
-          }
-        }
-      ],
+      shipping_options: resolveShippingOption(),
       metadata: {
         items: JSON.stringify(Array.from(aggregated.values()))
       }

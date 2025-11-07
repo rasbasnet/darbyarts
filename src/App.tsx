@@ -10,6 +10,7 @@ import Home from './pages/Home/Home';
 import Posters from './pages/Posters/Posters';
 import PosterDetail from './pages/PosterDetail/PosterDetail';
 import CheckoutResult from './pages/Posters/CheckoutResult/CheckoutResult';
+import PosterAccessGate from './components/PosterAccessGate/PosterAccessGate';
 
 const App = () => (
   <Routes>
@@ -20,9 +21,30 @@ const App = () => (
       <Route path="about" element={<About />} />
       <Route path="exhibitions" element={<Exhibitions />} />
       <Route path="exhibitions/:exhibitionId" element={<ExhibitionDetail />} />
-      <Route path="posters" element={<Posters />} />
-      <Route path="posters/:posterId" element={<PosterDetail />} />
-      <Route path="posters/checkout/result" element={<CheckoutResult />} />
+      <Route
+        path="posters"
+        element={(
+          <PosterAccessGate>
+            <Posters />
+          </PosterAccessGate>
+        )}
+      />
+      <Route
+        path="posters/:posterId"
+        element={(
+          <PosterAccessGate>
+            <PosterDetail />
+          </PosterAccessGate>
+        )}
+      />
+      <Route
+        path="posters/checkout/result"
+        element={(
+          <PosterAccessGate>
+            <CheckoutResult />
+          </PosterAccessGate>
+        )}
+      />
       <Route path="contact" element={<Contact />} />
     </Route>
     <Route path="*" element={<Navigate to="/" replace />} />

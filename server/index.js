@@ -10,6 +10,53 @@ const posters = require('../src/data/posters.json');
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' }) : null;
 
+const parseTestPriceCents = () => {
+  const raw = process.env.POSTER_TEST_PRICE_CENTS || process.env.REACT_APP_POSTER_TEST_PRICE_CENTS;
+  if (!raw) {
+    return null;
+  }
+
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+
+  return Math.round(value);
+};
+
+const testPriceCents = parseTestPriceCents();
+const testAccessPassword = process.env.POSTER_TEST_ACCESS_PASSWORD || null;
+const isTestAccessRequired = Boolean(testPriceCents);
+
+const resolveUnitAmount = (poster, edition) => {
+  if (testPriceCents) {
+    return testPriceCents;
+  }
+
+  return edition?.priceCents ?? poster.priceCents;
+};
+
+const resolveShippingOption = () => {
+  const amount = testPriceCents ? 0 : 1500;
+
+  return [
+    {
+      shipping_rate_data: {
+        type: 'fixed_amount',
+        fixed_amount: {
+          amount,
+          currency: 'usd'
+        },
+        display_name: testPriceCents ? 'Test shipping (free)' : 'Flat rate shipping',
+        delivery_estimate: {
+          minimum: { unit: 'business_day', value: 5 },
+          maximum: { unit: 'business_day', value: 10 }
+        }
+      }
+    }
+  ];
+};
+
 const app = express();
 const port = process.env.PORT || 4242;
 
@@ -36,6 +83,27 @@ const resolveOrigin = (req) => {
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });
+});
+
+app.post('/api/posters/access', (req, res) => {
+  if (!isTestAccessRequired) {
+    return res.json({ granted: true });
+  }
+
+  if (!testAccessPassword) {
+    return res.status(500).json({ error: 'Access password not configured on the server.' });
+  }
+
+  const { password } = req.body ?? {};
+  if (typeof password !== 'string' || password.trim() === '') {
+    return res.status(400).json({ error: 'Password is required.' });
+  }
+
+  if (password !== testAccessPassword) {
+    return res.status(401).json({ error: 'Incorrect password.' });
+  }
+
+  return res.json({ granted: true });
 });
 
 app.post('/api/stripe/create-checkout-session', async (req, res) => {
@@ -96,7 +164,7 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
         return res.status(404).json({ error: `Edition not found for poster: ${id}` });
       }
 
-      const unitAmount = edition?.priceCents ?? poster.priceCents;
+      const unitAmount = resolveUnitAmount(poster, edition);
 
       const productData = {
         name: edition ? `${poster.title} — ${edition.label}` : poster.title,
@@ -130,22 +198,7 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       shipping_address_collection: {
         allowed_countries: ['US', 'CA']
       },
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 1500,
-              currency: 'usd'
-            },
-            display_name: 'Flat rate shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 5 },
-              maximum: { unit: 'business_day', value: 10 }
-            }
-          }
-        }
-      ],
+      shipping_options: resolveShippingOption(),
       metadata: {
         items: JSON.stringify(Array.from(aggregated.values()))
       }
