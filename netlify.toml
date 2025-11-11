@@ -28,6 +28,30 @@
   force = true
 
 [[redirects]]
+  from = "/api/posters/inventory/check"
+  to = "/.netlify/functions/check-inventory"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/posters/inventory/commit"
+  to = "/.netlify/functions/commit-inventory"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/posters/inventory/snapshot"
+  to = "/.netlify/functions/inventory-snapshot"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/posters/inventory/release"
+  to = "/.netlify/functions/release-hold"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

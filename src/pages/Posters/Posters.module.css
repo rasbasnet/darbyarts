@@ -408,6 +408,22 @@
   gap: 1rem;
 }
 
+.variantMeta {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.variantStock {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(102, 62, 49, 0.72);
+}
+
+.variantStockSoldOut {
+  color: #7a2d1c;
+}
+
 .comingSoonBadge {
   display: inline-flex;
   align-items: center;

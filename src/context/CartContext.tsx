@@ -2,6 +2,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, 
 import { useLocation } from 'react-router-dom';
 import { Poster, PosterEdition, getPosterById } from '../data/posters';
 import { POSTERS_SALES_ENABLED } from '../config/features';
+import type { InventoryShortage } from '../services/inventory';
 
 type CartLineItem = {
   posterId: string;
@@ -16,6 +17,37 @@ type CartPoster = Poster & {
 };
 
 export const CART_BACKUP_KEY = 'darbymitchell-cart-backup';
+
+const formatInventoryShortageMessage = (shortages?: InventoryShortage[]) => {
+  if (!shortages?.length) {
+    return null;
+  }
+
+  const [primary] = shortages;
+  const source = primary.sources?.[0];
+  const available = Number.isFinite(primary.available) ? Math.max(0, Math.floor(primary.available)) : 0;
+
+  if (!source?.posterId) {
+    if (available <= 0) {
+      return 'One of your selected editions just sold out. Please remove it from your cart to continue.';
+    }
+    return available === 1
+      ? 'Only one copy of a selected edition remains. Reduce your quantity and try again.'
+      : `Only ${available} copies remain for one of your selections. Update your cart and try again.`;
+  }
+
+  const poster = getPosterById(source.posterId);
+  const edition = poster?.editions?.find((entry) => entry.id === source.editionId);
+  const targetName = edition ? `${poster?.title ?? 'Selected poster'} — ${edition.label}` : poster?.title ?? 'Selected poster';
+
+  if (available <= 0) {
+    return `${targetName} just sold out. Please remove it from your cart to continue.`;
+  }
+
+  return available === 1
+    ? `Only one copy of ${targetName} remains. Update your quantity and try again.`
+    : `Only ${available} copies of ${targetName} remain. Update your cart and try again.`;
+};
 
 type CartContextValue = {
   items: CartPoster[];
@@ -397,13 +429,25 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     setError(null);
 
     try {
+      const cartItems = enrichedItems.map((poster) => ({
+        posterId: poster.id,
+        editionId: poster.edition?.id ?? null,
+        quantity: poster.quantity
+      }));
+
+      const { verifyInventory } = await import('../services/inventory');
+      const availability = await verifyInventory(cartItems);
+
+      if (!availability.ok) {
+        const shortageMessage = formatInventoryShortageMessage(availability.shortages);
+        setError(shortageMessage ?? 'One or more selected editions are sold out.');
+        setDrawerOpen(true);
+        return;
+      }
+
       const { beginStripeCheckout } = await import('../services/payments');
       await beginStripeCheckout({
-        items: enrichedItems.map((poster) => ({
-          posterId: poster.id,
-          editionId: poster.edition?.id ?? null,
-          quantity: poster.quantity
-        }))
+        items: cartItems
       });
     } catch (checkoutError) {
       const message = checkoutError instanceof Error ? checkoutError.message : 'Checkout failed. Please try again.';

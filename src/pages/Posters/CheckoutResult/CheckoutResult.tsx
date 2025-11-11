@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import SectionHeader from '../../../components/SectionHeader/SectionHeader';
 import { CART_BACKUP_KEY, useCart } from '../../../context/CartContext';
+import { useInventory } from '../../../context/InventoryContext';
 import { profile } from '../../../data/profile';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import styles from './CheckoutResult.module.css';
@@ -42,6 +43,11 @@ const CheckoutResult = () => {
   const [isLoading, setLoading] = useState(Boolean(sessionId));
   const [sessionError, setSessionError] = useState<string | null>(null);
   const [sessionDetails, setSessionDetails] = useState<SessionSummary | null>(null);
+  const [inventoryCommitState, setInventoryCommitState] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [inventoryCommitError, setInventoryCommitError] = useState<string | null>(null);
+  const { refresh: refreshInventory } = useInventory();
+  const [hasReleasedHold, setHasReleasedHold] = useState(false);
+  const holdId = sessionDetails?.metadata?.holdId ?? null;
 
   useEffect(() => {
     if (!status) {
@@ -160,6 +166,83 @@ const CheckoutResult = () => {
     }
   }, [replaceCart, sessionDetails, status]);
 
+  useEffect(() => {
+    setHasReleasedHold(false);
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (status !== 'cancelled' || !holdId || hasReleasedHold) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const releaseHold = async () => {
+      try {
+        const { releaseInventoryHold } = await import('../../../services/inventory');
+        await releaseInventoryHold(holdId);
+        if (!cancelled) {
+          setHasReleasedHold(true);
+          await refreshInventory().catch(() => undefined);
+        }
+      } catch (releaseError) {
+        if (!cancelled) {
+          console.error('Unable to release inventory hold', releaseError);
+        }
+      }
+    };
+
+    releaseHold();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hasReleasedHold, holdId, refreshInventory, status]);
+
+  useEffect(() => {
+    if (status !== 'success' || !sessionId || inventoryCommitState !== 'idle') {
+      return;
+    }
+
+    let cancelled = false;
+    const fallbackMessage =
+      "We're double-checking inventory for your edition and will email you if anything changes.";
+
+    const commitInventory = async () => {
+      setInventoryCommitState('pending');
+      try {
+        const { commitInventoryFromSession } = await import('../../../services/inventory');
+        const result = await commitInventoryFromSession(sessionId);
+        if (cancelled) {
+          return;
+        }
+
+        if (result.ok || result.alreadyProcessed) {
+          setInventoryCommitState('success');
+          setInventoryCommitError(null);
+          await refreshInventory().catch(() => undefined);
+        } else {
+          console.error('Inventory commit conflict', result);
+          setInventoryCommitState('error');
+          setInventoryCommitError(fallbackMessage);
+        }
+      } catch (commitError) {
+        if (cancelled) {
+          return;
+        }
+        console.error('Inventory commit failed', commitError);
+        setInventoryCommitState('error');
+        setInventoryCommitError(fallbackMessage);
+      }
+    };
+
+    commitInventory();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [inventoryCommitState, refreshInventory, sessionId, status]);
+
   const isSuccess = status === 'success';
 
   const currency = sessionDetails?.currency ?? 'usd';
@@ -226,6 +309,12 @@ const CheckoutResult = () => {
             details. Posters ship rolled in archival tubes within 10 business days.
           </p>
           <p>We’ll send tracking information as soon as your order leaves the studio.</p>
+          {inventoryCommitError ? (
+            <p className={styles.error}>
+              {inventoryCommitError}{' '}
+              <a href={supportLink}>Email the studio</a> if you have any questions.
+            </p>
+          ) : null}
         </>
       );
     }

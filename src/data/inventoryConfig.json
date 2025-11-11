@@ -1,0 +1,13 @@
+{
+  "seed": {
+    "johnny-blue-skies-night-one::johnny-night-one-matte": 45,
+    "johnny-blue-skies-night-one::johnny-night-one-foil": 18,
+    "johnny-blue-skies-night-two::johnny-night-two-matte": 45,
+    "johnny-blue-skies-night-two::johnny-night-two-foil": 18,
+    "shared:uncut-foil": 4
+  },
+  "overrides": {
+    "johnny-blue-skies-night-one::johnny-night-one-uncut": "shared:uncut-foil",
+    "johnny-blue-skies-night-two::johnny-night-two-uncut": "shared:uncut-foil"
+  }
+}

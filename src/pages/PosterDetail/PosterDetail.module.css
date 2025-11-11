@@ -97,6 +97,18 @@
   color: #472720;
 }
 
+.stockBadge {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(90, 52, 40, 0.62);
+}
+
+.stockBadgeSoldOut {
+  color: #7a2d1c;
+}
+
 .note {
   margin: 0;
   font-size: 0.95rem;
@@ -162,6 +174,21 @@
 .editionOption small {
   font-size: 0.85rem;
   color: rgba(90, 52, 40, 0.64);
+}
+
+.editionStock {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(90, 52, 40, 0.64);
+}
+
+.editionStockSoldOut {
+  color: #7a2d1c;
+}
+
+.editionOptionDisabled {
+  opacity: 0.65;
 }
 
 .editionOptionSelected {
@@ -264,6 +291,14 @@
   color: rgba(63, 37, 31, 0.78);
   font-size: 0.9rem;
   line-height: 1.7;
+}
+
+.soldOutNotice {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7a2d1c;
 }
 
 @supports not (backdrop-filter: blur(1px)) {

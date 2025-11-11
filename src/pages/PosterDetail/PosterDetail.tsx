@@ -6,6 +6,8 @@ import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
 import { POSTERS_SALES_ENABLED } from '../../config/features';
+import { useInventory } from '../../context/InventoryContext';
+import { formatStockLabel, isSoldOut } from '../../utils/stock';
 import styles from './PosterDetail.module.css';
 
 const PosterDetail = () => {
@@ -13,6 +15,7 @@ const PosterDetail = () => {
   const poster = posterId ? getPosterById(posterId) : null;
   const { addToCart } = useCart();
   const isSalesEnabled = POSTERS_SALES_ENABLED;
+  const { getAvailability, isLoading: isInventoryLoading } = useInventory();
 
   const [selectedEditionId, setSelectedEditionId] = useState<string | null>(poster?.editions?.[0]?.id ?? null);
 
@@ -24,6 +27,29 @@ const PosterDetail = () => {
     () => poster?.editions?.find((edition) => edition.id === selectedEditionId) ?? null,
     [poster?.editions, selectedEditionId]
   );
+
+  const selectedEditionAvailability = useMemo(() => {
+    if (!poster) {
+      return null;
+    }
+
+    if (selectedEdition) {
+      return getAvailability(poster.id, selectedEdition.id);
+    }
+
+    if (!poster.editions?.length) {
+      return getAvailability(poster.id, null);
+    }
+
+    return null;
+  }, [getAvailability, poster, selectedEdition]);
+
+  const selectedEditionStockLabel = formatStockLabel(
+    selectedEditionAvailability?.available,
+    selectedEditionAvailability?.initial
+  );
+
+  const isSelectedEditionSoldOut = isSoldOut(selectedEditionAvailability?.available);
 
   if (!poster) {
     return <Navigate to="/posters" replace />;
@@ -91,10 +117,21 @@ const PosterDetail = () => {
                   <div className={styles.editionOptions}>
                     {poster.editions.map((edition) => {
                       const isSelected = selectedEditionId === edition.id;
+                      const availability = getAvailability(poster.id, edition.id);
+                      const stockLabel = formatStockLabel(availability?.available, availability?.initial);
+                      const soldOut = isSoldOut(availability?.available);
+                      const optionClassNames = [
+                        styles.editionOption,
+                        isSelected ? styles.editionOptionSelected : '',
+                        soldOut ? styles.editionOptionDisabled : ''
+                      ]
+                        .filter(Boolean)
+                        .join(' ');
+
                       return (
                         <label
                           key={edition.id}
-                          className={`${styles.editionOption} ${isSelected ? styles.editionOptionSelected : ''}`.trim()}
+                          className={optionClassNames}
                         >
                           <input
                             type="radio"
@@ -102,11 +139,23 @@ const PosterDetail = () => {
                             value={edition.id}
                             checked={isSelected}
                             onChange={() => setSelectedEditionId(edition.id)}
+                            disabled={soldOut}
                           />
                           <span>
                             <strong>{edition.label}</strong>
                             <em>{formatCurrency(edition.priceCents / 100, poster.currency)}</em>
                             {edition.description ? <small>{edition.description}</small> : null}
+                            {stockLabel ? (
+                              <small
+                                className={`${styles.editionStock} ${
+                                  soldOut ? styles.editionStockSoldOut : ''
+                                }`.trim()}
+                              >
+                                {stockLabel}
+                              </small>
+                            ) : isInventoryLoading ? (
+                              <small className={styles.editionStock}>Checking stock…</small>
+                            ) : null}
                           </span>
                         </label>
                       );
@@ -129,16 +178,34 @@ const PosterDetail = () => {
                 </div>
               ) : null}
 
+              {selectedEditionStockLabel ? (
+                <p
+                  className={`${styles.stockBadge} ${
+                    isSelectedEditionSoldOut ? styles.stockBadgeSoldOut : ''
+                  }`.trim()}
+                >
+                  {selectedEditionStockLabel}
+                </p>
+              ) : isInventoryLoading ? (
+                <p className={styles.stockBadge}>Checking stock…</p>
+              ) : null}
+
               <div className={styles.actions}>
                 <button
                   type="button"
                   className={styles.primaryButton}
                   onClick={() => addToCart(poster.id, selectedEdition?.id ?? null)}
-                  disabled={!isSalesEnabled || (requiresEdition && !selectedEdition)}
+                  disabled={!isSalesEnabled || (requiresEdition && !selectedEdition) || isSelectedEditionSoldOut}
                 >
                   {isSalesEnabled ? 'Add to cart' : 'Coming soon'}
                 </button>
               </div>
+
+              {isSelectedEditionSoldOut ? (
+                <p className={styles.soldOutNotice}>
+                  This edition has sold out. Please choose another edition to continue.
+                </p>
+              ) : null}
             </div>
 
             <div className={styles.infoPanel}>

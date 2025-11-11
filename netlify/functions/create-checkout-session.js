@@ -1,7 +1,20 @@
+const crypto = require('crypto');
 const posters = require('../../src/data/posters.json');
+const inventory = require('../../server/inventory');
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? require('stripe')(stripeSecretKey) : null;
+const INVENTORY_HOLD_TTL_SECONDS = (() => {
+  const parsed = Number(process.env.INVENTORY_HOLD_TTL_SECONDS);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 900;
+})();
+
+const generateHoldId = () => {
+  if (typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `hold_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+};
 
 const findPoster = (posterId) => posters.find((poster) => poster.id === posterId);
 
@@ -124,11 +137,48 @@ exports.handler = async (event) => {
     }
   }
 
+  const aggregatedValues = Array.from(aggregated.values());
+  const holdId = generateHoldId();
+  let holdReserved = false;
+
+  const releaseHoldIfNeeded = async () => {
+    if (!holdReserved) {
+      return;
+    }
+    holdReserved = false;
+    try {
+      await inventory.releaseHold(holdId);
+    } catch (releaseError) {
+      console.error('Inventory hold release error', releaseError);
+    }
+  };
+
+  try {
+    const holdResult = await inventory.reserveInventory(aggregatedValues, {
+      holdId,
+      holdSeconds: INVENTORY_HOLD_TTL_SECONDS
+    });
+
+    if (!holdResult.ok) {
+      return jsonResponse(409, {
+        error: 'One or more selected editions are sold out.',
+        shortages: holdResult.shortages,
+        snapshot: holdResult.snapshot
+      });
+    }
+
+    holdReserved = true;
+  } catch (availabilityError) {
+    console.error('Inventory reservation failed', availabilityError);
+    return jsonResponse(500, { error: 'Unable to reserve inventory before checkout.' });
+  }
+
   const lineItems = [];
 
   for (const { posterId: id, editionId: entryEditionId, quantity: qty } of aggregated.values()) {
     const poster = findPoster(id);
     if (!poster) {
+      await releaseHoldIfNeeded();
       return jsonResponse(404, { error: `Poster not found: ${id}` });
     }
 
@@ -139,6 +189,7 @@ exports.handler = async (event) => {
     if (poster.editions?.length) {
       edition = poster.editions.find((variant) => variant.id === entryEditionId);
       if (!edition) {
+        await releaseHoldIfNeeded();
         return jsonResponse(404, { error: `Edition not found for poster: ${id}` });
       }
       name = `${poster.title} — ${edition.label}`;
@@ -182,13 +233,17 @@ exports.handler = async (event) => {
       },
       shipping_options: resolveShippingOption(),
       metadata: {
-        items: JSON.stringify(Array.from(aggregated.values()))
+        items: JSON.stringify(aggregatedValues),
+        holdId
       }
     });
 
     return jsonResponse(200, { sessionId: session.id });
   } catch (error) {
     console.error('Stripe checkout session error', error);
+    if (typeof releaseHoldIfNeeded === 'function') {
+      await releaseHoldIfNeeded();
+    }
     return jsonResponse(500, { error: 'Unable to create checkout session.' });
   }
 };

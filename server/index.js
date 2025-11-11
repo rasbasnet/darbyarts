@@ -1,14 +1,27 @@
 /* eslint-disable no-console */
 const path = require('path');
+const crypto = require('crypto');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const Stripe = require('stripe');
+const inventory = require('./inventory');
 
 const posters = require('../src/data/posters.json');
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' }) : null;
+const INVENTORY_HOLD_TTL_SECONDS = (() => {
+  const parsed = Number(process.env.INVENTORY_HOLD_TTL_SECONDS);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 900;
+})();
+
+const generateHoldId = () => {
+  if (typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `hold_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+};
 
 const parseTestPriceCents = () => {
   const raw = process.env.POSTER_TEST_PRICE_CENTS || process.env.REACT_APP_POSTER_TEST_PRICE_CENTS;
@@ -106,6 +119,114 @@ app.post('/api/posters/access', (req, res) => {
   return res.json({ granted: true });
 });
 
+app.post('/api/posters/inventory/check', async (req, res) => {
+  try {
+    const { items } = req.body ?? {};
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'No items supplied for availability check.' });
+    }
+
+    const result = await inventory.checkAvailability(items);
+    if (!result.ok) {
+      return res.status(409).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error('Inventory availability error', error);
+    return res.status(500).json({ error: 'Unable to verify inventory.' });
+  }
+});
+
+app.get('/api/posters/inventory/snapshot', async (_req, res) => {
+  try {
+    const snapshot = await inventory.getInventorySnapshot();
+    return res.json({ snapshot });
+  } catch (error) {
+    console.error('Inventory snapshot error', error);
+    return res.status(500).json({ error: 'Unable to load inventory.' });
+  }
+});
+
+app.post('/api/posters/inventory/release', async (req, res) => {
+  try {
+    const { holdId } = req.body ?? {};
+    if (typeof holdId !== 'string' || !holdId.trim()) {
+      return res.status(400).json({ error: 'holdId is required.' });
+    }
+    const result = await inventory.releaseHold(holdId.trim());
+    if (!result.released) {
+      return res.status(404).json({ error: 'Hold not found or already released.' });
+    }
+    return res.json(result);
+  } catch (error) {
+    console.error('Inventory release error', error);
+    return res.status(500).json({ error: 'Unable to release inventory hold.' });
+  }
+});
+
+app.post('/api/posters/inventory/commit', async (req, res) => {
+  try {
+    const { sessionId } = req.body ?? {};
+    if (typeof sessionId !== 'string' || !sessionId.trim()) {
+      return res.status(400).json({ error: 'sessionId is required.' });
+    }
+
+    if (!stripe) {
+      return res.status(500).json({ error: 'Stripe secret key not configured on the server.' });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId.trim());
+    if (!session) {
+      return res.status(404).json({ error: 'Checkout session not found.' });
+    }
+
+    if (session.payment_status !== 'paid') {
+      return res.status(409).json({ error: 'Payment has not completed.' });
+    }
+
+    const rawItems = session.metadata?.items;
+    const holdId = typeof session.metadata?.holdId === 'string' ? session.metadata.holdId : null;
+    if (typeof rawItems !== 'string') {
+      return res.status(400).json({ error: 'Checkout metadata missing line items.' });
+    }
+
+    let parsedItems;
+    try {
+      parsedItems = JSON.parse(rawItems);
+    } catch (parseError) {
+      console.error('Unable to parse checkout metadata', parseError);
+      return res.status(400).json({ error: 'Checkout metadata is invalid.' });
+    }
+
+    if (!Array.isArray(parsedItems) || !parsedItems.length) {
+      return res.status(400).json({ error: 'No purchasable items recorded for this checkout.' });
+    }
+
+    const paymentIntentId =
+      typeof session.payment_intent === 'string'
+        ? session.payment_intent
+        : session.payment_intent && typeof session.payment_intent === 'object'
+          ? session.payment_intent.id
+          : null;
+
+    const result = await inventory.commitInventory(parsedItems, {
+      orderId: paymentIntentId ?? session.id,
+      sessionId: session.id,
+      holdId
+    });
+
+    if (!result.ok) {
+      return res.status(409).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    console.error('Inventory commit error', error);
+    return res.status(500).json({ error: 'Unable to update inventory.' });
+  }
+});
+
 app.post('/api/stripe/create-checkout-session', async (req, res) => {
   try {
     if (!stripe) {
@@ -151,16 +272,54 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       }
     }
 
+    const aggregatedValues = Array.from(aggregated.values());
+    const holdId = generateHoldId();
+    let holdReserved = false;
+
+    const releaseHoldIfNeeded = async () => {
+      if (!holdReserved) {
+        return;
+      }
+      holdReserved = false;
+      try {
+        await inventory.releaseHold(holdId);
+      } catch (releaseError) {
+        console.error('Inventory hold release error', releaseError);
+      }
+    };
+
+    try {
+      const holdResult = await inventory.reserveInventory(aggregatedValues, {
+        holdId,
+        holdSeconds: INVENTORY_HOLD_TTL_SECONDS
+      });
+
+      if (!holdResult.ok) {
+        return res.status(409).json({
+          error: 'One or more selected editions are sold out.',
+          shortages: holdResult.shortages,
+          snapshot: holdResult.snapshot
+        });
+      }
+
+      holdReserved = true;
+    } catch (availabilityError) {
+      console.error('Inventory reservation failed', availabilityError);
+      return res.status(500).json({ error: 'Unable to reserve inventory before checkout.' });
+    }
+
     const lineItems = [];
 
     for (const { posterId: id, editionId: entryEditionId, quantity: qty } of aggregated.values()) {
       const poster = findPoster(id);
       if (!poster) {
+        await releaseHoldIfNeeded();
         return res.status(404).json({ error: `Poster not found: ${id}` });
       }
 
       const edition = poster.editions?.find((variant) => variant.id === entryEditionId);
       if (poster.editions?.length && !edition) {
+        await releaseHoldIfNeeded();
         return res.status(404).json({ error: `Edition not found for poster: ${id}` });
       }
 
@@ -200,13 +359,17 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
       },
       shipping_options: resolveShippingOption(),
       metadata: {
-        items: JSON.stringify(Array.from(aggregated.values()))
+        items: JSON.stringify(aggregatedValues),
+        holdId
       }
     });
 
     return res.json({ sessionId: session.id });
   } catch (error) {
     console.error('Stripe checkout session error', error);
+    if (typeof releaseHoldIfNeeded === 'function') {
+      await releaseHoldIfNeeded();
+    }
     return res.status(500).json({ error: 'Unable to create checkout session.' });
   }
 });

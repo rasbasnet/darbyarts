@@ -4,12 +4,15 @@ import { posters } from '../../data/posters';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { resolveAssetPath } from '../../utils/media';
 import { POSTERS_SALES_ENABLED } from '../../config/features';
+import { useInventory } from '../../context/InventoryContext';
+import { formatStockLabel, isSoldOut } from '../../utils/stock';
 import styles from './Posters.module.css';
 
 const Posters = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isSalesEnabled = POSTERS_SALES_ENABLED;
+  const { getAvailability, isLoading: isInventoryLoading, refresh: refreshInventory } = useInventory();
 
   useEffect(() => {
     const checkoutStatus = searchParams.get('checkout');
@@ -21,6 +24,23 @@ const Posters = () => {
       navigate('/posters', { replace: true });
     }
   }, [navigate, searchParams]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const refresh = async () => {
+      try {
+        await refreshInventory();
+      } catch (error) {
+        if (isMounted) {
+          console.error('Unable to refresh inventory snapshot', error);
+        }
+      }
+    };
+    refresh();
+    return () => {
+      isMounted = false;
+    };
+  }, [refreshInventory]);
 
   return (
     <div className={styles.page}>
@@ -99,7 +119,26 @@ const Posters = () => {
                       <ul className={styles.variantList}>
                         {poster.editions.map((edition) => (
                           <li key={edition.id}>
-                            <span>{edition.label}</span>
+                            <div className={styles.variantMeta}>
+                              <span>{edition.label}</span>
+                              {(() => {
+                                const availability = getAvailability(poster.id, edition.id);
+                                const label = formatStockLabel(
+                                  availability?.available,
+                                  availability?.initial
+                                );
+                                if (!label) {
+                                  return isInventoryLoading ? (
+                                    <span className={styles.variantStock}>Checking stock…</span>
+                                  ) : null;
+                                }
+                                const soldOut = isSoldOut(availability?.available);
+                                const badgeClass = soldOut
+                                  ? `${styles.variantStock} ${styles.variantStockSoldOut}`
+                                  : styles.variantStock;
+                                return <span className={badgeClass}>{label}</span>;
+                              })()}
+                            </div>
                             <span>{formatCurrency(edition.priceCents / 100, poster.currency)}</span>
                           </li>
                         ))}

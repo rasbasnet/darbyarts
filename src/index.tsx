@@ -5,6 +5,7 @@ import App from './App';
 import './index.css';
 import { CartProvider } from './context/CartContext';
 import { PosterAccessProvider } from './context/PosterAccessContext';
+import { InventoryProvider } from './context/InventoryContext';
 
 const container = document.getElementById('root');
 
@@ -19,7 +20,9 @@ root.render(
     <BrowserRouter>
       <CartProvider>
         <PosterAccessProvider>
-          <App />
+          <InventoryProvider>
+            <App />
+          </InventoryProvider>
         </PosterAccessProvider>
       </CartProvider>
     </BrowserRouter>

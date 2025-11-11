@@ -22,6 +22,7 @@ server/.env.local
 .env
 .env.local.example
 server/.env.example
+server/inventory/inventory.store.json
 
 npm-debug.log*
 yarn-debug.log*
