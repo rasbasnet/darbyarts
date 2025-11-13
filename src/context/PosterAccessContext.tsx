@@ -1,6 +1,4 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
-
-const POSTER_ACCESS_STORAGE_KEY = 'poster-test-access';
 const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL ?? '').replace(/\/$/, '');
 const POSTER_TEST_PRICE_ENABLED = Boolean(process.env.REACT_APP_POSTER_TEST_PRICE_CENTS);
 const POSTER_PASSWORD_FLAG =
@@ -19,15 +17,8 @@ type PosterAccessContextValue = {
 
 const PosterAccessContext = createContext<PosterAccessContextValue | undefined>(undefined);
 
-const getStoredAccess = () => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-  return window.sessionStorage.getItem(POSTER_ACCESS_STORAGE_KEY) === 'granted';
-};
-
 export const PosterAccessProvider = ({ children }: { children: ReactNode }) => {
-  const [hasAccess, setHasAccess] = useState(() => (REQUIRES_ACCESS ? getStoredAccess() : true));
+  const [hasAccess, setHasAccess] = useState(!REQUIRES_ACCESS);
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,9 +54,6 @@ export const PosterAccessProvider = ({ children }: { children: ReactNode }) => {
           return false;
         }
 
-        if (typeof window !== 'undefined') {
-          window.sessionStorage.setItem(POSTER_ACCESS_STORAGE_KEY, 'granted');
-        }
         setHasAccess(true);
         return true;
       } catch (requestError) {
