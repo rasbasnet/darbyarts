@@ -6,19 +6,34 @@ const STORE_PATH = path.join(__dirname, STORE_FILENAME);
 
 const resolveStorageMode = () => {
   const configured = (process.env.INVENTORY_STORAGE ?? '').toLowerCase();
-  if (configured === 'file' || configured === 'netlify') {
-    return configured;
+  if (configured === 'file') {
+    return 'file';
   }
 
-  return process.env.NETLIFY === 'true' ? 'netlify' : 'file';
+  if (configured === 'netlify') {
+    if (process.env.NETLIFY_BLOBS_CONTEXT) {
+      return 'netlify';
+    }
+    console.warn(
+      '[inventory] INVENTORY_STORAGE=netlify but NETLIFY_BLOBS_CONTEXT is missing. Falling back to file storage.'
+    );
+    return 'file';
+  }
+
+  if (process.env.NETLIFY_BLOBS_CONTEXT) {
+    return 'netlify';
+  }
+
+  return 'file';
 };
 
-const storageMode = resolveStorageMode();
+const getStorageMode = () => resolveStorageMode();
 
 let blobStore = null;
 
 const getBlobStore = () => {
-  if (storageMode !== 'netlify') {
+  if (getStorageMode() !== 'netlify') {
+    blobStore = null;
     return null;
   }
 
@@ -66,7 +81,7 @@ const writeBlobStore = async (data) => {
 };
 
 const readStore = async () => {
-  if (storageMode === 'netlify') {
+  if (getStorageMode() === 'netlify') {
     const json = await readBlobStore();
     if (json && typeof json === 'object') {
       return json;
@@ -78,7 +93,7 @@ const readStore = async () => {
 };
 
 const writeStore = async (data) => {
-  if (storageMode === 'netlify') {
+  if (getStorageMode() === 'netlify') {
     return writeBlobStore(data);
   }
 
@@ -88,5 +103,5 @@ const writeStore = async (data) => {
 module.exports = {
   readStore,
   writeStore,
-  storageMode
+  getStorageMode
 };

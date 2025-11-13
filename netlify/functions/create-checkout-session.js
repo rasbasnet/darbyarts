@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { connectLambda } = require('@netlify/blobs');
 const posters = require('../../src/data/posters.json');
 const inventory = require('../../server/inventory');
 
@@ -83,6 +84,13 @@ const jsonResponse = (statusCode, payload) => ({
 });
 
 exports.handler = async (event) => {
+  if (event?.blobs) {
+    try {
+      connectLambda(event);
+    } catch (error) {
+      console.warn('Unable to initialise Netlify Blobs context', error);
+    }
+  }
   if (!stripe) {
     return jsonResponse(500, { error: 'Stripe secret key not configured on the server.' });
   }

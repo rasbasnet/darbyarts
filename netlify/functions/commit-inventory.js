@@ -1,3 +1,4 @@
+const { connectLambda } = require('@netlify/blobs');
 const inventory = require('../../server/inventory');
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -10,6 +11,13 @@ const jsonResponse = (statusCode, payload) => ({
 });
 
 exports.handler = async (event) => {
+  if (event?.blobs) {
+    try {
+      connectLambda(event);
+    } catch (error) {
+      console.warn('Unable to initialise Netlify Blobs context', error);
+    }
+  }
   if (event.httpMethod !== 'POST') {
     return jsonResponse(405, { error: 'Method not allowed.' });
   }

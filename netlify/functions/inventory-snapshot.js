@@ -1,3 +1,4 @@
+const { connectLambda } = require('@netlify/blobs');
 const inventory = require('../../server/inventory');
 
 const jsonResponse = (statusCode, payload) => ({
@@ -7,6 +8,13 @@ const jsonResponse = (statusCode, payload) => ({
 });
 
 exports.handler = async (event) => {
+  if (event?.blobs) {
+    try {
+      connectLambda(event);
+    } catch (error) {
+      console.warn('Unable to initialise Netlify Blobs context', error);
+    }
+  }
   if (event.httpMethod !== 'GET') {
     return jsonResponse(405, { error: 'Method not allowed.' });
   }
