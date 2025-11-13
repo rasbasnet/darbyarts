@@ -48,7 +48,7 @@ const PosterAccessGate = ({ children }: PosterAccessGateProps) => {
             {error ? <p className={styles.error} role="alert">{error}</p> : null}
           </form>
 
-          <p className={styles.note}>This gate only appears while poster test pricing is active.</p>
+          <p className={styles.note}>This gate only appears while the poster drop is password protected.</p>
         </div>
       </div>
     </div>

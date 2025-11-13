@@ -38,8 +38,11 @@ const parseTestPriceCents = () => {
 };
 
 const testPriceCents = parseTestPriceCents();
+const isPasswordGateEnabled =
+  (process.env.POSTERS_REQUIRE_PASSWORD ?? '').toLowerCase() === 'true' ||
+  (process.env.POSTERS_PASSWORD_REQUIRED ?? '').toLowerCase() === 'true';
 const testAccessPassword = process.env.POSTER_TEST_ACCESS_PASSWORD || null;
-const isTestAccessRequired = Boolean(testPriceCents);
+const isTestAccessRequired = Boolean(testPriceCents) || isPasswordGateEnabled;
 
 const resolveUnitAmount = (poster, edition) => {
   if (testPriceCents) {

@@ -2,7 +2,11 @@ import { createContext, ReactNode, useCallback, useContext, useMemo, useState } 
 
 const POSTER_ACCESS_STORAGE_KEY = 'poster-test-access';
 const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL ?? '').replace(/\/$/, '');
-const REQUIRES_ACCESS = Boolean(process.env.REACT_APP_POSTER_TEST_PRICE_CENTS);
+const POSTER_TEST_PRICE_ENABLED = Boolean(process.env.REACT_APP_POSTER_TEST_PRICE_CENTS);
+const POSTER_PASSWORD_FLAG =
+  (process.env.REACT_APP_POSTERS_REQUIRE_PASSWORD ?? process.env.REACT_APP_POSTERS_PASSWORD_REQUIRED ?? '').toLowerCase() ===
+  'true';
+const REQUIRES_ACCESS = POSTER_TEST_PRICE_ENABLED || POSTER_PASSWORD_FLAG;
 
 type PosterAccessContextValue = {
   requiresAccess: boolean;
