@@ -2,7 +2,7 @@ export const isSoldOut = (available: number | null | undefined) => available != 
 
 export const formatStockLabel = (
   available: number | null | undefined,
-  initial: number | null | undefined
+  _initial: number | null | undefined
 ) => {
   if (available == null) {
     return null;

@@ -50,6 +50,7 @@ const PosterDetail = () => {
   );
 
   const isSelectedEditionSoldOut = isSoldOut(selectedEditionAvailability?.available);
+  const isStockInfoAvailable = Boolean(selectedEditionAvailability);
 
   if (!poster) {
     return <Navigate to="/posters" replace />;
@@ -195,9 +196,17 @@ const PosterDetail = () => {
                   type="button"
                   className={styles.primaryButton}
                   onClick={() => addToCart(poster.id, selectedEdition?.id ?? null)}
-                  disabled={!isSalesEnabled || (requiresEdition && !selectedEdition) || isSelectedEditionSoldOut}
+                  disabled=
+                    {!isSalesEnabled ||
+                    (requiresEdition && !selectedEdition) ||
+                    isSelectedEditionSoldOut ||
+                    (!isInventoryLoading && !isStockInfoAvailable)}
                 >
-                  {isSalesEnabled ? 'Add to cart' : 'Coming soon'}
+                  {isSalesEnabled
+                    ? !isInventoryLoading && !isStockInfoAvailable
+                      ? 'Inventory unavailable'
+                      : 'Add to cart'
+                    : 'Coming soon'}
                 </button>
               </div>
 
