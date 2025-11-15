@@ -11,10 +11,6 @@ export const formatStockLabel = (
   if (available <= 0) {
     return 'Sold out';
   }
-
-  if (initial && initial > 0) {
-    return `${available}/${initial} remaining`;
-  }
-
+  
   return `${available} remaining`;
 };
