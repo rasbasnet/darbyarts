@@ -42,9 +42,11 @@ const getBlobStoreConfig = () => {
     null;
 
   if (siteID && token) {
+    console.info('[inventory] Using static Netlify blobs credentials (siteID + token).');
     return { name: 'poster-inventory', siteID, token };
   }
 
+  console.info('[inventory] Using runtime Netlify blobs context.');
   return { name: 'poster-inventory' };
 };
 
@@ -57,6 +59,7 @@ const getBlobStore = () => {
   }
 
   if (!blobStore) {
+    console.info('[inventory] Initialising Netlify blob store client.');
     const { getStore } = require('@netlify/blobs');
     blobStore = getStore(getBlobStoreConfig());
   }
@@ -87,6 +90,7 @@ const readBlobStore = async () => {
     return null;
   }
 
+  console.info('[inventory] Reading inventory blob key.');
   return store.get('inventory', { type: 'json' });
 };
 
@@ -96,16 +100,23 @@ const writeBlobStore = async (data) => {
     throw new Error('Netlify blob store is not configured.');
   }
 
+  console.info('[inventory] Writing inventory blob key.');
   await store.setJSON('inventory', data);
 };
 
 const readStore = async () => {
   if (getStorageMode() === 'netlify') {
-    const json = await readBlobStore();
-    if (json && typeof json === 'object') {
-      return json;
+    try {
+      const json = await readBlobStore();
+      if (json && typeof json === 'object') {
+        return json;
+      }
+      console.warn('[inventory] Blob store returned empty payload. Falling back to seed if needed.');
+      return null;
+    } catch (error) {
+      console.error('[inventory] Failed to read blob store. Falling back to local file.', error);
+      return readFileStore();
     }
-    return null;
   }
 
   return readFileStore();
@@ -113,7 +124,12 @@ const readStore = async () => {
 
 const writeStore = async (data) => {
   if (getStorageMode() === 'netlify') {
-    return writeBlobStore(data);
+    try {
+      await writeBlobStore(data);
+      return;
+    } catch (error) {
+      console.error('[inventory] Failed to write blob store. Falling back to local file write.', error);
+    }
   }
 
   return writeFileStore(data);

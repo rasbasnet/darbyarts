@@ -74,7 +74,14 @@ const postJson = (path: string, body: Record<string, unknown>) =>
   });
 
 export const getInventorySnapshot = async (): Promise<InventorySnapshotResponse> => {
-  const response = await fetch(resolveEndpoint('/api/posters/inventory/snapshot'));
+  let response: Response;
+  try {
+    response = await fetch(resolveEndpoint('/api/posters/inventory/snapshot'));
+  } catch (networkError) {
+    console.error('Inventory snapshot network error', networkError);
+    throw new Error('Unable to load poster inventory. Check your connection and try again.');
+  }
+
   const payload = await parseJson(response);
 
   if (!response.ok) {
