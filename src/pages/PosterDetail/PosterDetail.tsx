@@ -204,7 +204,7 @@ const PosterDetail = () => {
                 >
                   {isSalesEnabled
                     ? !isInventoryLoading && !isStockInfoAvailable
-                      ? 'Inventory unavailable'
+                      ? 'Stock unavailable'
                       : 'Add to cart'
                     : 'Coming soon'}
                 </button>
