@@ -29,6 +29,25 @@ const resolveStorageMode = () => {
 
 const getStorageMode = () => resolveStorageMode();
 
+const getBlobStoreConfig = () => {
+  const siteID =
+    process.env.NETLIFY_BLOBS_SITE_ID ||
+    process.env.NETLIFY_SITE_ID ||
+    process.env.NETLIFY_INTERNAL_SITE_ID ||
+    null;
+  const token =
+    process.env.NETLIFY_BLOBS_TOKEN ||
+    process.env.NETLIFY_AUTH_TOKEN ||
+    process.env.NETLIFY_API_TOKEN ||
+    null;
+
+  if (siteID && token) {
+    return { name: 'poster-inventory', siteID, token };
+  }
+
+  return { name: 'poster-inventory' };
+};
+
 let blobStore = null;
 
 const getBlobStore = () => {
@@ -39,7 +58,7 @@ const getBlobStore = () => {
 
   if (!blobStore) {
     const { getStore } = require('@netlify/blobs');
-    blobStore = getStore({ name: 'poster-inventory' });
+    blobStore = getStore(getBlobStoreConfig());
   }
 
   return blobStore;
